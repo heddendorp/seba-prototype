@@ -1,0 +1,26 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@seba/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@seba/watch-lecture": ["libs/watch-lecture/src/index.ts"],
+      "@seba/create-lecture": ["libs/create-lecture/src/index.ts"],
+      "@seba/statistics": ["libs/statistics/src/index.ts"],
+      "@seba/models": ["libs/models/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
