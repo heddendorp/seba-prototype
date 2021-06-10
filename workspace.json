@@ -13,10 +13,10 @@
         "babel": true
       },
       "component": {
-        "style": "scss"
+        "style": "none"
       },
       "library": {
-        "style": "scss",
+        "style": "none",
         "linter": "eslint",
         "strict": true
       }

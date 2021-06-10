@@ -1,38 +1,112 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@seba/api-interfaces';
+import React from 'react';
 import { CreateLecture } from '@seba/create-lecture';
 import { WatchLecture } from '@seba/watch-lecture';
 import { Statistics } from '@seba/statistics';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link as RouterLink,
+} from 'react-router-dom';
+import {
+  createMuiTheme,
+  CssBaseline,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles,
+  responsiveFontSizes,
+  ThemeProvider,
+} from '@material-ui/core';
+import { green, red } from '@material-ui/core/colors';
+
+const drawerWidth = 240;
+
+let theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: green[500],
+    },
+    secondary: {
+      main: red[500],
+    },
+  },
+});
+theme = responsiveFontSizes(theme);
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(3),
+  },
+}));
 
 export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
-
-  useEffect(() => {
-    fetch('/api')
-      .then((r) => r.json())
-      .then(setMessage);
-  }, []);
+  const classes = useStyles();
 
   return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to app!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-          alt="Nx - Smart, Extensible Build Framework"
-        />
-      </div>
-      <hr/>
-      <p>Create Lecture:</p>
-      <CreateLecture></CreateLecture>
-      <p>Watch Lecture</p>
-      <WatchLecture></WatchLecture>
-      <p>Statistics</p>
-      <Statistics></Statistics>
-      <hr/>
-      <div>{m.message}</div>
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <div className={classes.root}>
+          <Drawer
+            variant="permanent"
+            anchor="left"
+            className={classes.drawer}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <nav>
+              <List>
+                <ListItem button component={RouterLink} to="/">
+                  <ListItemText primary="Create Lecture" />
+                </ListItem>
+                <ListItem button component={RouterLink} to="/watch">
+                  <ListItemText primary="Watch Lecture" />
+                </ListItem>
+                <ListItem button component={RouterLink} to="/stats">
+                  <ListItemText primary="Statistics" />
+                </ListItem>
+              </List>
+            </nav>
+          </Drawer>
+          {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+          <main className={classes.content}>
+            <Switch>
+              <Route path="/stats">
+                <Statistics />
+              </Route>
+              <Route path="/watch">
+                <WatchLecture />
+              </Route>
+              <Route path="/">
+                <CreateLecture />
+              </Route>
+            </Switch>
+          </main>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 };
 
