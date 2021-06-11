@@ -33,6 +33,7 @@
     "document-register-element": "1.13.1",
     "express": "4.17.1",
     "mongoose": "^5.12.12",
+    "mongodb-client-encryption": "1.2.4",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "^5.2.0",
