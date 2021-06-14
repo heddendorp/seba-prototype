@@ -11,7 +11,7 @@ export interface IUser extends mongoose.Document {
 }
 
 export const UserSchema = new mongoose.Schema({
-  name: String,
+  username: { type: String, unique: true},
   role: Number
 });
 

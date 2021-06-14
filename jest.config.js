@@ -6,5 +6,6 @@ module.exports = {
     '<rootDir>/libs/create-lecture',
     '<rootDir>/libs/statistics',
     '<rootDir>/libs/models',
+    '<rootDir>/libs/controllers',
   ],
 };

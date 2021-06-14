@@ -43,6 +43,9 @@
     },
     "models": {
       "tags": []
+    },
+    "controllers": {
+      "tags": []
     }
   }
 }
