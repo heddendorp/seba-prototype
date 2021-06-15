@@ -1,17 +1,21 @@
 import * as mongoose from "mongoose";
-import {IQuizOption} from "./quiz-answer";
+import {IQuizOption, QuizOptionSchema} from "./quiz-answer";
+import {IQuizSubmission, QuizSubmissionSchema} from "./quiz-submission";
 
 export interface IQuiz extends mongoose.Document {
   timestamp: number,
   options: Array<IQuizOption>,
-  isSingleChoice: boolean
+  isSingleChoice: boolean,
+
+  submissions: Array<IQuizSubmission>
 }
 
 export const QuizSchema = new mongoose.Schema({
   timestamp: Number,
-  options_ids: [String],
-  isSingleChoice: Boolean
+  options: [QuizOptionSchema],
+  isSingleChoice: Boolean,
+
+  submissions: [QuizSubmissionSchema]
 });
 
-const QuizModel = mongoose.model<IQuiz>("Quiz", QuizSchema);
-export default QuizModel;
+export const Quiz = mongoose.model<IQuiz>("Quiz", QuizSchema);

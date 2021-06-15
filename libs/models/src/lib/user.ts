@@ -7,13 +7,16 @@ export enum Role {
 
 export interface IUser extends mongoose.Document {
   username: string,
+  display_name: string,
+  password: string,
   role: Role
 }
 
 export const UserSchema = new mongoose.Schema({
   username: { type: String, unique: true},
-  role: Number
+  display_name: String,
+  password: String,
+  role: Role
 });
 
-const UserModel = mongoose.model<IUser>("User", UserSchema);
-export default UserModel;
+export const User = mongoose.model<IUser>("User", UserSchema);

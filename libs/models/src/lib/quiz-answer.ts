@@ -10,5 +10,4 @@ export const QuizOptionSchema = new mongoose.Schema({
   isCorrect: Boolean
 });
 
-const QuizOptionModel = mongoose.model<IQuizOption>("QuizOption", QuizOptionSchema);
-export default QuizOptionModel;
+export const QuizOption = mongoose.model<IQuizOption>("QuizOption", QuizOptionSchema);

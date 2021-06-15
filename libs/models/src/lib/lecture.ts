@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
-import {IUser} from "./user";
-import {ILectureUnit} from "./lecture-unit";
+import {IUser, UserSchema} from "./user";
+import {ILectureUnit, LectureUnitSchema} from "./lecture-unit";
 
 export interface ILecture extends mongoose.Document {
   name: string,
@@ -10,9 +10,8 @@ export interface ILecture extends mongoose.Document {
 
 export const LectureSchema = new mongoose.Schema({
   name: String,
-  lecturer_id: String,
-  unit_ids: [String]
+  lecturer: UserSchema,
+  units: [LectureUnitSchema]
 })
 
-const LectureModel = mongoose.model<ILecture>("Lecture", LectureSchema);
-export default LectureModel;
+export const Lecture = mongoose.model<ILecture>("Lecture", LectureSchema);

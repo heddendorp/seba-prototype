@@ -1,24 +1,23 @@
 import * as mongoose from "mongoose";
-import {IUser} from "./user";
-import {IAnswer} from "./answer";
+import {IUser, UserSchema} from "./user";
+import {IAnswer, AnswerSchema} from "./answer";
 
 export interface IQuestion extends mongoose.Document {
   timestamp: number,
   author: IUser,
   text: string,
-  upvotes: number,
+  upVotes: number,
   answers: Array<IAnswer>,
   isAnswered: boolean
 }
 
 export const QuestionSchema = new mongoose.Schema({
   timestamp: Number,
-  author_id: String,
+  author: UserSchema,
   text: String,
-  upvotes: Number,
-  answer_ids: [String],
+  upVotes: Number,
+  answers: [AnswerSchema],
   isAnswered: Boolean
 });
 
-const QuestionModel = mongoose.model<IQuestion>("Question", QuestionSchema);
-export default QuestionModel;
+export const Question = mongoose.model<IQuestion>("Question", QuestionSchema);

@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
-import {IQuiz} from "./quiz";
-import {IQuestion} from "./question";
+import {IQuiz, QuizSchema} from "./quiz";
+import {IQuestion, QuestionSchema} from "./question";
 
 export interface ILectureUnit extends mongoose.Document {
   name: string,
@@ -12,9 +12,8 @@ export interface ILectureUnit extends mongoose.Document {
 export const LectureUnitSchema = new mongoose.Schema({
   name: String,
   video_path: String,
-  quiz_ids: [String],
-  question_ids: [String]
+  quizzes: [QuizSchema],
+  questions: [QuestionSchema]
 })
 
-const LectureUnitModel = mongoose.model<ILectureUnit>("LectureUnit", LectureUnitSchema);
-export default LectureUnitModel;
+export const LectureUnit = mongoose.model<ILectureUnit>("LectureUnit", LectureUnitSchema);
