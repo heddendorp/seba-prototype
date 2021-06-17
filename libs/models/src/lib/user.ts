@@ -16,7 +16,7 @@ export const UserSchema = new mongoose.Schema({
   username: { type: String, unique: true},
   display_name: String,
   password: String,
-  role: Role
+  role: {type: String, enum: Role}
 });
 
 export const User = mongoose.model<IUser>("User", UserSchema);

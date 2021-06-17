@@ -1,19 +1,21 @@
-import UserModel, {Role} from "../../../../libs/models/src/lib/user";
-import {createUser} from "../../../../libs/controllers/src/lib/user-controller";
+import {Role, User} from "@seba/models";
+import {UserService} from "@seba/services";
 
 export async function fill_default_model() {
-  await createUser(new UserModel({
+  const userService = new UserService();
+
+  await userService.create(new User({
     username: "testStudent",
     role: Role.STUDENT
   }));
-  await createUser(new UserModel({
+  await userService.create(new User({
     username: "testLecturer",
     role: Role.LECTURER
   }));
 }
 
 export function delete_model() {
-  UserModel.remove({}, () => console.log("Deleted all users"));
+  User.remove({}, () => console.log("Deleted all users"));
 }
 
 export async function reset_model() {
