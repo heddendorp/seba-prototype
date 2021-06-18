@@ -1,7 +1,8 @@
 import './watch-lecture.module.scss';
 import { Container, createStyles, Grid, makeStyles, Paper, Theme } from '@material-ui/core';
-
-
+/*import { Card, CardMedia, IconButton } from '@material-ui/core';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+*/
 /* eslint-disable-next-line */
 export interface WatchLectureProps {}
 
@@ -10,27 +11,30 @@ const useStyles = makeStyles((theme: Theme) =>
     padded: {
       padding: theme.spacing(2)
     },
+      media:{
+      width: '75%',
+    },
+    
   }),
 );
 
 export function WatchLecture(props: WatchLectureProps) {
   const classes = useStyles();
+
   return (
     <div>
       <Container className={classes.padded}>
-        <h1>Lecture</h1>
+
         <Paper variant="outlined" className={classes.padded}>
-          <h3>Lecture 11: How to create a React page</h3>
+
           <Grid container spacing={3}>
             <Grid item xs={6}>
               <video controls width="250">
 
-                  <source src="/media/cc0-videos/flower.webm"
-                          type="video/webm">
-
-                  <source src="/media/cc0-videos/flower.mp4"
+                  
+                  <source src="https://test-videos.co.uk/vids/bigbuckbunny/mp4/av1/360/Big_Buck_Bunny_360_10s_1MB.mp4"
                           type="video/mp4">
-
+                  </source>
                   Sorry, your browser does not support embedded videos.
               </video>
             </Grid>
