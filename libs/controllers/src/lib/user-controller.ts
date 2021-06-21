@@ -11,17 +11,6 @@ router.post("/login", async (req, res, next) => {
         message: info.message
       });
 
-    switch (+user.role) {
-      case Role.STUDENT:
-        res.redirect("/student/home");
-        break;
-      case Role.LECTURER:
-        res.redirect("/lecturer/home");
-        break;
-      default:
-        throw new Error(`User-role ${user.role} not implemented yet.`);
-    }
-
     res.json(user);
   })(req, res, next);
 });
@@ -46,7 +35,7 @@ router.put(
   "/edit",
   async (req, res) => {
     if (!req.isAuthenticated())
-      res.redirect("/login");
+      res.status(401);
     else {
       const changes = {};
       if (req.body.display_name !== undefined)
@@ -54,6 +43,7 @@ router.put(
       if (req.body.role !== undefined)
         changes.role = req.body.role;
 
+      //TODO: Test if it works without changes
       await User.updateOne({_id: req.user._id}, changes, null);
       res.json(User.findOne({_id: req.user._id}));
     }
