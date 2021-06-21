@@ -291,22 +291,22 @@
         }
       }
     },
-    "services": {
-      "root": "libs/services",
-      "sourceRoot": "libs/services/src",
+    "auth": {
+      "root": "libs/auth",
+      "sourceRoot": "libs/auth/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/services/**/*.ts"]
+            "lintFilePatterns": ["libs/auth/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/services"],
+          "outputs": ["coverage/libs/auth"],
           "options": {
-            "jestConfig": "libs/services/jest.config.js",
+            "jestConfig": "libs/auth/jest.config.js",
             "passWithNoTests": true
           }
         }

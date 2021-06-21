@@ -1,15 +1,15 @@
 import * as express from 'express';
-import { Message } from '@seba/api-interfaces';
 import * as mongoose from "mongoose";
-import {fill_default_model} from "./app/default-model";
+import {userRouter} from "@seba/controllers";
+import * as passport from "passport";
+import {initializePassport} from "@seba/auth";
 
 const app = express();
+app.use(passport.initialize());
+app.use(passport.session());
 
-const greeting: Message = { message: 'Welcome to api!' };
-
-app.get('/api', (req, res) => {
-  res.send(greeting);
-});
+initializePassport(passport);
+app.use("/user", userRouter);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, async () => {
@@ -19,7 +19,6 @@ const server = app.listen(port, async () => {
   mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => console.log("Connected to database"))
     .catch(console.error.bind(console, "Connection error:"))
-
-  await fill_default_model();
   });
+
 server.on('error', console.error);

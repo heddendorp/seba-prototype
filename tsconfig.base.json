@@ -21,7 +21,7 @@
       "@seba/statistics": ["libs/statistics/src/index.ts"],
       "@seba/models": ["libs/models/src/index.ts"],
       "@seba/controllers": ["libs/controllers/src/index.ts"],
-      "@seba/services": ["libs/services/src/index.ts"]
+      "@seba/auth": ["libs/auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

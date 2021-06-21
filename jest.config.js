@@ -7,6 +7,6 @@ module.exports = {
     '<rootDir>/libs/statistics',
     '<rootDir>/libs/models',
     '<rootDir>/libs/controllers',
-    '<rootDir>/libs/services',
+    '<rootDir>/libs/auth',
   ],
 };

@@ -47,7 +47,7 @@
     "controllers": {
       "tags": []
     },
-    "services": {
+    "auth": {
       "tags": []
     }
   }
