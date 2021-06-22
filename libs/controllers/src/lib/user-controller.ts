@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as passport from "passport";
-import {Role, User} from "@seba/models";
+import {User} from "@seba/models";
 
 const router = express.Router();
 

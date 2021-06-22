@@ -8,5 +8,6 @@ module.exports = {
     '<rootDir>/libs/models',
     '<rootDir>/libs/controllers',
     '<rootDir>/libs/auth',
+    '<rootDir>/libs/login',
   ],
 };

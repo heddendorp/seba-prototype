@@ -3,8 +3,11 @@ import * as mongoose from "mongoose";
 import {userRouter} from "@seba/controllers";
 import * as passport from "passport";
 import {initializePassport} from "@seba/auth";
+import * as bodyParser from "body-parser";
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 

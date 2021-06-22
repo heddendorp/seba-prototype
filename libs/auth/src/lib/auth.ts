@@ -1,4 +1,4 @@
-import {Role, User} from "@seba/models";
+import {User} from "@seba/models";
 import * as passwordHash from "password-hash";
 import {Strategy as LocalStrategy} from "passport-local";
 
@@ -9,8 +9,10 @@ export function encryptPassword(password) {
 export function initializePassport(passport) {
   passport.use(
     "register",
-    new LocalStrategy(
-      async function (username, password, done) {
+    new LocalStrategy({
+      passReqToCallback: true
+    },
+      async function (req, username, password, done) {
         if (await User.exists({username: username}))
           return done(null, {
             response: {
@@ -22,8 +24,8 @@ export function initializePassport(passport) {
         const user = await User.create({
           username: username,
           password: encryptPassword(password),
-          display_name: username,
-          role: Role.STUDENT
+          display_name: req.query.display_name,
+          role: req.query.role
         });
 
         return done(null, {
@@ -44,9 +46,7 @@ export function initializePassport(passport) {
 
           if (!user || !passwordHash.verify(password, user.password))
             return done(null, false, {
-              response: {
-                message: "Login failed. Invalid username or password."
-              },
+              message: "Login failed. Invalid username or password.",
               statusCode: 401
             });
 

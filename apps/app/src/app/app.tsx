@@ -2,6 +2,7 @@ import React from 'react';
 import { CreateLecture } from '@seba/create-lecture';
 import { WatchLecture } from '@seba/watch-lecture';
 import { Statistics } from '@seba/statistics';
+import {SignUp, Login} from "@seba/login";
 import {
   BrowserRouter as Router,
   Switch,
@@ -86,6 +87,9 @@ export const App = () => {
                 <ListItem button component={RouterLink} to="/stats">
                   <ListItemText primary="Statistics" />
                 </ListItem>
+                <ListItem button component={RouterLink} to="/login">
+                  <ListItemText primary="Login"/>
+                </ListItem>
               </List>
             </nav>
           </Drawer>
@@ -98,6 +102,12 @@ export const App = () => {
               </Route>
               <Route path="/watch">
                 <WatchLecture />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/signup">
+                <SignUp />
               </Route>
               <Route path="/">
                 <CreateLecture />
