@@ -11,7 +11,13 @@ router.post("/login", async (req, res, next) => {
         message: info.message
       });
 
-    res.json(user);
+    req.login(user, function(err) {
+      if (err) { return next(err); }
+
+      return res.json({
+        user: user
+      })
+    });
   })(req, res, next);
 });
 

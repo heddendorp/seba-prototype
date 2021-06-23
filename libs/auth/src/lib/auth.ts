@@ -7,6 +7,14 @@ export function encryptPassword(password) {
 }
 
 export function initializePassport(passport) {
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
+
   passport.use(
     "register",
     new LocalStrategy({

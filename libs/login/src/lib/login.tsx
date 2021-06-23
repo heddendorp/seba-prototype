@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 
 import logo from "./logo.png";
-import {FormEvent} from "react";
+import {ChangeEvent, FormEvent, useState} from "react";
 
 export interface LoginProps {
   handleSubmit: (username: string, password: string) => void;
@@ -36,6 +36,31 @@ const useStyles = makeStyles((theme) => ({
 export function Login(props: LoginProps) {
   const classes = useStyles();
 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    fetch("http://localhost:3333/user/login", {
+      method: 'POST',
+      body: JSON.stringify({
+        username: username,
+        password: password
+      }),
+      headers: new Headers()
+    }).then(response => console.log(response.json()))
+      .catch(error => alert(error));
+  }
+
+  const onChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value)
+  }
+
+  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -44,7 +69,7 @@ export function Login(props: LoginProps) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate action="http://localhost:3333/user/login" method="POST">
+        <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -55,6 +80,7 @@ export function Login(props: LoginProps) {
             name="username"
             autoFocus
             autoComplete="username"
+            onChange={onChangeUsername}
           />
           <TextField
             variant="outlined"
@@ -65,6 +91,7 @@ export function Login(props: LoginProps) {
             label="Password"
             type="password"
             id="password"
+            onChange={onChangePassword}
           />
           <Button
             type="submit"
