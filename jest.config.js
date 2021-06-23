@@ -10,5 +10,6 @@ module.exports = {
     '<rootDir>/libs/auth',
     '<rootDir>/libs/login',
     '<rootDir>/libs/home',
+    '<rootDir>/libs/navigation',
   ],
 };

@@ -55,6 +55,9 @@
     },
     "home": {
       "tags": []
+    },
+    "navigation": {
+      "tags": []
     }
   }
 }
