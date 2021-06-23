@@ -9,5 +9,6 @@ module.exports = {
     '<rootDir>/libs/controllers',
     '<rootDir>/libs/auth',
     '<rootDir>/libs/login',
+    '<rootDir>/libs/navigation',
   ],
 };
