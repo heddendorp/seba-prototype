@@ -24,8 +24,8 @@ export function initializePassport(passport) {
         const user = await User.create({
           username: username,
           password: encryptPassword(password),
-          display_name: req.query.display_name,
-          role: req.query.role
+          display_name: req.body.display_name,
+          role: req.body.role
         });
 
         return done(null, {
