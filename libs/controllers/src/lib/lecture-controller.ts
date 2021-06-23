@@ -1,12 +1,12 @@
 import * as express from "express";
-import {Role} from "@seba/models";
+import * as passport from "passport";
 
 const router = express.Router();
 
 router.post(
   "/create",
   async (req, res) => {
-
+    res.json({message: "success."})
   }
 );
 

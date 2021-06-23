@@ -24,11 +24,19 @@ export function CreateLecture(props: CreateLectureProps) {
   }
 
   const handleSubmit = (title: string, dateTime: string, description: string, file: File) => {
-    console.log("Form submitted:")
-    console.log(title)
-    console.log(dateTime)
-    console.log(description)
-    console.log(file.name)
+    // console.log("Form submitted:")
+    // console.log(title)
+    // console.log(dateTime)
+    // console.log(description)
+    // console.log(file.name)
+
+    fetch("http://localhost:3333/lecture/create", {
+      method: 'POST',
+      body: JSON.stringify({
+      }),
+      headers: new Headers()
+    }).then(response => console.log(response.json()))
+      .catch(error => alert(error));
   }
 
   return (
