@@ -40,7 +40,7 @@ router.get(
         result = await Lecture.find({lecturer: req.user._id}).populate("units").exec();
         break;
       case Role.STUDENT:
-        result = await Lecture.find({students: req.user._id});
+        result = await Lecture.find({students: req.user._id}).populate("units").exec();
         break;
       default:
         throw new Error("Not implemented");

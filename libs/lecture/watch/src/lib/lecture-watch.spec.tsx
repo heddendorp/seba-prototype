@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import WatchLecture from './watch-lecture';
+import LectureWatch from './lecture-watch';
 
-describe('WatchLecture', () => {
+describe('LectureWatch', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<WatchLecture />);
+    const { baseElement } = render(<LectureWatch />);
     expect(baseElement).toBeTruthy();
   });
 });

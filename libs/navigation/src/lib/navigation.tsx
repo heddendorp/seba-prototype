@@ -11,12 +11,16 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import {useStyles} from './style';
-import {ILectureUnit, Role} from '@seba/models';
-import {useEffect, useState} from 'react';
+import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
+import {ChangeEvent, useEffect, useState} from 'react';
 
 import {CreateUnit} from '@seba/lecture/create-unit';
 import {LectureCreate} from "@seba/lecture/create";
 import {LectureService, UserService} from "@seba/api-services";
+import LectureWatch from "../../../lecture/watch/src/lib/lecture-watch";
+import LectureQuestions from "../../../lecture/questions/src/lib/lecture-questions";
+import {LectureQuizzes} from "@seba/lecture/quizzes";
+import {Statistics} from "@seba/lecture/statistics";
 
 export function Navigation() {
   const classes = useStyles();
@@ -46,19 +50,40 @@ export function Navigation() {
     ));
   }
 
+  function renderStatisticsTab(user: IUser, lecture: ILecture) {
+    if (+user.role === Role.LECTURER)
+      return (
+        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/statistics"}>
+          <ListItemText primary="Statistics"/>
+        </ListItem>
+      );
+    return;
+  }
+
+  function renderCreateUnitButton(user: IUser, lecture: ILecture) {
+    if (+user.role === Role.LECTURER)
+      return (
+        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/unit/create"}>
+          <ListItemText primary="Create..."/>
+        </ListItem>
+      );
+    return;
+  }
+
   async function renderLectures() {
     const lectures = await LectureService.getAll();
+    const currentUser = await UserService.getCurrent();
+
     return lectures.map((lecture) => (
       <Accordion>
         <AccordionSummary>
           {lecture.title}
         </AccordionSummary>
-        <AccordionDetails>
+        {renderStatisticsTab(currentUser, lecture)}
+        <AccordionDetails className={classes.lectureAccordion}>
           {renderLectureUnits(lecture.units)}
         </AccordionDetails>
-        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/unit/create"}>
-          <ListItemText primary="Create..."/>
-        </ListItem>
+        {renderCreateUnitButton(currentUser, lecture)}
       </Accordion>
     ));
   }
@@ -80,7 +105,7 @@ export function Navigation() {
 
     setRenderedLecturesDelayed();
     setRenderedCreateButtonDelayed();
-  });
+  }, []);
 
   return (
     <Router>
@@ -113,6 +138,18 @@ export function Navigation() {
             </Route>
             <Route path="/lecture/:lecture_id/unit/create">
               <CreateUnit/>
+            </Route>
+            <Route path="/lecture/:lecture_id/statistics">
+              <Statistics/>
+            </Route>
+            <Route path="/unit/:unit_id/watch">
+              <LectureWatch/>
+            </Route>
+            <Route path="/unit/:unit_id/questions">
+              <LectureQuestions/>
+            </Route>
+            <Route path="/unit/:unit_id/quizzes">
+              <LectureQuizzes/>
             </Route>
           </Switch>
         </main>

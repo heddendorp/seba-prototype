@@ -19,6 +19,10 @@ export const useStyles = makeStyles((theme) => ({
   logo: {
     width: "80%"
   },
+  lectureAccordion: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,

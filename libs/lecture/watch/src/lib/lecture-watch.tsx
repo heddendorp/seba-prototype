@@ -1,4 +1,4 @@
-import './watch-lecture.module.scss';
+import './lecture-watch.module.scss';
 import {
   Container,
   createStyles,
@@ -11,7 +11,7 @@ import {
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 */
 /* eslint-disable-next-line */
-export interface WatchLectureProps {}
+export interface LectureWatchProps {}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export function WatchLecture(props: WatchLectureProps) {
+export function LectureWatch(props: LectureWatchProps) {
   const classes = useStyles();
 
   return (
-    <div>
+    <Container component="main" maxWidth="xs">
       <h2>Lecture 135:</h2>
 
-      <Grid item xs={9}>
+      <Grid item xs={12}>
         <Paper variant="outlined" className={classes.padded}>
           <video controls width="100%">
             <source
@@ -42,8 +42,8 @@ export function WatchLecture(props: WatchLectureProps) {
           </video>
         </Paper>
       </Grid>
-    </div>
+    </Container>
   );
 }
 
-export default WatchLecture;
+export default LectureWatch;

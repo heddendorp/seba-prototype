@@ -1,1 +1,1 @@
-export * from './lib/watch-lecture';
+export * from './lib/lecture-watch';
