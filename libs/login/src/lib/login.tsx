@@ -8,11 +8,10 @@ import {
 } from "@material-ui/core";
 
 import logo from "./logo.png";
-import {FormEvent} from "react";
-
-export interface LoginProps {
-  handleSubmit: (username: string, password: string) => void;
-}
+import React, {ChangeEvent, FormEvent, useState} from "react";
+import { Alert } from '@material-ui/lab';
+import {useHistory} from "react-router-dom";
+import {StorageService} from "../../../api-services/src/lib/storage-service";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,12 +28,66 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(2, 0, 2),
   },
 }));
 
-export function Login(props: LoginProps) {
+export function Login() {
   const classes = useStyles();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const history = useHistory();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    fetch("http://localhost:3333/user/login", {
+      method: 'POST',
+      body: JSON.stringify({
+        username: username,
+        password: password
+      }),
+      headers: new Headers()
+    }).then(response => {
+      if (response.status !== 200) {
+        response.text().then(text =>  {
+          setError(true);
+          setErrorMessage(JSON.parse(text).message);
+        });
+      }
+
+      setError(false);
+      response.text().then(text => {
+        const body = JSON.parse(text);
+        StorageService.setToken(body.token)
+
+        history.push("/home", {
+          role: body.user.role
+        });
+      });
+    }).catch(error => alert(error));
+  }
+
+  const onChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value)
+  }
+
+  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }
+
+  const getAlert = () => {
+    if (error)
+      return (
+        <Alert className={classes.form} severity="error">{errorMessage}</Alert>
+      );
+    return;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -44,7 +97,7 @@ export function Login(props: LoginProps) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate action="http://localhost:3333/user/login" method="POST">
+        <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -55,6 +108,7 @@ export function Login(props: LoginProps) {
             name="username"
             autoFocus
             autoComplete="username"
+            onChange={onChangeUsername}
           />
           <TextField
             variant="outlined"
@@ -65,7 +119,9 @@ export function Login(props: LoginProps) {
             label="Password"
             type="password"
             id="password"
+            onChange={onChangePassword}
           />
+          {getAlert()}
           <Button
             type="submit"
             fullWidth

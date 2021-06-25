@@ -1,20 +1,19 @@
 import * as mongoose from "mongoose";
-import {IUser, UserSchema} from "./user";
-import {ILectureUnit, LectureUnitSchema} from "./lecture-unit";
 
 export interface ILecture extends mongoose.Document {
-  name: string,
+  title: string,
+  short_title: string,
   semester: string,
-  lecturer: IUser,
-  units: Array<ILectureUnit>
+  lecturer: string,
+  units: [string]
 }
 
 export const LectureSchema = new mongoose.Schema({
-  name: String,
+  title: String,
+  short_title: String,
   semester: String,
-  lecturer: UserSchema,
-  units: [LectureUnitSchema]
+  lecturer: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+  units: [{type: mongoose.Schema.Types.ObjectId, ref: "LectureUnit"}]
 })
-LectureSchema.index({name: 1, semester: 1}, {unique: true});
 
 export const Lecture = mongoose.model<ILecture>("Lecture", LectureSchema);
