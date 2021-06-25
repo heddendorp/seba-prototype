@@ -3,24 +3,9 @@ import {Button, Container, CssBaseline, Link, makeStyles, TextField, Typography}
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import {LectureService} from "../../../../api-services/src/lib/lecture-service";
+import {useStyles} from "./style";
 
 export interface LectureCreateProps {}
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(2, 0, 2),
-  },
-}));
 
 export function LectureCreate(props: LectureCreateProps) {
   const history = useHistory();

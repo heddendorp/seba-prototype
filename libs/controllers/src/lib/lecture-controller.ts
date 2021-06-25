@@ -34,7 +34,19 @@ router.get(
   "",
   passport.authenticate("jwt", {session: false}),
   async (req, res) => {
-    res.json(await Lecture.find({lecturer: req.user._id}).populate("units").exec());
+    let result;
+    switch (+req.user.role) {
+      case Role.LECTURER:
+        result = await Lecture.find({lecturer: req.user._id}).populate("units").exec();
+        break;
+      case Role.STUDENT:
+        result = await Lecture.find({students: req.user._id});
+        break;
+      default:
+        throw new Error("Not implemented");
+    }
+
+    res.json(result);
   }
 )
 

@@ -1,11 +1,5 @@
 /* eslint-disable-next-line */
-import {
-  Route,
-  BrowserRouter as Router,
-  Switch,
-  Link as RouterLink,
-  useLocation,
-} from 'react-router-dom';
+import {BrowserRouter as Router, Link as RouterLink, Route, Switch} from 'react-router-dom';
 import {
   Accordion,
   AccordionDetails,
@@ -16,103 +10,77 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core';
-import { useStyles } from './style';
+import {useStyles} from './style';
 import {ILectureUnit, Role} from '@seba/models';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
-import { CreateUnit } from '@seba/lecture/create-unit';
+import {CreateUnit} from '@seba/lecture/create-unit';
 import {LectureCreate} from "@seba/lecture/create";
-import {LectureService} from "../../../api-services/src/lib/lecture-service";
+import {LectureService, UserService} from "@seba/api-services";
 
-export interface NavigationProps {}
-
-export function Navigation(props: NavigationProps) {
-  const location = useLocation();
+export function Navigation() {
   const classes = useStyles();
+  const logoPath = "/assets/logo.png";
 
-  const lectureCreatePath = {
-    pathname: '/lecture/create',
-    state: location.state,
-  };
-
-  const lectureUnitCreatePath = {
-    pathname: '/lecture-unit/create',
-    state: location.state,
-  };
-
-  const [lectures, setLectures] = useState();
+  const [renderedLectures, setRenderedLectures] = useState();
+  const [renderedCreateButton, setRenderedCreateButton] = useState();
 
   function renderLectureUnits(units: [ILectureUnit]) {
-    const lectureUnits = [];
-
-      for (const lectureUnit of units)
-        lectureUnits.push(
-          <Accordion>
-            <AccordionSummary>{lectureUnit.title}</AccordionSummary>
-            <AccordionDetails>
-              <List>
-                <ListItem>
-                  <ListItemText>Questions</ListItemText>
-                </ListItem>
-                <ListItem>
-                  <ListItemText>Quiz</ListItemText>
-                </ListItem>
-                <ListItem>
-                  <ListItemText>Video</ListItemText>
-                </ListItem>
-              </List>
-            </AccordionDetails>
-          </Accordion>
-        );
-
-    return lectureUnits;
-  }
-
-  function clickMe(event, lecture) {
-    location.state.lecture = lecture;
-    console.log('Set state');
-  }
-
-  useEffect(() => {
-    async function getLectures() {
-      const response = await LectureService.getAll();
-
-      const body = await response.json();
-      if (response.status !== 200) console.log(body);
-
-      const lectures = [];
-      for (const lecture of body) {
-        const url = '/lecture/overview/' + lecture._id;
-        lectures.push(
-          <Accordion>
-            <AccordionSummary onClick={(e) => clickMe(e, lecture)}>
-              {lecture.title}
-            </AccordionSummary>
-            <AccordionDetails>
-              {renderLectureUnits(lecture.units)}
-            </AccordionDetails>
-            <ListItem button component={RouterLink} to={lectureUnitCreatePath}>
-              <ListItemText primary="Create..." />
+    return units.map((unit) => (
+      <Accordion>
+        <AccordionSummary>{unit.title}</AccordionSummary>
+        <AccordionDetails>
+          <List>
+            <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/watch"}>
+              <ListItemText>Video</ListItemText>
             </ListItem>
-          </Accordion>
-        );
-      }
+            <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/questions"}>
+              <ListItemText>Questions</ListItemText>
+            </ListItem>
+            <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/quizzes"}>
+              <ListItemText>Quizzes</ListItemText>
+            </ListItem>
+          </List>
+        </AccordionDetails>
+      </Accordion>
+    ));
+  }
 
-      setLectures(lectures);
-    }
+  async function renderLectures() {
+    const lectures = await LectureService.getAll();
+    return lectures.map((lecture) => (
+      <Accordion>
+        <AccordionSummary>
+          {lecture.title}
+        </AccordionSummary>
+        <AccordionDetails>
+          {renderLectureUnits(lecture.units)}
+        </AccordionDetails>
+        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/unit/create"}>
+          <ListItemText primary="Create..."/>
+        </ListItem>
+      </Accordion>
+    ));
+  }
 
-    getLectures();
-  }, []);
-
-  function getCreateButton() {
-    if (+location.state.role === Role.LECTURER)
+  async function renderCreateButton() {
+    const currentUser = await UserService.getCurrent();
+    if (+currentUser.role === Role.LECTURER)
       return (
-        <ListItem button component={RouterLink} to={lectureCreatePath}>
-          <ListItemText primary="Create..." />
+        <ListItem button component={RouterLink} to="/lecture/create">
+          <ListItemText primary="Create..."/>
         </ListItem>
       );
     return;
   }
+
+  useEffect(() => {
+    const setRenderedLecturesDelayed = async () => setRenderedLectures(await renderLectures());
+    const setRenderedCreateButtonDelayed = async () => setRenderedCreateButton(await renderCreateButton());
+
+    setRenderedLecturesDelayed();
+    setRenderedCreateButtonDelayed();
+  });
 
   return (
     <Router>
@@ -120,31 +88,31 @@ export function Navigation(props: NavigationProps) {
         <Drawer
           variant="permanent"
           className={classes.drawer}
-          classes={{ paper: classes.paper }}
+          classes={{paper: classes.paper}}
         >
           <nav>
             <List>
               <div className={classes.logoContainer}>
-                <img src="/assets/logo.png" className={classes.logo} />
+                <img src={logoPath} className={classes.logo} alt="Learn with me"/>
               </div>
-              <Box border={1} />
+              <Box border={1}/>
               <ListItem button component={RouterLink} to="/home">
-                <ListItemText primary="Home" />
+                <ListItemText primary="Home"/>
               </ListItem>
-              <Box border={1} />
-              {lectures}
-              <Box border={1} />
-              {getCreateButton()}
+              <Box border={1}/>
+              {renderedLectures}
+              <Box border={1}/>
+              {renderedCreateButton}
             </List>
           </nav>
         </Drawer>
         <main className={classes.content}>
           <Switch>
             <Route path="/lecture/create">
-              <LectureCreate />
+              <LectureCreate/>
             </Route>
-            <Route path="/lecture-unit/create">
-              <CreateUnit />
+            <Route path="/lecture/:lecture_id/unit/create">
+              <CreateUnit/>
             </Route>
           </Switch>
         </main>

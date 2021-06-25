@@ -1,26 +1,14 @@
 import { BaseService } from './base-service';
 import {ICreateLectureTransport} from "@seba/api-interfaces";
+import {ILecture} from "@seba/models";
 
 export class LectureService extends BaseService {
   public static async create(body: ICreateLectureTransport){
-    return this.authenticatedRequest('POST', 'lecture')
+    return this.authenticatedRequest('POST', 'lecture', body);
   }
 
   public static async getAll(){
-    return this.authenticatedRequest('GET', 'lecture')
+    const response = await this.authenticatedRequest('GET', 'lecture');
+    return await response.json() as [ILecture];
   }
 }
-
-// fetch("http://localhost:3333/lecture/create", {
-//   method: 'POST',
-//   body: JSON.stringify({
-//     title: title,
-//     semester: semester
-//   }),
-//   headers: new Headers({"Authorization": "Bearer " + location.state.token})
-// }).then(response => {
-//   if (response.status !== 200)
-//     response.text().then(text => console.log(text));
-//
-//   history.push("/lecture");
-// }).catch(error => alert(error));

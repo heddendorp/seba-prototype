@@ -1,11 +1,13 @@
 import * as mongoose from "mongoose";
+import {ILectureUnit} from "./lecture-unit";
+import {IUser} from "./user";
 
 export interface ILecture extends mongoose.Document {
   title: string,
   short_title: string,
   semester: string,
-  lecturer: string,
-  units: [string]
+  lecturer: IUser,
+  units: [ILectureUnit]
 }
 
 export const LectureSchema = new mongoose.Schema({
@@ -13,6 +15,7 @@ export const LectureSchema = new mongoose.Schema({
   short_title: String,
   semester: String,
   lecturer: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+  students: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
   units: [{type: mongoose.Schema.Types.ObjectId, ref: "LectureUnit"}]
 })
 
