@@ -1,10 +1,16 @@
 /* eslint-disable-next-line */
+import {Navigation} from "@seba/navigation";
+
 export interface HomeProps {}
 
 export function Home(props: HomeProps) {
+
   return (
     <div>
-      <h1>Welcome to home!</h1>
+      <Navigation/>
+      <main>
+        Welcome to home!
+      </main>
     </div>
   );
 }

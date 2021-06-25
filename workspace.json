@@ -186,69 +186,6 @@
         }
       }
     },
-    "watch-lecture": {
-      "root": "libs/watch-lecture",
-      "sourceRoot": "libs/watch-lecture/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/watch-lecture/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/watch-lecture"],
-          "options": {
-            "jestConfig": "libs/watch-lecture/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "create-lecture": {
-      "root": "libs/create-lecture",
-      "sourceRoot": "libs/create-lecture/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/create-lecture/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/create-lecture"],
-          "options": {
-            "jestConfig": "libs/create-lecture/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "statistics": {
-      "root": "libs/statistics",
-      "sourceRoot": "libs/statistics/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/statistics/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/statistics"],
-          "options": {
-            "jestConfig": "libs/statistics/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "models": {
       "root": "libs/models",
       "sourceRoot": "libs/models/src",
@@ -370,6 +307,155 @@
           "outputs": ["coverage/libs/navigation"],
           "options": {
             "jestConfig": "libs/navigation/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lecture-create": {
+      "root": "libs/lecture/create",
+      "sourceRoot": "libs/lecture/create/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lecture/create/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lecture/create"],
+          "options": {
+            "jestConfig": "libs/lecture/create/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lecture-create-unit": {
+      "root": "libs/lecture/create-unit",
+      "sourceRoot": "libs/lecture/create-unit/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/lecture/create-unit/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lecture/create-unit"],
+          "options": {
+            "jestConfig": "libs/lecture/create-unit/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lecture-statistics": {
+      "root": "libs/lecture/statistics",
+      "sourceRoot": "libs/lecture/statistics/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lecture/statistics/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lecture/statistics"],
+          "options": {
+            "jestConfig": "libs/lecture/statistics/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lecture-watch": {
+      "root": "libs/lecture/watch",
+      "sourceRoot": "libs/lecture/watch/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lecture/watch/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lecture/watch"],
+          "options": {
+            "jestConfig": "libs/lecture/watch/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lecture-questions": {
+      "root": "libs/lecture/questions",
+      "sourceRoot": "libs/lecture/questions/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lecture/questions/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lecture/questions"],
+          "options": {
+            "jestConfig": "libs/lecture/questions/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lecture-quizzes": {
+      "root": "libs/lecture/quizzes",
+      "sourceRoot": "libs/lecture/quizzes/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lecture/quizzes/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lecture/quizzes"],
+          "options": {
+            "jestConfig": "libs/lecture/quizzes/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-services": {
+      "root": "libs/api-services",
+      "sourceRoot": "libs/api-services/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-services/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api-services"],
+          "options": {
+            "jestConfig": "libs/api-services/jest.config.js",
             "passWithNoTests": true
           }
         }

@@ -16,16 +16,19 @@
     "baseUrl": ".",
     "paths": {
       "@seba/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@seba/watch-lecture": ["libs/watch-lecture/src/index.ts"],
-      "@seba/create-lecture": ["libs/create-lecture/src/index.ts"],
-      "@seba/statistics": ["libs/statistics/src/index.ts"],
       "@seba/models": ["libs/models/src/index.ts"],
       "@seba/controllers": ["libs/controllers/src/index.ts"],
       "@seba/auth": ["libs/auth/src/index.ts"],
       "@seba/login": ["libs/login/src/index.ts"],
       "@seba/home": ["libs/home/src/index.ts"],
-      "@seba/login": ["libs/login/src/index.ts"],
-      "@seba/navigation": ["libs/navigation/src/index.ts"]
+      "@seba/navigation": ["libs/navigation/src/index.ts"],
+      "@seba/lecture/create": ["libs/lecture/create/src/index.ts"],
+      "@seba/lecture/create-unit": ["libs/lecture/create-unit/src/index.ts"],
+      "@seba/lecture/statistics": ["libs/lecture/statistics/src/index.ts"],
+      "@seba/lecture/watch": ["libs/lecture/watch/src/index.ts"],
+      "@seba/lecture/questions": ["libs/lecture/questions/src/index.ts"],
+      "@seba/lecture/quizzes": ["libs/lecture/quizzes/src/index.ts"],
+      "@seba/api-services": ["libs/api-services/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

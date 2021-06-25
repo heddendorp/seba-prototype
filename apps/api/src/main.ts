@@ -6,9 +6,10 @@ import {initializePassport} from "@seba/auth";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import {lectureRouter} from "../../../libs/controllers/src/lib/lecture-controller";
+import {lectureUnitRouter} from "../../../libs/controllers/src/lib/lecture-unit-controller";
 
 const app = express();
-app.use(cors())
+app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json({type: ["application/json", "text/plain"]}));
 
@@ -18,6 +19,7 @@ app.use(passport.session());
 initializePassport(passport);
 app.use("/user", userRouter);
 app.use("/lecture", lectureRouter);
+app.use("/lecture-unit", lectureUnitRouter);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, async () => {

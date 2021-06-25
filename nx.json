@@ -32,15 +32,6 @@
     "api-interfaces": {
       "tags": []
     },
-    "watch-lecture": {
-      "tags": []
-    },
-    "create-lecture": {
-      "tags": []
-    },
-    "statistics": {
-      "tags": []
-    },
     "models": {
       "tags": []
     },
@@ -57,6 +48,27 @@
       "tags": []
     },
     "navigation": {
+      "tags": []
+    },
+    "lecture-create": {
+      "tags": []
+    },
+    "lecture-create-unit": {
+      "tags": []
+    },
+    "lecture-statistics": {
+      "tags": []
+    },
+    "lecture-watch": {
+      "tags": []
+    },
+    "lecture-questions": {
+      "tags": []
+    },
+    "lecture-quizzes": {
+      "tags": []
+    },
+    "api-services": {
       "tags": []
     }
   }
