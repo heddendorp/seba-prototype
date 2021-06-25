@@ -11,6 +11,7 @@ import logo from "./logo.png";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import { Alert } from '@material-ui/lab';
 import {useHistory} from "react-router-dom";
+import {StorageService} from "../../../api-services/src/lib/storage-service";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -63,6 +64,7 @@ export function Login() {
       setError(false);
       response.text().then(text => {
         const body = JSON.parse(text);
+        StorageService.setToken(body.token)
 
         history.push("/home", {
           role: body.user.role
