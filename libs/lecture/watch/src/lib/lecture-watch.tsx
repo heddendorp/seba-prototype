@@ -7,6 +7,10 @@ import {
   Paper,
   Theme,
 } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import {useEffect, useState} from "react";
+import {LectureService, LectureUnitService} from "@seba/api-services";
+import {ILecture} from "@seba/models";
 /*import { Card, CardMedia, IconButton } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 */
@@ -29,12 +33,37 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function LectureWatch(props: LectureWatchProps) {
+  const params = useParams();
   const classes = useStyles();
 
-  return (
-    <Container component="main">
-      <h2>Lecture 135:</h2>
+  const [renderedTitle, setRenderedTitle] = useState();
+  const [renderedDescription, setRenderedDescription] = useState();
 
+  function renderTitle(title: string) {
+    return(
+      <h2>{title}</h2>
+    );
+  }
+
+  function renderDescription(description: string) {
+    return(
+      <h2>{description}</h2>
+    );
+  }
+
+  useEffect(() => {
+    const renderDelayed = async () => {
+      const lecture = await LectureUnitService.getById(params.unit_id);
+      setRenderedTitle(renderTitle(lecture.title));
+      setRenderedDescription(renderDescription(lecture.description));
+    };
+
+    renderDelayed();
+  }, []);
+
+  return (
+    <main>
+      {renderedTitle}
       <div className={classes.root}>
         <Grid item xs={9}>
           <Paper variant="outlined" className={classes.padded}>
@@ -59,7 +88,8 @@ export function LectureWatch(props: LectureWatchProps) {
           </Paper>
         </Grid>
       </div>
-    </Container>
+      {renderedDescription}
+    </main>
   );
 }
 

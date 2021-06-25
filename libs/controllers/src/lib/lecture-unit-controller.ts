@@ -42,4 +42,12 @@ router.get(
   }
 );
 
+router.get(
+  "",
+  passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    res.json(await LectureUnit.find({_id: req.query.id}));
+  }
+)
+
 export const lectureUnitRouter = router;
