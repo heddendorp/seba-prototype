@@ -3,14 +3,20 @@ import {IQuiz, QuizSchema} from "./quiz";
 import {IQuestion, QuestionSchema} from "./question";
 
 export interface ILectureUnit extends mongoose.Document {
-  name: string,
+  lecture: string,
+  title: string,
+  description: string,
+  publish_date: Date,
   video_path: string,
   quizzes: Array<IQuiz>,
   questions: Array<IQuestion>
 }
 
 export const LectureUnitSchema = new mongoose.Schema({
-  name: String,
+  lecture: { type: mongoose.Schema.Types.ObjectId, ref: 'Lecture' },
+  title: String,
+  description: String,
+  publish_date: Date,
   video_path: String,
   quizzes: [QuizSchema],
   questions: [QuestionSchema]

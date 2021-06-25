@@ -1,17 +1,29 @@
 import * as express from "express";
 import * as passport from "passport";
-import {User} from "@seba/models";
+import {genToken} from "@seba/auth";
 
 const router = express.Router();
 
 router.post("/login", async (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
     if (err || !user)
-      return res.status(400).json({
+      return res.status(401).json({
         message: info.message
       });
 
-    res.json(user);
+    req.login(user, function(err) {
+      if (err)
+        return next(err);
+
+      const body = { id: user._id }
+      const token = genToken(body);
+
+      res.cookie("token", token);
+      return res.json({
+        user: user,
+        token: token
+      })
+    });
   })(req, res, next);
 });
 
@@ -28,25 +40,6 @@ router.post(
       res.status(201).json({
         message: "Signup success."
       });
-  }
-);
-
-router.put(
-  "/edit",
-  async (req, res) => {
-    if (!req.isAuthenticated())
-      res.status(401);
-    else {
-      const changes = {};
-      if (req.body.display_name !== undefined)
-        changes.display_name = req.body.display_name;
-      if (req.body.role !== undefined)
-        changes.role = req.body.role;
-
-      //TODO: Test if it works without changes
-      await User.updateOne({_id: req.user._id}, changes, null);
-      res.json(User.findOne({_id: req.user._id}));
-    }
   }
 );
 
