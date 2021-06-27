@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import {useStyles} from './style';
 import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
-import {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 
 import {CreateUnit} from '@seba/lecture/create-unit';
 import {LectureCreate} from "@seba/lecture/create";
@@ -21,6 +21,7 @@ import LectureWatch from "../../../lecture/watch/src/lib/lecture-watch";
 import LectureQuestions from "../../../lecture/questions/src/lib/lecture-questions";
 import {LectureQuizzes} from "@seba/lecture/quizzes";
 import {Statistics} from "@seba/lecture/statistics";
+import { Questions } from '../../../questions/src/lib/questions';
 
 export function Navigation() {
   const classes = useStyles();
@@ -124,6 +125,9 @@ export function Navigation() {
               <ListItem button component={RouterLink} to="/home">
                 <ListItemText primary="Home"/>
               </ListItem>
+              <ListItem button component={RouterLink} to="/questions">
+                <ListItemText primary="Questions"/>
+              </ListItem>
               <Box border={1}/>
               {renderedLectures}
               <Box border={1}/>
@@ -133,6 +137,7 @@ export function Navigation() {
         </Drawer>
         <main className={classes.content}>
           <Switch>
+            <Route path="/questions" component={Questions}/>
             <Route path="/lecture/create">
               <LectureCreate/>
             </Route>
