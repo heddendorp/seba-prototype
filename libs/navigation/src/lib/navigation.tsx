@@ -5,7 +5,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Drawer,
+  Drawer, IconButton,
   List,
   ListItem,
   ListItemText,
@@ -15,12 +15,14 @@ import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
 import {ChangeEvent, useEffect, useState} from 'react';
 
 import {CreateUnit} from '@seba/lecture/create-unit';
-import {LectureCreate} from "@seba/lecture/create";
+import {CreateLecture} from "@seba/lecture/create";
 import {LectureService, UserService} from "@seba/api-services";
 import LectureWatch from "../../../lecture/watch/src/lib/lecture-watch";
 import LectureQuestions from "../../../lecture/questions/src/lib/lecture-questions";
 import {LectureQuizzes} from "@seba/lecture/quizzes";
 import {Statistics} from "@seba/lecture/statistics";
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
+import CloseIcon from "@material-ui/icons/Close";
 
 export function Navigation() {
   const classes = useStyles();
@@ -77,7 +79,12 @@ export function Navigation() {
     return lectures.map((lecture) => (
       <Accordion>
         <AccordionSummary>
-          {lecture.title}
+          <div>
+            {lecture.title}
+            <IconButton component={RouterLink} to={"/lecture/" + lecture._id + "/edit"} className={classes.editButton}>
+              <EditOutlinedIcon />
+            </IconButton>
+          </div>
         </AccordionSummary>
         {renderStatisticsTab(currentUser, lecture)}
         <AccordionDetails className={classes.lectureAccordion}>
@@ -134,7 +141,7 @@ export function Navigation() {
         <main className={classes.content}>
           <Switch>
             <Route path="/lecture/create">
-              <LectureCreate/>
+              <CreateLecture/>
             </Route>
             <Route path="/lecture/:lecture_id/unit/create">
               <CreateUnit/>
@@ -149,6 +156,9 @@ export function Navigation() {
               <LectureQuestions/>
             </Route>
             <Route path="/unit/:unit_id/quizzes">
+              <LectureQuizzes/>
+            </Route>
+            <Route path="/lecture/:lecture_id/edit">
               <LectureQuizzes/>
             </Route>
           </Switch>

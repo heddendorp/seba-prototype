@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import LectureCreate from './lecture-create';
+import CreateLecture from './create-lecture';
 
-describe('LectureCreate', () => {
+describe('CreateLecture', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<LectureCreate />);
+    const { baseElement } = render(<CreateLecture />);
     expect(baseElement).toBeTruthy();
   });
 });

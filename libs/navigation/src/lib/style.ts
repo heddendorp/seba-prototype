@@ -27,5 +27,9 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing(2)
+  },
+  editButton: {
+    top: "0px",
+    right: "0px",
   }
 }));
