@@ -7,6 +7,7 @@ import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import {lectureRouter} from "../../../libs/controllers/src/lib/lecture-controller";
 import {lectureUnitRouter} from "../../../libs/controllers/src/lib/lecture-unit-controller";
+import { questionRouter } from '../../../libs/controllers/src/lib/question-controller';
 
 const app = express();
 app.use(cors());
@@ -20,6 +21,7 @@ initializePassport(passport);
 app.use("/user", userRouter);
 app.use("/lecture", lectureRouter);
 app.use("/lecture-unit", lectureUnitRouter);
+app.use("/question", questionRouter);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, async () => {

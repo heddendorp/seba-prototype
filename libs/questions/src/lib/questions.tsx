@@ -3,6 +3,7 @@ import { Button } from '@material-ui/core';
 import NewQuestionDialog from './new-question-dialog/new-question-dialog';
 import React from 'react';
 import QuestionList from './question-list/question-list';
+import { QuestionService } from '../../../api-services/src/lib/question-service';
 
 /* eslint-disable-next-line */
 export interface QuestionsProps {}
@@ -14,8 +15,11 @@ export function Questions(props: QuestionsProps) {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (question: any)=>{
+    QuestionService.create(question);
+    return () => {
+      setOpen(false);
+    }
   };
 
   return (
