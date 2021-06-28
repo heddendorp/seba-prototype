@@ -10,6 +10,11 @@ export interface UploadLectureDropzoneProps {
   Docs for the dropzone: https://yuvaleros.github.io/material-ui-dropzone/
  */
 
+/*
+  TODO:
+    -dropzone freeze with large file
+ */
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     previewChip: {
@@ -29,8 +34,8 @@ export function UploadLectureDropzone(props: UploadLectureDropzoneProps) {
   return (
     <DropzoneArea
       filesLimit={1}
-      //at the moment it is set to images - todo: set to video
-      acceptedFiles={['image/*']}
+      //at the moment it is set to nothing - todo: set to video
+      //acceptedFiles={['video/*']}
       showPreviews={true}
       showPreviewsInDropzone={false}
       useChipsForPreview
@@ -38,6 +43,8 @@ export function UploadLectureDropzone(props: UploadLectureDropzoneProps) {
       previewChipProps={{ classes: { root: classes.previewChip } }}
       previewText="Selected file:"
       onChange={onChangeFile}
+      //at the moment max 10GB file
+      maxFileSize={10000000000}
     />
   );
 }

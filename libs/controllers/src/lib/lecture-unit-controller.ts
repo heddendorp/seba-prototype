@@ -4,6 +4,29 @@ import {Lecture, LectureUnit} from "@seba/models";
 
 const router = express.Router();
 
+router.post("/video",
+  //todo: add the authenticate functionality
+  //passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    try {
+      if (!req.files) {
+        res.send({
+          status: false,
+          message: "No files"
+        })
+      } else {
+        req.files.video.mv("../../../../apps/api/src/assets/videos/" + req.files.video.name)
+
+        res.send({
+          status: true,
+          message: "File is uploaded"
+        })
+      }
+    } catch (e) {
+      res.status(500).send(e)
+    }
+  })
+
 router.post(
   "",
   passport.authenticate("jwt", {session: false}),
@@ -16,12 +39,10 @@ router.post(
     });
 
     unit.save(function (err) {
-      if (err){
+      if (err) {
         res.status(500);
         console.log(err);
-      }
-      else
-      {
+      } else {
         Lecture.findById(req.body.lecture_id)
           .then(async lecture => {
             lecture.units.push(unit._id);

@@ -7,8 +7,8 @@ import {
   TextField,
   Theme,
 } from '@material-ui/core';
-import UploadLectureDropzone from '../upload-lecture-dropzone/upload-lecture-dropzone';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import UploadLectureDropzone from './upload-lecture-dropzone/upload-lecture-dropzone';
+import {ChangeEvent, FormEvent, useState} from 'react';
 
 /* eslint-disable-next-line */
 export interface UploadLectureFormProps {
@@ -16,7 +16,8 @@ export interface UploadLectureFormProps {
     title: string,
     dateTime: string,
     description: string,
-    file: File
+    file: File,
+    setProgress: (value: (((prevState: number) => number) | number)) => void
   ) => void;
 }
 
@@ -34,10 +35,19 @@ const useStyles = makeStyles((theme: Theme) =>
       top: theme.spacing(1),
       color: theme.palette.grey[500],
     },
+    finishButton: {
+      display: "flex",
+      justifyContent: "flex-end"
+    }
   })
 );
 
-export function UploadLectureForm(props: UploadLectureFormProps) {
+/*
+  Todo-create-lecture-form:
+    -lecture-unit title limit is set to a max limit of 50 chars
+ */
+
+export function CreateUnitForm(props: UploadLectureFormProps) {
   const [title, setTitle] = useState('');
   const [dateTime, setDateTime] = useState('');
   const [description, setDescription] = useState('');
@@ -48,29 +58,11 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
 
   const classes = useStyles();
 
-  //just some random progressBar progress --> will start, when this component is rendered
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          return 100;
-        }
-        const diff = Math.random() * 10;
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 500);
-
-    //clean up
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
   const handleSubmit = (e: FormEvent) => {
     //this prevents closing dialog when clicking submit
     e.preventDefault();
     //you can give values from from to parent object here
-    props.handleSubmit(title, dateTime, description, file);
+    props.handleSubmit(title, dateTime, description, file, setProgress);
   };
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -98,6 +90,10 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
             rowsMax={2}
             fullWidth
             onChange={onChangeTitle}
+            inputProps={{
+              maxLength: 50
+            }}
+
           />
         </Grid>
         <Grid item xs={3}>
@@ -125,7 +121,7 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
           />
         </Grid>
         <Grid item xs={12}>
-          <UploadLectureDropzone setFile={setFile} />
+          <UploadLectureDropzone setFile={setFile}/>
         </Grid>
         <Grid item xs={12}>
           <LinearProgress
@@ -135,14 +131,16 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button autoFocus>Cancel</Button>
-          <Button color="primary" type="submit">
-            Upload
-          </Button>
+          <div className={classes.finishButton}>
+            <Button autoFocus>Cancel</Button>
+            <Button color="primary" type="submit">
+              Upload
+            </Button>
+          </div>
         </Grid>
       </Grid>
     </form>
   );
 }
 
-export default UploadLectureForm;
+export default CreateUnitForm;

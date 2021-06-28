@@ -8,7 +8,6 @@ export interface ICreateLectureUnitTransport {
   lecture_id: string,
   title: string,
   description: string,
-  // TODO Gregor: Use Date here
-  publish_date: string,
+  publish_date: Date,
   video_path: string
 }
