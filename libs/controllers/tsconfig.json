@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "typeRoots": ["./src/custom.d.ts"],
   "references": [
     {
       "path": "./tsconfig.lib.json"

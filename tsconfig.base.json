@@ -28,7 +28,8 @@
       "@seba/lecture/watch": ["libs/lecture/watch/src/index.ts"],
       "@seba/lecture/questions": ["libs/lecture/questions/src/index.ts"],
       "@seba/lecture/quizzes": ["libs/lecture/quizzes/src/index.ts"],
-      "@seba/api-services": ["libs/api-services/src/index.ts"]
+      "@seba/api-services": ["libs/api-services/src/index.ts"],
+      "@seba/context": ["libs/context/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

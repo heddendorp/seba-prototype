@@ -1,4 +1,3 @@
-/* eslint-disable-next-line */
 import {BrowserRouter as Router, Link as RouterLink, Route, Switch} from 'react-router-dom';
 import {
   Accordion,
@@ -12,24 +11,44 @@ import {
 } from '@material-ui/core';
 import {useStyles} from './style';
 import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
-import {ChangeEvent, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {CreateUnit} from '@seba/lecture/create-unit';
 import {LectureCreate} from "@seba/lecture/create";
-import {LectureService, UserService} from "@seba/api-services";
-import LectureWatch from "../../../lecture/watch/src/lib/lecture-watch";
-import LectureQuestions from "../../../lecture/questions/src/lib/lecture-questions";
+import {UserService} from "@seba/api-services";
+import {LectureWatch} from "@seba/lecture/watch";
+import {LectureQuestions} from "@seba/lecture/questions";
 import {LectureQuizzes} from "@seba/lecture/quizzes";
 import {Statistics} from "@seba/lecture/statistics";
+import {LectureProvider, useLectureContext} from "@seba/context";
 
 export function Navigation() {
   const classes = useStyles();
   const logoPath = "/assets/logo.png";
 
-  const [renderedLectures, setRenderedLectures] = useState();
-  const [renderedCreateButton, setRenderedCreateButton] = useState();
+  const [user, setUser] = useState<IUser>();
 
-  function renderLectureUnits(units: [ILectureUnit]) {
+  function StatisticsTab(lecture: ILecture) {
+    if (user !== undefined && +user.role === Role.LECTURER)
+      return (
+        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/statistics"}>
+          <ListItemText primary="Statistics"/>
+        </ListItem>
+      );
+    return;
+  }
+
+  function CreateUnitButton(lecture: ILecture) {
+    if (user !== undefined && +user.role === Role.LECTURER)
+      return (
+        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/unit/create"}>
+          <ListItemText primary="Create..."/>
+        </ListItem>
+      );
+    return;
+  }
+
+  function LectureUnits(units: [ILectureUnit]) {
     return units.map((unit) => (
       <Accordion>
         <AccordionSummary>{unit.title}</AccordionSummary>
@@ -50,112 +69,90 @@ export function Navigation() {
     ));
   }
 
-  function renderStatisticsTab(user: IUser, lecture: ILecture) {
-    if (+user.role === Role.LECTURER)
-      return (
-        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/statistics"}>
-          <ListItemText primary="Statistics"/>
-        </ListItem>
-      );
-    return;
+  function Lectures() {
+    const context = useLectureContext();
+
+    if (context.lectures !== undefined)
+      return <>
+        {context.lectures.map((lecture) => (
+          <Accordion>
+            <AccordionSummary>
+              {lecture.title}
+            </AccordionSummary>
+            <AccordionDetails className={classes.lectureAccordion}>
+              {StatisticsTab(lecture)}
+              {LectureUnits(lecture.units)}
+              {CreateUnitButton(lecture)}
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </>;
+    return null;
   }
 
-  function renderCreateUnitButton(user: IUser, lecture: ILecture) {
-    if (+user.role === Role.LECTURER)
-      return (
-        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/unit/create"}>
-          <ListItemText primary="Create..."/>
-        </ListItem>
-      );
-    return;
-  }
-
-  async function renderLectures() {
-    const lectures = await LectureService.getAll();
-    const currentUser = await UserService.getCurrent();
-
-    return lectures.map((lecture) => (
-      <Accordion>
-        <AccordionSummary>
-          {lecture.title}
-        </AccordionSummary>
-        {renderStatisticsTab(currentUser, lecture)}
-        <AccordionDetails className={classes.lectureAccordion}>
-          {renderLectureUnits(lecture.units)}
-        </AccordionDetails>
-        {renderCreateUnitButton(currentUser, lecture)}
-      </Accordion>
-    ));
-  }
-
-  async function renderCreateButton() {
-    const currentUser = await UserService.getCurrent();
-    if (+currentUser.role === Role.LECTURER)
+  function CreateButton() {
+    if (user !== undefined && +user.role === Role.LECTURER)
       return (
         <ListItem button component={RouterLink} to="/lecture/create">
           <ListItemText primary="Create..."/>
         </ListItem>
       );
-    return;
+    return null;
   }
 
   useEffect(() => {
-    const setRenderedLecturesDelayed = async () => setRenderedLectures(await renderLectures());
-    const setRenderedCreateButtonDelayed = async () => setRenderedCreateButton(await renderCreateButton());
-
-    setRenderedLecturesDelayed();
-    setRenderedCreateButtonDelayed();
+    UserService.getCurrent().then(user => setUser(user));
   }, []);
 
   return (
     <Router>
       <div className={classes.root}>
-        <Drawer
-          variant="permanent"
-          className={classes.drawer}
-          classes={{paper: classes.paper}}
-        >
-          <nav>
-            <List>
-              <div className={classes.logoContainer}>
-                <img src={logoPath} className={classes.logo} alt="Learn with me"/>
-              </div>
-              <Box border={1}/>
-              <ListItem button component={RouterLink} to="/home">
-                <ListItemText primary="Home"/>
-              </ListItem>
-              <Box border={1}/>
-              {renderedLectures}
-              <Box border={1}/>
-              {renderedCreateButton}
-            </List>
-          </nav>
-        </Drawer>
-        <main className={classes.content}>
-          <Switch>
-            <Route path="/lecture/create">
-              <LectureCreate/>
-            </Route>
-            <Route path="/lecture/:lecture_id/unit/create">
-              <CreateUnit/>
-            </Route>
-            <Route path="/lecture/:lecture_id/statistics">
-              <Statistics/>
-            </Route>
-            <Route path="/unit/:unit_id/watch">
-              <LectureWatch/>
-            </Route>
-            <Route path="/unit/:unit_id/questions">
-              <LectureQuestions/>
-            </Route>
-            <Route path="/unit/:unit_id/quizzes">
-              <LectureQuizzes/>
-            </Route>
-          </Switch>
-        </main>
+        <LectureProvider>
+          <Drawer
+            variant="permanent"
+            className={classes.drawer}
+            classes={{paper: classes.paper}}
+          >
+            <nav>
+              <List>
+                <div className={classes.logoContainer}>
+                  <img src={logoPath} className={classes.logo} alt="Learn with me"/>
+                </div>
+                <Box border={1}/>
+                <ListItem button component={RouterLink} to="/home">
+                  <ListItemText primary="Home"/>
+                </ListItem>
+                <Box border={1}/>
+                <Lectures/>
+                <Box border={1}/>
+                <CreateButton/>
+              </List>
+            </nav>
+          </Drawer>
+          <main className={classes.content}>
+            <Switch>
+              <Route path="/lecture/create">
+                <LectureCreate/>
+              </Route>
+              <Route path="/lecture/:lecture_id/unit/create">
+                <CreateUnit/>
+              </Route>
+              <Route path="/lecture/:lecture_id/statistics">
+                <Statistics/>
+              </Route>
+              <Route path="/unit/:unit_id/watch">
+                <LectureWatch/>
+              </Route>
+              <Route path="/unit/:unit_id/questions">
+                <LectureQuestions/>
+              </Route>
+              <Route path="/unit/:unit_id/quizzes">
+                <LectureQuizzes/>
+              </Route>
+            </Switch>
+          </main>
+        </LectureProvider>
       </div>
     </Router>
   );
 }
-
-export default Navigation;
