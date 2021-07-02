@@ -1,10 +1,11 @@
-import { createStyles, Grid, makeStyles, Paper, Theme } from '@material-ui/core';
+import { createStyles, Grid, IconButton, makeStyles, Paper, Theme } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import { QuestionService } from '../../../../api-services/src/lib/question-service';
 
 /* eslint-disable-next-line */
 export interface QuestionListEntryProps {
-  id: string;
+  question: any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -17,27 +18,24 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function QuestionListEntry(props: QuestionListEntryProps) {
   const classes = useStyles();
+  const upvote = () =>{
+    QuestionService.upvote(props.question._id)
+  }
   return (
     <Paper variant="outlined" className={classes.padded}>
       <Grid container alignItems="stretch">
         <Grid item xs container justify="space-around"  direction="column">
             <Grid item container alignItems='center' spacing={2}>
-              <ThumbUpIcon/> <span>12</span>
+              <IconButton onClick={upvote}><ThumbUpIcon/></IconButton> <span>{props.question.upVotes}</span>
             </Grid>
             <Grid item>
               <RadioButtonUncheckedIcon/>
             </Grid>
           </Grid>
         <Grid item xs={11}>
-          <h1>Question {props.id}</h1>
+          <h1>Question {props.question._id}</h1>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            auctor turpis quis enim placerat convallis. Curabitur a ultricies magna.
-            Pellentesque cursus massa vel nibh facilisis, a rutrum dui interdum. Sed
-            tempor nunc ut metus sollicitudin malesuada. Nunc tristique ligula
-            mattis orci ornare, quis porttitor erat convallis. Aliquam erat
-            volutpat. Aenean ullamcorper magna sit amet magna aliquam, ut interdum
-            risus finibus. Nullam imperdiet orci in pharetra bibendum.
+            {props.question.text}
           </p>
         </Grid>
       </Grid>

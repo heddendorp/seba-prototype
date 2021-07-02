@@ -1,4 +1,4 @@
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, useRouteMatch } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import NewQuestionDialog from './new-question-dialog/new-question-dialog';
 import React from 'react';
@@ -9,6 +9,7 @@ import { QuestionService } from '../../../api-services/src/lib/question-service'
 export interface QuestionsProps {}
 
 export function Questions(props: QuestionsProps) {
+  let { path, url } = useRouteMatch();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -16,8 +17,8 @@ export function Questions(props: QuestionsProps) {
   };
 
   const handleClose = (question: any)=>{
-    QuestionService.create(question);
     return () => {
+      QuestionService.create(question);
       setOpen(false);
     }
   };
@@ -30,11 +31,11 @@ export function Questions(props: QuestionsProps) {
       <QuestionList/>
       <ul>
         <li>
-          <Link to="/questions">questions root</Link>
+          <Link to={`${url}/questions`}>questions root</Link>
         </li>
       </ul>
       <Route
-        path="/"
+        exact path={path}
         render={() => <div>This is the questions root route.</div>}
       />
     </div>

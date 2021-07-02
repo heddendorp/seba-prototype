@@ -52,8 +52,8 @@ export function QuestionList(props: QuestionListProps) {
         </Grid>
         <Grid container spacing={3} direction="column">
           {questions.map((question) => (
-            <Grid item>
-              <QuestionListEntry id={question._id} />
+            <Grid item key={question._id}>
+              <QuestionListEntry question={question} />
             </Grid>
           ))}
         </Grid>

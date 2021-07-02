@@ -37,7 +37,7 @@ router.get(
 );
 
 router.post(
-  ':questionId/upvote',
+  '/:questionId/upvote',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const question = await Question.findById(req.params.questionId);

@@ -10,4 +10,8 @@ export class QuestionService extends BaseService {
     const response = await this.authenticatedRequest('GET', 'question');
     return await response.json() as [IQuestion];
   }
+
+  public static upvote(id) {
+    return this.authenticatedRequest('POST', `question/${id}/upvote`)
+  }
 }
