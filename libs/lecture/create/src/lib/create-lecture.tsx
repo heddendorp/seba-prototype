@@ -1,4 +1,3 @@
-/* eslint-disable-next-line */
 import {Container, CssBaseline, Typography} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import {LectureService} from "../../../../api-services/src/lib/lecture-service";
@@ -20,7 +19,7 @@ export function CreateLecture(props: LectureCreateProps) {
 
     await LectureService.create({
       title: title,
-      short_title: title,
+      short_title: short_title,
       semester: semester
     });
     history.push("/ID");

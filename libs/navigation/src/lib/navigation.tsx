@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import {useStyles} from './style';
 import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
-import {ChangeEvent, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {CreateUnit} from '@seba/lecture/create-unit';
 import {CreateLecture} from "@seba/lecture/create";
@@ -22,7 +22,7 @@ import LectureQuestions from "../../../lecture/questions/src/lib/lecture-questio
 import {LectureQuizzes} from "@seba/lecture/quizzes";
 import {Statistics} from "@seba/lecture/statistics";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
-import CloseIcon from "@material-ui/icons/Close";
+import EditLecture from "../../../lecture/create/src/lib/edit-lecture";
 
 export function Navigation() {
   const classes = useStyles();
@@ -159,7 +159,7 @@ export function Navigation() {
               <LectureQuizzes/>
             </Route>
             <Route path="/lecture/:lecture_id/edit">
-              <LectureQuizzes/>
+              <EditLecture/>
             </Route>
           </Switch>
         </main>

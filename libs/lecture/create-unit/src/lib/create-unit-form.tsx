@@ -134,7 +134,7 @@ export function CreateUnitForm(props: UploadLectureFormProps) {
           <div className={classes.finishButton}>
             <Button autoFocus>Cancel</Button>
             <Button color="primary" type="submit">
-              Upload
+              Submit
             </Button>
           </div>
         </Grid>

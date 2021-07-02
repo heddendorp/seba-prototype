@@ -15,6 +15,7 @@ router.post(
 
     const lecture = new Lecture({
       title: req.body.title,
+      short_title: req.body.short_title,
       semester: req.body.semester,
       lecturer: req.user._id
     });
@@ -49,5 +50,41 @@ router.get(
     res.json(result);
   }
 )
+
+router.get(
+  "/:lectureId",
+  passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    await Lecture.findById(req.params.lectureId, function (err, result) {
+      if (err){
+        console.log(err);
+        return res.status(500).json({message: "Internal server error."});
+      }
+      else
+        res.status(200).json(result);
+    }).exec();
+  }
+)
+
+router.post(
+  "/:lectureId",
+  passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    if (+req.user.role !== Role.LECTURER)
+      return res.status(401).json({
+        message: "Only lecturers can update lectures."
+      });
+
+    await Lecture.findByIdAndUpdate(req.params.lectureId, {$set: req.body}, function (err) {
+      if (err){
+        console.log(err);
+        return res.status(500).json({message: "Internal server error."});
+      }
+      else
+        return res.status(200).json({message: "Success."});
+    }).exec();
+
+  }
+);
 
 export const lectureRouter = router;

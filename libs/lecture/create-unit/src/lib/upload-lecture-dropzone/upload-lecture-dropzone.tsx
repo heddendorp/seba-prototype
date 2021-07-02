@@ -43,8 +43,7 @@ export function UploadLectureDropzone(props: UploadLectureDropzoneProps) {
       previewChipProps={{ classes: { root: classes.previewChip } }}
       previewText="Selected file:"
       onChange={onChangeFile}
-      //at the moment max 10GB file
-      maxFileSize={10000000000}
+      maxFileSize={1024 * 1024 * 1024}  // Limited to 1 GB
     />
   );
 }
