@@ -19,9 +19,6 @@ export function EditLecture(props: EditLectureProps) {
     short_title: string,
     semester: string,
   ) => {
-
-    //todo handle Submit
-
     await LectureService.update(params.lecture_id, {
       title: title,
       short_title: title,
@@ -31,8 +28,6 @@ export function EditLecture(props: EditLectureProps) {
 
 
     //todo refresh navigation
-    //history.push("/ID");
-    //todo redirection
   }
 
   return (

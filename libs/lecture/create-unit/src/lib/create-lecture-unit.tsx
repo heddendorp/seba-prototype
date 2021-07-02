@@ -1,13 +1,11 @@
 import './create-lecture.module.scss';
-import { useState } from 'react';
-import UploadLectureDialog from './upload-lecture-dialog/upload-lecture-dialog';
 import CreateUnitForm from './create-unit-form';
-import {Button, createStyles, Grid, LinearProgress, makeStyles, TextField, Theme} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import {LectureUnitService} from "../../../../api-services/src/lib/lecture-unit-service";
 
 /* eslint-disable-next-line */
-export interface CreateLectureProps {}
+export interface CreateLectureUnitProps {}
 
 /*
   Todo-create-lecture:
@@ -25,14 +23,9 @@ export const useStyles = makeStyles((theme) => ({
   })
 );
 
-export function CreateUnit(props: CreateLectureProps) {
+export function CreateLectureUnit(props: CreateLectureUnitProps) {
   const classes = useStyles();
   const params = useParams();
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const handleOpen = () => {
-    setOpenDialog(true);
-  };
 
   const handleSubmit = async (
     title: string,
@@ -42,7 +35,6 @@ export function CreateUnit(props: CreateLectureProps) {
     setProgress: (value: (((prevState: number) => number) | number)) => void
   ) => {
 
-    // TODO August: Refactor
     await LectureUnitService.create({
       lecture_id: params.lecture_id,
       title: title,
@@ -51,7 +43,7 @@ export function CreateUnit(props: CreateLectureProps) {
       //todo: remove this later
       video_path: file == undefined ? "" : file.name
     })
-
+/*
     const formData = new FormData();
     formData.append("video", file);
 
@@ -63,6 +55,8 @@ export function CreateUnit(props: CreateLectureProps) {
     }
 
     xhr.send(formData);
+
+ */
   };
 
   return (
@@ -70,22 +64,7 @@ export function CreateUnit(props: CreateLectureProps) {
         <CreateUnitForm handleSubmit={handleSubmit} />
     </div>
 
-
-    // <div>
-    //   <Button variant="outlined" color="secondary">
-    //     Delete lecture
-    //   </Button>
-    //   <Button variant="outlined" color="primary" onClick={handleOpen}>
-    //     Upload lecture
-    //   </Button>
-    //   <UploadLectureDialog
-    //     openDialog={openDialog}
-    //     setOpenDialog={setOpenDialog}
-    //   >
-    //     <CreateUnitForm handleSubmit={handleSubmit} />
-    //   </UploadLectureDialog>
-    // </div>
   );
 }
 
-export default CreateUnit;
+export default CreateLectureUnit;

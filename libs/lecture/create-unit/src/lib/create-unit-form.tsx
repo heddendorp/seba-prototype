@@ -8,7 +8,11 @@ import {
   Theme,
 } from '@material-ui/core';
 import UploadLectureDropzone from './upload-lecture-dropzone/upload-lecture-dropzone';
-import {ChangeEvent, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {LectureService, LectureUnitService} from "@seba/api-services";
+import {useParams} from "react-router-dom";
+import {convertBuildOptions} from "@nrwl/web/src/utils/normalize";
+import * as moment from "moment";
 
 /* eslint-disable-next-line */
 export interface UploadLectureFormProps {
@@ -42,21 +46,29 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-/*
-  Todo-create-lecture-form:
-    -lecture-unit title limit is set to a max limit of 50 chars
- */
-
 export function CreateUnitForm(props: UploadLectureFormProps) {
-  const [title, setTitle] = useState('');
-  const [dateTime, setDateTime] = useState('');
-  const [description, setDescription] = useState('');
-  //not sure about this initial value ""{} as File
+  const [title, setTitle] = useState("");
+  const [dateTime, setDateTime] = useState((moment(new Date())).format().slice(0, -9));
+  const [description, setDescription] = useState("");
   const [file, setFile] = useState({} as File);
 
   const [progress, setProgress] = useState(0);
 
   const classes = useStyles();
+  const params = useParams();
+
+  useEffect(  () => {
+    if(params.unit_id !== undefined) {
+      const lectureUnit = async () => await LectureUnitService.getById(params.unit_id);
+
+      lectureUnit().then((unit) => {
+        setTitle(unit.title);
+        setDateTime((moment(unit.publish_date)).format().slice(0, -9));
+        setDescription(unit.description);
+      });
+    }
+    //todo add error handling
+  }, [useParams()]);
 
   const handleSubmit = (e: FormEvent) => {
     //this prevents closing dialog when clicking submit
@@ -89,11 +101,12 @@ export function CreateUnitForm(props: UploadLectureFormProps) {
             variant="outlined"
             rowsMax={2}
             fullWidth
+            value={title}
             onChange={onChangeTitle}
             inputProps={{
-              maxLength: 50
+              maxLength: 50 //char limit is set to 50
             }}
-
+            required
           />
         </Grid>
         <Grid item xs={3}>
@@ -101,11 +114,12 @@ export function CreateUnitForm(props: UploadLectureFormProps) {
             id="datetime-local"
             label="Publish date"
             type="datetime-local"
-            defaultValue="2017-05-24T10:30"
             InputLabelProps={{
               shrink: true,
             }}
+            value={dateTime}
             onChange={onChangeDateTime}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -117,7 +131,9 @@ export function CreateUnitForm(props: UploadLectureFormProps) {
             variant="outlined"
             rowsMax={5}
             fullWidth
+            value={description}
             onChange={onChangeDescription}
+            required
           />
         </Grid>
         <Grid item xs={12}>

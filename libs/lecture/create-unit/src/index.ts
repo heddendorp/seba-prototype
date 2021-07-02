@@ -1,1 +1,1 @@
-export * from './lib/create-unit';
+export * from './lib/create-lecture-unit';

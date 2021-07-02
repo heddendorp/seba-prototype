@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import CreateUnit from './create-unit';
+import CreateLectureUnit from './create-lecture-unit';
 
 describe('CreateLecture', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<CreateUnit />);
+    const { baseElement } = render(<CreateLectureUnit />);
     expect(baseElement).toBeTruthy();
   });
 });

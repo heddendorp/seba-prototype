@@ -23,17 +23,17 @@ export function CreateLectureForm(props: CreateLectureFormProps) {
   const params = useParams();
 
   useEffect(  () => {
-    //todo: problem when only switch between edit views
-    const lecture = async () => await LectureService.getById(params.lecture_id);
+    if(params.lecture_id !== undefined) {
+      const lecture = async () => await LectureService.getById(params.lecture_id);
 
-    lecture().then((lec) => {
-      setTitle(lec.title)
-      setShortTitle(lec.short_title)
-      setSemester(lec.semester)
-    });
-    //todo add error handling
-  }, []);
-
+      lecture().then((lec) => {
+        setTitle(lec.title)
+        setShortTitle(lec.short_title)
+        setSemester(lec.semester)
+      });
+      //todo add error handling
+    }
+  }, [useParams()]);
 
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,6 @@ export function CreateLectureForm(props: CreateLectureFormProps) {
   }
 
   const handleSubmit = (e: FormEvent) => {
-    //todo why it gets redirected to query url without the preventDefault?
     e.preventDefault();
     props.handleSubmit(title, shortTitle, semester);
   };

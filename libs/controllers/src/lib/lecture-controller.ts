@@ -61,7 +61,7 @@ router.get(
         return res.status(500).json({message: "Internal server error."});
       }
       else
-        res.status(200).json(result);
+        return res.status(200).json(result);
     }).exec();
   }
 )
@@ -83,7 +83,6 @@ router.post(
       else
         return res.status(200).json({message: "Success."});
     }).exec();
-
   }
 );
 

@@ -14,7 +14,7 @@ import {useStyles} from './style';
 import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
 import {useEffect, useState} from 'react';
 
-import {CreateUnit} from '@seba/lecture/create-unit';
+import {CreateLectureUnit} from '@seba/lecture/create-unit';
 import {CreateLecture} from "@seba/lecture/create";
 import {LectureService, UserService} from "@seba/api-services";
 import LectureWatch from "../../../lecture/watch/src/lib/lecture-watch";
@@ -23,6 +23,7 @@ import {LectureQuizzes} from "@seba/lecture/quizzes";
 import {Statistics} from "@seba/lecture/statistics";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import EditLecture from "../../../lecture/create/src/lib/edit-lecture";
+import {EditLectureUnit} from "../../../lecture/create-unit/src/lib/edit-lecture-unit";
 
 export function Navigation() {
   const classes = useStyles();
@@ -34,7 +35,12 @@ export function Navigation() {
   function renderLectureUnits(units: [ILectureUnit]) {
     return units.map((unit) => (
       <Accordion>
-        <AccordionSummary>{unit.title}</AccordionSummary>
+        <div>
+          {unit.title}
+          <IconButton component={RouterLink} to={"/unit/" + unit._id + "/edit"} className={classes.editButton}>
+            <EditOutlinedIcon />
+          </IconButton>
+        </div>
         <AccordionDetails>
           <List>
             <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/watch"}>
@@ -144,7 +150,7 @@ export function Navigation() {
               <CreateLecture/>
             </Route>
             <Route path="/lecture/:lecture_id/unit/create">
-              <CreateUnit/>
+              <CreateLectureUnit/>
             </Route>
             <Route path="/lecture/:lecture_id/statistics">
               <Statistics/>
@@ -160,6 +166,9 @@ export function Navigation() {
             </Route>
             <Route path="/lecture/:lecture_id/edit">
               <EditLecture/>
+            </Route>
+            <Route path="/unit/:unit_id/edit">
+              <EditLectureUnit/>
             </Route>
           </Switch>
         </main>
