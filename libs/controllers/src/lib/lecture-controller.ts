@@ -20,12 +20,11 @@ router.post(
     });
 
     lecture.save(function (err) {
-      if (err){
-        res.status(500);
+      if (err) {
         console.log(err);
-      }
-      else
-        res.status(200);
+        return res.status(500).json({message: "Internal server error."});
+      } else
+        return res.status(200).json({message: "Success."});
     });
   }
 );

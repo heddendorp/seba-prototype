@@ -1,39 +1,14 @@
-/* eslint-disable-next-line */
-import {
-  Button,
-  Container,
-  CssBaseline, Link,
-  makeStyles, TextField,
-  Typography
-} from "@material-ui/core";
+import {Button, Container, CssBaseline, Link, TextField, Typography} from "@material-ui/core";
 
-import logo from "./logo.png";
 import React, {ChangeEvent, FormEvent, useState} from "react";
-import { Alert } from '@material-ui/lab';
+import {Alert} from '@material-ui/lab';
 import {useHistory} from "react-router-dom";
-import {StorageService} from "../../../api-services/src/lib/storage-service";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  logo: {
-    marginBottom: theme.spacing(5)
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(2, 0, 2),
-  },
-}));
+import {StorageService, UserService} from "@seba/api-services";
+import {useStyles} from "./styles";
 
 export function Login() {
   const classes = useStyles();
+  const logoPath = "/assets/logo.png";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -46,30 +21,20 @@ export function Login() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    fetch("http://localhost:3333/user/login", {
-      method: 'POST',
-      body: JSON.stringify({
-        username: username,
-        password: password
-      }),
-      headers: new Headers()
-    }).then(response => {
-      if (response.status !== 200) {
-        response.text().then(text =>  {
-          setError(true);
-          setErrorMessage(JSON.parse(text).message);
-        });
-      }
+    const response = await UserService.login({username: username, password: password});
 
-      setError(false);
-      response.text().then(text => {
-        const body = JSON.parse(text);
+    response.json().then(body => {
+      if (response.status !== 200) {
+        setError(true);
+        setErrorMessage(body.message);
+      } else {
+        setError(false);
         StorageService.setToken(body.token)
 
         history.push("/home", {
           role: body.user.role
         });
-      });
+      }
     }).catch(error => alert(error));
   }
 
@@ -91,21 +56,18 @@ export function Login() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
+      <CssBaseline/>
       <div className={classes.paper}>
-        <img className={classes.logo} src={logo}/>
+        <img className={classes.logo} src={logoPath} alt="Learn with me"/>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
-            margin="normal"
             required
             fullWidth
-            id="username"
             label="Username"
-            name="username"
             autoFocus
             autoComplete="username"
             onChange={onChangeUsername}
@@ -115,10 +77,8 @@ export function Login() {
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
-            id="password"
             onChange={onChangePassword}
           />
           {getAlert()}
@@ -139,5 +99,3 @@ export function Login() {
     </Container>
   );
 }
-
-export default Login;

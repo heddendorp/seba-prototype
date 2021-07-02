@@ -1,14 +1,11 @@
-/* eslint-disable-next-line */
-import {Button, Container, CssBaseline, Link, makeStyles, TextField, Typography} from "@material-ui/core";
+import {Button, Container, CssBaseline, TextField, Typography} from "@material-ui/core";
 import React, {ChangeEvent, FormEvent, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
-import {LectureService} from "../../../../api-services/src/lib/lecture-service";
+import {LectureService} from "@seba/api-services";
 import {useStyles} from "./style";
+import {useLectureContext} from "@seba/context";
 
-export interface LectureCreateProps {}
-
-export function LectureCreate(props: LectureCreateProps) {
-  const history = useHistory();
+export function LectureCreate() {
+  const context = useLectureContext();
   const classes = useStyles();
 
   const [title, setTitle] = useState("");
@@ -17,12 +14,11 @@ export function LectureCreate(props: LectureCreateProps) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    await LectureService.create({
+    LectureService.create({
       title: title,
       short_title: title,
       semester: semester
-    });
-    history.push("/ID");
+    }).then(() => context.updateLectures());
   }
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +31,7 @@ export function LectureCreate(props: LectureCreateProps) {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
+      <CssBaseline/>
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Create Lecture
