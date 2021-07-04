@@ -1,15 +1,23 @@
 import './create-lecture.module.scss';
+import {useEffect, useState} from 'react';
+import UploadLectureDialog from './upload-lecture-dialog/upload-lecture-dialog';
 import CreateUnitForm from './create-unit-form';
 import {useParams} from 'react-router-dom';
 import {LectureUnitService} from "@seba/api-services";
 import {useLectureContext} from "@seba/context";
 import {useStyles} from "./styles";
+import {Button, createStyles, Grid, LinearProgress, makeStyles, TextField, Theme} from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import {LectureUnitService} from "../../../../api-services/src/lib/lecture-unit-service";
+
+/* eslint-disable-next-line */
+export interface EditLectureUnitProps {}
 
 type CreateUnitURLParams = {
   lecture_id: string
 }
 
-export function CreateUnit() {
+export function EditLectureUnit(props: EditLectureUnitProps) {
   const context = useLectureContext();
   const classes = useStyles();
   const params = useParams<CreateUnitURLParams>();
@@ -35,6 +43,8 @@ export function CreateUnit() {
     });
   };
 
+  //todo refresh navigation
+
   return (
     <div className={classes.root}>
       <CreateUnitForm handleSubmit={handleSubmit}/>
@@ -42,4 +52,4 @@ export function CreateUnit() {
   );
 }
 
-export default CreateUnit;
+export default EditLectureUnit;

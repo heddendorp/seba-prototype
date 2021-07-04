@@ -1,6 +1,7 @@
 import {BaseService} from "./base-service";
 import {ICreateLectureUnitTransport, IUploadVideoTransport} from "@seba/api-interfaces";
 import {StorageService} from "./storage-service";
+import {ILectureUnit} from "@seba/models";
 
 export class LectureUnitService extends BaseService {
   public static async create(body: ICreateLectureUnitTransport) {
@@ -20,5 +21,14 @@ export class LectureUnitService extends BaseService {
         body.callback(request.response);
     }
     request.send(data);
+  }
+
+  public static async getById(lectureUnitId: string){
+    const response = await this.authenticatedRequest('GET', `lecture-unit/${lectureUnitId}`);
+    return await response.json() as ILectureUnit;
+  }
+
+  public static async update(lectureUnitId: string, body: ICreateLectureUnitTransport){
+    return this.authenticatedRequest('POST', `lecture-unit/${lectureUnitId}`, body);
   }
 }

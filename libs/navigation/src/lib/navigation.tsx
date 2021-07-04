@@ -4,7 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Drawer,
+  Drawer, IconButton,
   List,
   ListItem,
   ListItemText,
@@ -13,14 +13,17 @@ import {useStyles} from './style';
 import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
 import {useEffect, useState} from 'react';
 
-import {CreateUnit} from '@seba/lecture/create-unit';
-import {LectureCreate} from "@seba/lecture/create";
-import {UserService} from "@seba/api-services";
+import {CreateLectureUnit} from '@seba/lecture/create-unit';
+import {CreateLecture} from "@seba/lecture/create";
+import {LectureService, UserService} from "@seba/api-services";
 import {LectureWatch} from "@seba/lecture/watch";
 import {LectureQuestions} from "@seba/lecture/questions";
 import {LectureQuizzes} from "@seba/lecture/quizzes";
 import {Statistics} from "@seba/lecture/statistics";
 import {LectureProvider, useLectureContext} from "@seba/context";
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
+import EditLecture from "../../../lecture/create/src/lib/edit-lecture";
+import {EditLectureUnit} from "../../../lecture/create-unit/src/lib/edit-lecture-unit";
 
 export function Navigation() {
   const classes = useStyles();
@@ -51,7 +54,12 @@ export function Navigation() {
   function LectureUnits(units: [ILectureUnit]) {
     return units.map((unit) => (
       <Accordion>
-        <AccordionSummary>{unit.title}</AccordionSummary>
+        <div>
+          {unit.title}
+          <IconButton component={RouterLink} to={"/unit/" + unit._id + "/edit"} className={classes.editButton}>
+            <EditOutlinedIcon />
+          </IconButton>
+        </div>
         <AccordionDetails>
           <List>
             <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/watch"}>
@@ -77,7 +85,12 @@ export function Navigation() {
         {context.lectures.map((lecture) => (
           <Accordion>
             <AccordionSummary>
-              {lecture.title}
+              <div>
+                {lecture.title}
+                <IconButton component={RouterLink} to={"/lecture/" + lecture._id + "/edit"} className={classes.editButton}>
+                  <EditOutlinedIcon />
+                </IconButton>
+              </div>
             </AccordionSummary>
             <AccordionDetails className={classes.lectureAccordion}>
               {StatisticsTab(lecture)}
@@ -148,6 +161,12 @@ export function Navigation() {
               </Route>
               <Route path="/unit/:unit_id/quizzes">
                 <LectureQuizzes/>
+              </Route>
+              <Route path="/lecture/:lecture_id/edit">
+                <EditLecture/>
+              </Route>
+              <Route path="/unit/:unit_id/edit">
+                <EditLectureUnit/>
               </Route>
             </Switch>
           </main>

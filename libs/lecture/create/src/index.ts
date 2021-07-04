@@ -1,1 +1,1 @@
-export * from './lib/lecture-create';
+export * from './lib/create-lecture';

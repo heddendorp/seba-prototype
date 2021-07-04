@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as passport from "passport";
-import {Lecture, LectureUnit} from "@seba/models";
+import {Lecture, LectureUnit, Role} from "@seba/models";
 import * as path from "path";
 import * as uuid from "uuid";
 
@@ -52,12 +52,49 @@ router.post(
   }
 )
 
+/*
 router.get(
   "/getPublishedByIds/?",
   passport.authenticate("jwt", {session: false}),
   async (req, res) => {
     // TODO: If lecturer -> all if student published only - probably needs renaming of route
     res.json(await LectureUnit.find({_id: {$in: req.query.id}}))
+  }
+);
+ */
+
+router.get(
+  "/:lectureUnitId",
+  //passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    await LectureUnit.findById(req.params.lectureUnitId, function (err, result) {
+      if (err){
+        console.log(err);
+        return res.status(500).json({message: "Internal server error."});
+      }
+      else
+        return res.status(200).json(result);
+    });
+  }
+)
+
+router.post(
+  "/:lectureUnitId",
+  //passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    if (+req.user.role !== Role.LECTURER)
+      return res.status(401).json({
+        message: "Only lecturers can update lectures."
+      });
+
+    await LectureUnit.findByIdAndUpdate(req.params.lectureUnitId, {$set: req.body}, function (err) {
+      if (err){
+        console.log(err);
+        return res.status(500).json({message: "Internal server error."});
+      }
+      else
+        return res.status(200).json({message: "Success."});
+    });
   }
 );
 
