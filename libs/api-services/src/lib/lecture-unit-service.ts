@@ -1,5 +1,5 @@
 import {BaseService} from "./base-service";
-import {ICreateLectureUnitTransport, IUploadVideoTransport} from "@seba/api-interfaces";
+import {ICreateLectureUnitTransport, IEditLectureUnitTransport, IUploadVideoTransport} from "@seba/api-interfaces";
 import {StorageService} from "./storage-service";
 import {ILectureUnit} from "@seba/models";
 
@@ -23,12 +23,12 @@ export class LectureUnitService extends BaseService {
     request.send(data);
   }
 
-  public static async getById(lectureUnitId: string){
-    const response = await this.authenticatedRequest('GET', `lecture-unit/${lectureUnitId}`);
+  public static async getById(unit_id: string) {
+    const response = await this.authenticatedRequest('GET', `lecture-unit/${unit_id}`);
     return await response.json() as ILectureUnit;
   }
 
-  public static async update(lectureUnitId: string, body: ICreateLectureUnitTransport){
-    return this.authenticatedRequest('POST', `lecture-unit/${lectureUnitId}`, body);
+  public static async update(unit_id: string, body: IEditLectureUnitTransport) {
+    return this.authenticatedRequest('PATCH', `lecture-unit/${unit_id}`, body);
   }
 }

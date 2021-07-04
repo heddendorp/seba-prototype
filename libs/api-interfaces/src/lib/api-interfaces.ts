@@ -14,6 +14,13 @@ export interface ICreateLectureUnitTransport extends Record<string, unknown> {
   video_path: string
 }
 
+export interface IEditLectureUnitTransport extends Record<string, unknown> {
+  title: string,
+  description: string,
+  publish_date: Date,
+  video_path: string | undefined
+}
+
 export interface IUploadVideoTransport {
   file: File,
   onProgress: (e: ProgressEvent) => void,

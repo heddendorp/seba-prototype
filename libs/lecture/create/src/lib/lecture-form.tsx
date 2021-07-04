@@ -2,10 +2,9 @@ import {Button, TextField} from "@material-ui/core";
 import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {useStyles} from "./style";
 import {LectureService} from "@seba/api-services";
-import {useParams} from 'react-router-dom';
 
-/* eslint-disable-next-line */
 export interface CreateLectureFormProps {
+  lecture_id: string | undefined,
   handleSubmit: (
     title: string,
     short_title: string,
@@ -13,27 +12,24 @@ export interface CreateLectureFormProps {
   ) => void;
 }
 
-export function CreateLectureForm(props: CreateLectureFormProps) {
+export function LectureForm(props: CreateLectureFormProps) {
+  const classes = useStyles();
 
   const [title, setTitle] = useState("");
   const [shortTitle, setShortTitle] = useState("");
   const [semester, setSemester] = useState("");
 
-  const classes = useStyles();
-  const params = useParams();
+  useEffect(() => {
+    if (props.lecture_id !== undefined) {
+      const getLecture = async () => await LectureService.getById(props.lecture_id as string);
 
-  useEffect(  () => {
-    if(params.lecture_id !== undefined) {
-      const lecture = async () => await LectureService.getById(params.lecture_id);
-
-      lecture().then((lec) => {
-        setTitle(lec.title)
-        setShortTitle(lec.short_title)
-        setSemester(lec.semester)
+      getLecture().then(lecture => {
+        setTitle(lecture.title)
+        setShortTitle(lecture.short_title)
+        setSemester(lecture.semester)
       });
-      //todo add error handling
     }
-  }, [useParams()]);
+  }, [props.lecture_id]);
 
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {

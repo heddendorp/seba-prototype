@@ -1,29 +1,19 @@
 import {Container, CssBaseline, Typography} from "@material-ui/core";
-import {useHistory} from "react-router-dom";
-import {LectureService} from "../../../../api-services/src/lib/lecture-service";
+import {LectureService} from "@seba/api-services";
 import {useStyles} from "./style";
-import {CreateLectureForm} from "./create-lecture-form";
+import {LectureForm} from "./lecture-form";
+import {useLectureContext} from "@seba/context";
 
-/* eslint-disable-next-line */
-export interface LectureCreateProps {}
-
-export function CreateLecture(props: LectureCreateProps) {
-  const history = useHistory();
+export function CreateLecture() {
   const classes = useStyles();
+  const context = useLectureContext();
 
-  const handleSubmit = async (
-    title: string,
-    short_title: string,
-    semester: string,
-  ) => {
-
-    await LectureService.create({
+  const handleSubmit = async (title: string, short_title: string, semester: string,) =>
+    LectureService.create({
       title: title,
       short_title: short_title,
       semester: semester
-    });
-    history.push("/ID");
-  }
+    }).then(() => context.updateLectures());
 
   return (
     <Container component="main" maxWidth="xs">
@@ -32,7 +22,7 @@ export function CreateLecture(props: LectureCreateProps) {
         <Typography component="h1" variant="h5">
           Create Lecture
         </Typography>
-        <CreateLectureForm handleSubmit={handleSubmit}/>
+        <LectureForm handleSubmit={handleSubmit} lecture_id={undefined}/>
       </div>
     </Container>
   );

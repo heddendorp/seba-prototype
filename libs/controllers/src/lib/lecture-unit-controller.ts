@@ -3,6 +3,7 @@ import * as passport from "passport";
 import {Lecture, LectureUnit, Role} from "@seba/models";
 import * as path from "path";
 import * as uuid from "uuid";
+import * as fs from "fs";
 
 const router = express.Router();
 const BASE_FILE_PATH = "../../../../apps/api/src/assets/videos/";
@@ -52,48 +53,39 @@ router.post(
   }
 )
 
-/*
-router.get(
-  "/getPublishedByIds/?",
-  passport.authenticate("jwt", {session: false}),
-  async (req, res) => {
-    // TODO: If lecturer -> all if student published only - probably needs renaming of route
-    res.json(await LectureUnit.find({_id: {$in: req.query.id}}))
-  }
-);
- */
-
 router.get(
   "/:lectureUnitId",
-  //passport.authenticate("jwt", {session: false}),
+  passport.authenticate("jwt", {session: false}),
   async (req, res) => {
     await LectureUnit.findById(req.params.lectureUnitId, function (err, result) {
-      if (err){
+      if (err) {
         console.log(err);
         return res.status(500).json({message: "Internal server error."});
-      }
-      else
+      } else
         return res.status(200).json(result);
     });
   }
 )
 
-router.post(
+router.patch(
   "/:lectureUnitId",
-  //passport.authenticate("jwt", {session: false}),
+  passport.authenticate("jwt", {session: false}),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
         message: "Only lecturers can update lectures."
       });
 
-    await LectureUnit.findByIdAndUpdate(req.params.lectureUnitId, {$set: req.body}, function (err) {
-      if (err){
-        console.log(err);
-        return res.status(500).json({message: "Internal server error."});
-      }
-      else
-        return res.status(200).json({message: "Success."});
+    LectureUnit.findById(req.params.lectureUnitId).then(unit => {
+      if (req.body.video_path !== undefined)
+        fs.unlinkSync(unit.video_path);
+
+      unit.overwrite(req.body);
+      unit.save();
+      return res.status(200).json({message: "Success."});
+    }).catch(err => {
+      console.log(err);
+      return res.status(500).json({message: "Internal server error."});
     });
   }
 );

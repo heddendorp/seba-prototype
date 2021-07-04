@@ -1,69 +1,42 @@
-import './create-lecture.module.scss';
-import CreateUnitForm from './create-unit-form';
-import {makeStyles} from '@material-ui/core';
-import { useParams } from 'react-router-dom';
-import {LectureUnitService} from "../../../../api-services/src/lib/lecture-unit-service";
+import LectureUnitForm from './lecture-unit-form';
+import {useParams} from 'react-router-dom';
+import {LectureUnitService} from "@seba/api-services";
+import {useStyles} from "./styles";
+import {useLectureContext} from "@seba/context";
 
-/* eslint-disable-next-line */
-export interface CreateLectureUnitProps {}
+type CreateUnitURLParams = {
+  lecture_id: string
+}
 
-/*
-  Todo-create-lecture:
-    -lecture dialog is at the moment disabled -> discuss
-      -error warning in log after opening upload dialog
- */
-
-
-export const useStyles = makeStyles((theme) => ({
-    root: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: 'center',
-    }
-  })
-);
-
-export function CreateLectureUnit(props: CreateLectureUnitProps) {
+export function CreateLectureUnit() {
   const classes = useStyles();
-  const params = useParams();
+  const context = useLectureContext();
+  const params = useParams<CreateUnitURLParams>();
 
-  const handleSubmit = async (
-    title: string,
-    dateTime: string,
-    description: string,
-    file: File,
-    setProgress: (value: (((prevState: number) => number) | number)) => void
-  ) => {
+  const handleSubmit = async (title: string, dateTime: string, description: string, file: File,
+                              setProgress: (value: (((prevState: number) => number) | number)) => void) =>
+    LectureUnitService.uploadVideo({
+      file: file,
+      onProgress: e => setProgress(e.loaded / e.total * 100),
+      callback: response => {
+        const body = JSON.parse(response);
+        if (body.message !== "Success.")
+          throw new Error(body.message);
 
-    await LectureUnitService.create({
-      lecture_id: params.lecture_id,
-      title: title,
-      description: description,
-      publish_date: new Date(dateTime),
-      //todo: remove this later
-      video_path: file == undefined ? "" : file.name
-    })
-/*
-    const formData = new FormData();
-    formData.append("video", file);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("post", "http://localhost:3333/lecture-unit/video", true);
-
-    xhr.upload.onprogress = function(e) {
-      setProgress(e.loaded / e.total * 100)
-    }
-
-    xhr.send(formData);
-
- */
-  };
+        LectureUnitService.create({
+          lecture_id: params.lecture_id,
+          title: title,
+          description: description,
+          publish_date: new Date(dateTime),
+          video_path: body.video_path
+        }).then(() => context.updateLectures());
+      }
+    });
 
   return (
     <div className={classes.root}>
-        <CreateUnitForm handleSubmit={handleSubmit} />
+      <LectureUnitForm handleSubmit={handleSubmit} unit_id={undefined}/>
     </div>
-
   );
 }
 

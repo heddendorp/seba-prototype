@@ -55,17 +55,16 @@ router.get(
   passport.authenticate("jwt", {session: false}),
   async (req, res) => {
     await Lecture.findById(req.params.lectureId, function (err, result) {
-      if (err){
+      if (err) {
         console.log(err);
         return res.status(500).json({message: "Internal server error."});
-      }
-      else
+      } else
         return res.status(200).json(result);
     }).exec();
   }
 )
 
-router.post(
+router.patch(
   "/:lectureId",
   passport.authenticate("jwt", {session: false}),
   async (req, res) => {
@@ -75,11 +74,10 @@ router.post(
       });
 
     await Lecture.findByIdAndUpdate(req.params.lectureId, {$set: req.body}, function (err) {
-      if (err){
+      if (err) {
         console.log(err);
         return res.status(500).json({message: "Internal server error."});
-      }
-      else
+      } else
         return res.status(200).json({message: "Success."});
     }).exec();
   }

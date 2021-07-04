@@ -1,5 +1,5 @@
 import {BaseService} from './base-service';
-import {ICreateLectureTransport, IGetLectureTransport} from "@seba/api-interfaces";
+import {ICreateLectureTransport} from "@seba/api-interfaces";
 import {ILecture} from "@seba/models";
 
 export class LectureService extends BaseService {
@@ -12,12 +12,12 @@ export class LectureService extends BaseService {
     return await response.json() as [ILecture];
   }
 
-  public static async getById(lectureId: string){
+  public static async getById(lectureId: string) {
     const response = await this.authenticatedRequest('GET', `lecture/${lectureId}`);
     return await response.json() as ILecture;
   }
 
-  public static async update(lectureId: string, body: ICreateLectureTransport){
-    return this.authenticatedRequest('POST', `lecture/${lectureId}`, body);
+  public static async update(lectureId: string, body: ICreateLectureTransport) {
+    return this.authenticatedRequest('PATCH', `lecture/${lectureId}`, body);
   }
 }
