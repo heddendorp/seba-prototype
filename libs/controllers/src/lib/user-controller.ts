@@ -1,8 +1,23 @@
 import * as express from "express";
+import {Request} from "express";
 import * as passport from "passport";
 import {genToken} from "@seba/auth";
 
 const router = express.Router();
+
+router.post(
+  "/register",
+  async (req: Request, res) => {
+    if (!req.user)
+      res.status(409).json({
+        message: "Signup failed - Username already exists."
+      });
+    else
+      res.status(201).json({
+        message: "Signup success."
+      });
+  }
+);
 
 router.post("/login", async (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
@@ -11,11 +26,11 @@ router.post("/login", async (req, res, next) => {
         message: info.message
       });
 
-    req.login(user, function(err) {
+    req.login(user, function (err) {
       if (err)
         return next(err);
 
-      const body = { id: user._id }
+      const body = {id: user._id}
       const token = genToken(body);
 
       res.cookie("token", token);
@@ -26,22 +41,6 @@ router.post("/login", async (req, res, next) => {
     });
   })(req, res, next);
 });
-
-router.post(
-  "/register",
-  passport.authenticate("register", {session: false}),
-  async (req, res) => {
-    // IDE marks an error here but user property is added by passport
-    if (req.user.statusCode === 409)
-      res.status(409).json({
-        message: "Signup failed - username already exists."
-      });
-    else
-      res.status(201).json({
-        message: "Signup success."
-      });
-  }
-);
 
 router.get(
   "/current",

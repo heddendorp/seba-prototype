@@ -1,76 +1,45 @@
-import {
-  Button,
-  createStyles,
-  Grid,
-  LinearProgress,
-  makeStyles,
-  TextField,
-  Theme,
-} from '@material-ui/core';
-import UploadLectureDropzone from '../upload-lecture-dropzone/upload-lecture-dropzone';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import {Button, Grid, LinearProgress, TextField,} from '@material-ui/core';
+import UploadLectureDropzone from './upload-lecture-dropzone/upload-lecture-dropzone';
+import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {LectureUnitService} from "@seba/api-services";
+import moment from "moment";
+import {useStyles} from "./styles";
 
-/* eslint-disable-next-line */
-export interface UploadLectureFormProps {
+export interface LectureUnitFormProps {
+  unit_id: string | undefined,
   handleSubmit: (
     title: string,
     dateTime: string,
     description: string,
-    file: File
+    file: File,
+    setProgress: (value: (((prevState: number) => number) | number)) => void
   ) => void;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formStyle: {
-      maxWidth: 900,
-    },
-    formProgressBar: {
-      width: '100%',
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
-    },
-  })
-);
-
-export function UploadLectureForm(props: UploadLectureFormProps) {
-  const [title, setTitle] = useState('');
-  const [dateTime, setDateTime] = useState('');
-  const [description, setDescription] = useState('');
-  //not sure about this initial value ""{} as File
-  const [file, setFile] = useState({} as File);
-
-  const [progress, setProgress] = useState(0);
-
+export function LectureUnitForm(props: LectureUnitFormProps) {
   const classes = useStyles();
 
-  //just some random progressBar progress --> will start, when this component is rendered
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          return 100;
-        }
-        const diff = Math.random() * 10;
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 500);
+  const [title, setTitle] = useState("");
+  const [dateTime, setDateTime] = useState((moment(new Date())).format().slice(0, -9));
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState({} as File);
+  const [progress, setProgress] = useState(0);
 
-    //clean up
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  useEffect(() => {
+    if (props.unit_id !== undefined) {
+      const lectureUnit = async () => await LectureUnitService.getById(props.unit_id as string);
+
+      lectureUnit().then((unit) => {
+        setTitle(unit.title);
+        setDateTime((moment(unit.publish_date)).format().slice(0, -9));
+        setDescription(unit.description);
+      });
+    }
+  }, [props.unit_id]);
 
   const handleSubmit = (e: FormEvent) => {
-    //this prevents closing dialog when clicking submit
     e.preventDefault();
-    //you can give values from from to parent object here
-    props.handleSubmit(title, dateTime, description, file);
+    props.handleSubmit(title, dateTime, description, file, setProgress);
   };
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +66,12 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
             variant="outlined"
             rowsMax={2}
             fullWidth
+            value={title}
             onChange={onChangeTitle}
+            inputProps={{
+              maxLength: 50 //char limit is set to 50
+            }}
+            required
           />
         </Grid>
         <Grid item xs={3}>
@@ -105,11 +79,12 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
             id="datetime-local"
             label="Publish date"
             type="datetime-local"
-            defaultValue="2017-05-24T10:30"
             InputLabelProps={{
               shrink: true,
             }}
+            value={dateTime}
             onChange={onChangeDateTime}
+            required
           />
         </Grid>
         <Grid item xs={12}>
@@ -121,11 +96,13 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
             variant="outlined"
             rowsMax={5}
             fullWidth
+            value={description}
             onChange={onChangeDescription}
+            required
           />
         </Grid>
         <Grid item xs={12}>
-          <UploadLectureDropzone setFile={setFile} />
+          <UploadLectureDropzone setFile={setFile}/>
         </Grid>
         <Grid item xs={12}>
           <LinearProgress
@@ -135,14 +112,16 @@ export function UploadLectureForm(props: UploadLectureFormProps) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button autoFocus>Cancel</Button>
-          <Button color="primary" type="submit">
-            Upload
-          </Button>
+          <div className={classes.finishButton}>
+            <Button autoFocus>Cancel</Button>
+            <Button color="primary" type="submit">
+              Submit
+            </Button>
+          </div>
         </Grid>
       </Grid>
     </form>
   );
 }
 
-export default UploadLectureForm;
+export default LectureUnitForm;

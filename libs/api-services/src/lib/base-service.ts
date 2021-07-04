@@ -12,7 +12,7 @@ export type MethodType =
   | 'PATCH';
 
 export class BaseService {
-  static baseUrl = 'http://localhost:3333';
+  public static baseUrl = 'http://localhost:3333';
 
   /**
    * Basic request to our api.

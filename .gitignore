@@ -38,4 +38,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-/apps/api/src/assets/video
+# Uplaoded video files
+/apps/api/src/assets/videos/*
+!/apps/api/src/assets/videos/.gitkeep

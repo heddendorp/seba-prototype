@@ -15,5 +15,6 @@ module.exports = {
     '<rootDir>/libs/lecture/questions',
     '<rootDir>/libs/lecture/quizzes',
     '<rootDir>/libs/api-services',
+    '<rootDir>/libs/context',
   ],
 };

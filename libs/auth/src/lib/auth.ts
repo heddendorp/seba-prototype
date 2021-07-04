@@ -37,12 +37,7 @@ export function initializePassport(passport) {
     },
       async function (req, username, password, done) {
         if (await User.exists({username: username}))
-          return done(null, {
-            response: {
-              message: "Signup failed - username already exists."
-            },
-            statusCode: 409
-          })
+          return done(null, false);
 
         const user = await User.create({
           username: username,

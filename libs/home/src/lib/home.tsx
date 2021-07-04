@@ -9,7 +9,6 @@ export function Home(props: HomeProps) {
     <div>
       <Navigation/>
       <main>
-        Welcome to home!
       </main>
     </div>
   );

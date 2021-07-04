@@ -1,2 +1,2 @@
-export * from './lib/signup/signup';
+export * from './lib/signup';
 export * from './lib/login';

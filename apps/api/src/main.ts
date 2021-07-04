@@ -5,6 +5,7 @@ import * as passport from "passport";
 import {initializePassport} from "@seba/auth";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
+import * as fileUpload from "express-fileupload";
 import {lectureRouter} from "../../../libs/controllers/src/lib/lecture-controller";
 import {lectureUnitRouter} from "../../../libs/controllers/src/lib/lecture-unit-controller";
 
@@ -12,6 +13,8 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json({type: ["application/json", "text/plain"]}));
+
+app.use(fileUpload({createParentPath: true}));
 
 app.use(passport.initialize());
 app.use(passport.session());
