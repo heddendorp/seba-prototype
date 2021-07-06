@@ -6,8 +6,6 @@ import {
   makeStyles,
   Paper,
   Theme,
-  Icon,
-  SvgIconProps,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import {useEffect, useState} from "react";
@@ -18,7 +16,8 @@ import {ILecture} from "@seba/models";
 /*import { Card, CardMedia, IconButton } from '@material-ui/core';*/
 /* eslint-disable-next-line */
 
-export interface LectureWatchProps {lecture_id : string}
+export interface LectureWatchProps {}
+type WatchLectureURLParams = { unit_id: string }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,45 +55,33 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function LectureWatch(props: LectureWatchProps) {
-  const params = useParams();
+  const params = useParams<WatchLectureURLParams>();
   const classes = useStyles();
 
   const [Title, setTitle] = useState();
-  //const [renderedDescription, setRenderedDescription] = useState();
-
-  function renderTitle(title: string) {
-    return(
-      <h2>{title}</h2>
-    );
-  }
-
-  function renderDescription(description: string) {
-    return(
-      <h3>{description}</h3>
-    );
-  }
+  const [Description, setDescription] = useState();
+  //const [VPath, setVPath] = useState();
+  
 
   useEffect(() => {
-    
+    console.log(params.unit_id)
+    const getLectureUnit = async () => await LectureUnitService.getById(params.unit_id);
 
-
-  
-    const getLecture = async () => await LectureService.getById(props.lecture_id);
-
-    getLecture().then(lecture => {
-      setTitle(lecture.title)
+    getLectureUnit().then(unit => {
+      setTitle(unit.title)
+      setDescription(unit.description)
       //setShortTitle(lecture.short_title)
       //setSemester(lecture.semester)
     });
 
     //renderDelayed();
-  }, []);
+  }, [params.unit_id]);
 
   return (
     <main>
       <div className={classes.root}>
-        {Title}
-        <h2>Hello</h2>
+        <h2>{Title}</h2>
+        
       </div>
       <div className={classes.root}>
         <Grid item xs={9}>
@@ -123,8 +110,7 @@ export function LectureWatch(props: LectureWatchProps) {
         <Grid item xs = {9}>
           <Paper variant="outlined" className={classes.doubts}>
             <Container>
-              
-              <h4>I have the description</h4>
+              <h4>{Description}</h4>
             </Container>
           </Paper>
         </Grid>

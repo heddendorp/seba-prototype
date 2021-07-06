@@ -19,6 +19,15 @@
     }
   },
   "projects": {
+    "api": {
+      "tags": []
+    },
+    "api-interfaces": {
+      "tags": []
+    },
+    "api-services": {
+      "tags": []
+    },
     "app": {
       "tags": []
     },
@@ -26,28 +35,19 @@
       "tags": [],
       "implicitDependencies": ["app"]
     },
-    "api": {
+    "auth": {
       "tags": []
     },
-    "api-interfaces": {
+    "chat": {
       "tags": []
     },
-    "models": {
+    "context": {
       "tags": []
     },
     "controllers": {
       "tags": []
     },
-    "auth": {
-      "tags": []
-    },
-    "login": {
-      "tags": []
-    },
     "home": {
-      "tags": []
-    },
-    "navigation": {
       "tags": []
     },
     "lecture-create": {
@@ -56,22 +56,25 @@
     "lecture-create-unit": {
       "tags": []
     },
-    "lecture-statistics": {
-      "tags": []
-    },
-    "lecture-watch": {
-      "tags": []
-    },
     "lecture-questions": {
       "tags": []
     },
     "lecture-quizzes": {
       "tags": []
     },
-    "api-services": {
+    "lecture-statistics": {
       "tags": []
     },
-    "context": {
+    "lecture-watch": {
+      "tags": []
+    },
+    "login": {
+      "tags": []
+    },
+    "models": {
+      "tags": []
+    },
+    "navigation": {
       "tags": []
     }
   }

@@ -16,5 +16,6 @@ module.exports = {
     '<rootDir>/libs/lecture/quizzes',
     '<rootDir>/libs/api-services',
     '<rootDir>/libs/context',
+    '<rootDir>/libs/chat',
   ],
 };
