@@ -502,6 +502,27 @@
           }
         }
       }
+    },
+    "questions": {
+      "root": "libs/questions",
+      "sourceRoot": "libs/questions/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/questions/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/questions"],
+          "options": {
+            "jestConfig": "libs/questions/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }

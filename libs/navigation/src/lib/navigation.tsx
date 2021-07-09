@@ -1,3 +1,4 @@
+/* eslint-disable-next-line */
 import {BrowserRouter as Router, Link as RouterLink, Route, Switch} from 'react-router-dom';
 import {
   Accordion,
@@ -12,18 +13,19 @@ import {
 } from '@material-ui/core';
 import {useStyles} from './style';
 import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {UserService} from "@seba/api-services";
 import {LectureWatch} from "@seba/lecture/watch";
 import {LectureQuestions} from "@seba/lecture/questions";
+
+import {CreateLectureUnit} from '@seba/lecture/create-unit';
+import {CreateLecture} from "@seba/lecture/create";
 import {LectureQuizzes} from "@seba/lecture/quizzes";
 import {Statistics} from "@seba/lecture/statistics";
 import {LectureProvider, useLectureContext} from "@seba/context";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import EditLecture from "../../../lecture/create/src/lib/edit-lecture";
 import {EditLectureUnit} from "../../../lecture/create-unit/src/lib/edit-lecture-unit";
-import {CreateLecture} from "@seba/lecture/create";
-import {CreateLectureUnit} from "@seba/lecture/create-unit";
 
 export function Navigation() {
   const classes = useStyles();

@@ -17,5 +17,6 @@ module.exports = {
     '<rootDir>/libs/api-services',
     '<rootDir>/libs/context',
     '<rootDir>/libs/chat',
+    '<rootDir>/libs/questions',
   ],
 };

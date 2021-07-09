@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
 import {Home} from "@seba/home";
+import { Questions } from '@seba/questions';
 
 let theme = createMuiTheme({
   palette: {
