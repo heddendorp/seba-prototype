@@ -26,6 +26,7 @@ import {LectureProvider, useLectureContext} from "@seba/context";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import EditLecture from "../../../lecture/create/src/lib/edit-lecture";
 import {EditLectureUnit} from "../../../lecture/create-unit/src/lib/edit-lecture-unit";
+import Questions from "../../../questions/src/lib/questions";
 
 export function Navigation() {
   const classes = useStyles();
@@ -169,7 +170,7 @@ export function Navigation() {
                 <LectureWatch/>
               </Route>
               <Route path="/unit/:unit_id/questions">
-                <LectureQuestions/>
+                <Questions/>
               </Route>
               <Route path="/unit/:unit_id/quizzes">
                 <LectureQuizzes/>
