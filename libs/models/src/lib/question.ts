@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 import {IUser, UserSchema} from "./user";
-import {IAnswer, AnswerSchema} from "./answer";
+import {IAnswer} from "./answer";
 
 export interface IQuestion extends mongoose.Document {
   timestamp: number,
@@ -16,7 +16,7 @@ export const QuestionSchema = new mongoose.Schema({
   author: UserSchema,
   text: String,
   upVotes: Number,
-  answers: [AnswerSchema],
+  answers: [{type: mongoose.Schema.Types.ObjectId, ref: "Answer"}],
   isAnswered: Boolean
 });
 

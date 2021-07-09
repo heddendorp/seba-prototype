@@ -1,13 +1,13 @@
 import * as mongoose from "mongoose";
 
-export interface IQuizOption extends mongoose.Document {
+export interface IQuizAnswer extends mongoose.Document {
   text: string,
   isCorrect: boolean
 }
 
-export const QuizOptionSchema = new mongoose.Schema({
+export const QuizAnswerSchema = new mongoose.Schema({
   text: String,
   isCorrect: Boolean
 });
 
-export const QuizOption = mongoose.model<IQuizOption>("QuizOption", QuizOptionSchema);
+export const QuizAnswer = mongoose.model<IQuizAnswer>("QuizOption", QuizAnswerSchema);
