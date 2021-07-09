@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post(
   "/register",
+  passport.authenticate("register", {session: false}),
   async (req: Request, res) => {
     if (!req.user)
       res.status(409).json({
