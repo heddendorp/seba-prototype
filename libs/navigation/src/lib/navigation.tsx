@@ -1,5 +1,5 @@
 /* eslint-disable-next-line */
-import {BrowserRouter as Router, Link as RouterLink, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Link as RouterLink, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {
   Accordion,
   AccordionDetails,
@@ -29,6 +29,7 @@ import {EditLectureUnit} from "../../../lecture/create-unit/src/lib/edit-lecture
 import Questions from "../../../questions/src/lib/questions";
 
 export function Navigation() {
+  const { path, url } = useRouteMatch();
   const classes = useStyles();
   const logoPath = "/assets/logo.png";
 
@@ -37,7 +38,7 @@ export function Navigation() {
   function StatisticsTab(lecture: ILecture) {
     if (user !== undefined && +user.role === Role.LECTURER)
       return (
-        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/statistics"}>
+        <ListItem button component={RouterLink} to={`${url}/lecture/${lecture._id}/statistics`}>
           <ListItemText primary="Statistics"/>
         </ListItem>
       );
@@ -47,7 +48,7 @@ export function Navigation() {
   function CreateUnitButton(lecture: ILecture) {
     if (user !== undefined && +user.role === Role.LECTURER)
       return (
-        <ListItem button component={RouterLink} to={"/lecture/" + lecture._id + "/unit/create"}>
+        <ListItem button component={RouterLink} to={`${url}/lecture/${lecture._id}/unit/create`}>
           <ListItemText primary="Create..."/>
         </ListItem>
       );
@@ -60,7 +61,7 @@ export function Navigation() {
         <AccordionSummary>
           <div>
             {unit.title}
-            <IconButton component={RouterLink} to={"/unit/" + unit._id + "/edit"}
+            <IconButton component={RouterLink} to={`${url}/unit/${unit._id}/edit`}
                         className={classes.editButton}>
               <EditOutlinedIcon/>
             </IconButton>
@@ -68,13 +69,13 @@ export function Navigation() {
         </AccordionSummary>
         <AccordionDetails>
           <List>
-            <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/watch"}>
+            <ListItem button component={RouterLink} to={`${url}/unit/${unit._id}/watch`}>
               <ListItemText>Video</ListItemText>
             </ListItem>
-            <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/questions"}>
+            <ListItem button component={RouterLink} to={`${url}/unit/${unit._id}/questions`}>
               <ListItemText>Questions</ListItemText>
             </ListItem>
-            <ListItem button component={RouterLink} to={"/unit/" + unit._id + "/quizzes"}>
+            <ListItem button component={RouterLink} to={`${url}/unit/${unit._id}/quizzes`}>
               <ListItemText>Quizzes</ListItemText>
             </ListItem>
           </List>
@@ -93,7 +94,7 @@ export function Navigation() {
             <AccordionSummary>
               <div>
                 {lecture.short_title}
-                <IconButton component={RouterLink} to={"/lecture/" + lecture._id + "/edit"}
+                <IconButton component={RouterLink} to={`${url}/lecture/${lecture._id}/edit`}
                             className={classes.editButton}>
                   <EditOutlinedIcon/>
                 </IconButton>
@@ -113,7 +114,7 @@ export function Navigation() {
   function CreateButton() {
     if (user !== undefined && +user.role === Role.LECTURER)
       return (
-        <ListItem button component={RouterLink} to="/lecture/create">
+        <ListItem button component={RouterLink} to={`${url}/lecture/create`}>
           <ListItemText primary="Create..."/>
         </ListItem>
       );
@@ -151,28 +152,28 @@ export function Navigation() {
           </Drawer>
           <main className={classes.content}>
             <Switch>
-              <Route path="/lecture/create">
+              <Route path={`${path}/lecture/create`}>
                 <CreateLecture/>
               </Route>
-              <Route path="/lecture/:lecture_id/edit">
+              <Route path={`${path}/lecture/:lecture_id/edit`}>
                 <EditLecture/>
               </Route>
-              <Route path="/lecture/:lecture_id/unit/create">
+              <Route path={`${path}/lecture/:lecture_id/unit/create`}>
                 <CreateLectureUnit/>
               </Route>
-              <Route path="/unit/:unit_id/edit">
+              <Route path={`${path}/unit/:unit_id/edit`}>
                 <EditLectureUnit/>
               </Route>
-              <Route path="/lecture/:lecture_id/statistics">
+              <Route path={`${path}/lecture/:lecture_id/statistics`}>
                 <Statistics/>
               </Route>
-              <Route path="/unit/:unit_id/watch">
+              <Route path={`${path}/unit/:unit_id/watch`}>
                 <LectureWatch/>
               </Route>
-              <Route path="/unit/:unit_id/questions">
+              <Route path={`${path}/unit/:unit_id/questions`}>
                 <Questions/>
               </Route>
-              <Route path="/unit/:unit_id/quizzes">
+              <Route path={`${path}/unit/:unit_id/quizzes`}>
                 <LectureQuizzes/>
               </Route>
             </Switch>
