@@ -31,5 +31,11 @@ export const useStyles = makeStyles((theme) => ({
   editButton: {
     top: "0px",
     right: "0px",
+  },
+  logoutButton: {
+    padding: theme.spacing(2),
+    textTransform: "none",
+    width: "100%",
+    justifyContent: "flex-start"
   }
 }));

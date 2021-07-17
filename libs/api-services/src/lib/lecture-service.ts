@@ -20,4 +20,8 @@ export class LectureService extends BaseService {
   public static async update(lectureId: string, body: ICreateLectureTransport) {
     return this.authenticatedRequest('PATCH', `lecture/${lectureId}`, body);
   }
+
+  static async delete(lecture_id: string) {
+    return this.authenticatedRequest('DELETE', `lecture/${lecture_id}`);
+  }
 }

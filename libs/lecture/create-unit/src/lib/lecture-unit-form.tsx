@@ -1,6 +1,16 @@
-import {Button, Grid, LinearProgress, TextField,} from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  LinearProgress,
+  TextField,
+} from '@material-ui/core';
 import UploadLectureDropzone from './upload-lecture-dropzone/upload-lecture-dropzone';
-import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import {LectureUnitService} from "@seba/api-services";
 import moment from "moment";
 import {useStyles} from "./styles";
@@ -25,6 +35,9 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
   const [file, setFile] = useState({} as File);
   const [progress, setProgress] = useState(0);
 
+  const [deleteAlert, setDeleteAlert] = useState(false);
+  const [video_path, setVideoPath] = useState("");
+
   useEffect(() => {
     if (props.unit_id !== undefined) {
       const lectureUnit = async () => await LectureUnitService.getById(props.unit_id as string);
@@ -33,6 +46,8 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         setTitle(unit.title);
         setDateTime((moment(unit.publish_date)).format().slice(0, -9));
         setDescription(unit.description);
+        // TODO: Correct video path
+        setVideoPath(unit.video_path);
       });
     }
   }, [props.unit_id]);
@@ -53,6 +68,72 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
   const onChangeDescription = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription(e.target.value);
   };
+
+  const handleOpenDialog = () => setDeleteAlert(true);
+
+  const handleCloseDialog = () => setDeleteAlert(false);
+
+  const handleClickDelete = async () => {
+    if (props.unit_id !== undefined)
+      await LectureUnitService.delete(props.unit_id);
+
+    setDeleteAlert(false);
+  }
+
+  function DeleteButton() {
+    if (props.unit_id !== undefined)
+      return (
+        <div>
+          <Button
+            fullWidth
+            color="secondary"
+            onClick={handleOpenDialog}
+          >
+            Delete
+          </Button>
+          <Dialog
+            open={deleteAlert}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Are you sure you want to delete the unit?</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Deleting the unit will be permanent and cannot be undone!
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleClickDelete} color="secondary" href="/home">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      );
+    return null;
+  }
+
+  function Preview() {
+    if (props.unit_id !== undefined) {
+      return (
+        <Grid item xs={12}>
+          <video controls width="100%">
+            <source
+              src={video_path}
+              type=".mp4"
+            />
+            Sorry, your browser does not support embedded videos.
+          </video>
+        </Grid>
+      );
+    }
+
+    return null;
+  }
 
   return (
     <form className={classes.formStyle} onSubmit={handleSubmit}>
@@ -101,6 +182,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
             required
           />
         </Grid>
+        <Preview/>
         <Grid item xs={12}>
           <UploadLectureDropzone setFile={setFile}/>
         </Grid>
@@ -117,6 +199,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
             <Button color="primary" type="submit">
               Submit
             </Button>
+            <DeleteButton/>
           </div>
         </Grid>
       </Grid>

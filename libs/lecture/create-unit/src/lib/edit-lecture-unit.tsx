@@ -14,34 +14,36 @@ export function EditLectureUnit() {
   const context = useLectureContext();
   const params = useParams<EditUnitURLParams>();
 
+  function sendUpdateRequest(body: IEditLectureUnitTransport) {
+    LectureUnitService
+      .update(params.unit_id, body)
+      .then(() => context.updateLectures());
+  }
+
   const handleSubmit = async (title: string, dateTime: string, description: string, file: File,
                               setProgress: (value: (((prevState: number) => number) | number)) => void) => {
-    let updatedFilePath = undefined;
-    if (file !== undefined)
-      await LectureUnitService.uploadVideo({
-        file: file,
-        onProgress: e => setProgress(e.loaded / e.total),
-        callback: response => {
-          const body = JSON.parse(response);
-          if (body.message !== "Success.")
-            throw new Error(body.message);
-
-          updatedFilePath = body.video_path;
-        }
-      });
-
     const body = {
       title: title,
       description: description,
       publish_date: new Date(dateTime)
     } as IEditLectureUnitTransport;
 
-    if (updatedFilePath !== undefined)
-      body.video_path = updatedFilePath;
+    if (file !== undefined) {
+      await LectureUnitService.uploadVideo({
+        file: file,
+        onProgress: e => setProgress(e.loaded / e.total),
+        callback: response => {
+          const responseBody = JSON.parse(response);
+          if (responseBody.message !== "Success.")
+            throw new Error(responseBody.message);
 
-    LectureUnitService
-      .update(params.unit_id, body)
-      .then(() => context.updateLectures());
+          body.video_path = responseBody.video_path;
+          sendUpdateRequest(body);
+        }
+      });
+    }
+    else
+      sendUpdateRequest(body);
   };
 
   return (

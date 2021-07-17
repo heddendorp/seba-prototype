@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as passport from "passport";
-import {Lecture, LectureUnit, Role} from "@seba/models";
+import {ILecture, Lecture, LectureUnit, Role} from "@seba/models";
 import * as path from "path";
 import * as uuid from "uuid";
 import * as fs from "fs";
@@ -31,6 +31,7 @@ router.post(
   passport.authenticate("jwt", {session: false}),
   async (req, res) => {
     const unit = new LectureUnit({
+      lecture: req.body.lecture_id,
       title: req.body.title,
       description: req.body.description,
       publish_date: req.body.publish_date,
@@ -95,6 +96,28 @@ router.get(
   passport.authenticate("jwt", {session: false}),
   async (req, res) => {
     res.json(await LectureUnit.find({_id: req.query.id}));
+  }
+)
+
+router.delete(
+  "/:lectureUnitId",
+  passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    if (+req.user.role !== Role.LECTURER)
+      return res.status(401).json({
+        message: "Only lecturers can delete lectures."
+      });
+
+    const unit = await LectureUnit.findById(req.params.lectureUnitId).populate("lecture").exec();
+    const lecture = unit.lecture as ILecture;
+    if (!lecture.lecturer._id.equals(req.user._id))
+      return res.status(401).json({
+        message: "You can only delete your own lectures."
+      });
+
+    // TODO: Delete recursively (Quiz -> Option & co)
+    unit.delete();
+    return res.status(200).json({message: "Success."});
   }
 )
 
