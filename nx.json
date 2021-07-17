@@ -20,65 +20,65 @@
   },
   "projects": {
     "api": {
-      "tags": []
+      "tags": ["scope:api"]
     },
     "api-interfaces": {
-      "tags": []
+      "tags": ["scope:shared"]
     },
     "api-services": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "app": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "app-e2e": {
-      "tags": [],
+      "tags": ["scope:app"],
       "implicitDependencies": ["app"]
     },
     "auth": {
-      "tags": []
+      "tags": ["scope:api"]
     },
     "chat": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "context": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "controllers": {
-      "tags": []
+      "tags": ["scope:api"]
     },
     "home": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "lecture-create": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "lecture-create-unit": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "lecture-questions": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "lecture-quizzes": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "lecture-statistics": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "lecture-watch": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "login": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "models": {
-      "tags": []
+      "tags": ["scope:api"]
     },
     "navigation": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "questions": {
-      "tags": []
+      "tags": ["scope:app"]
     }
   }
 }
