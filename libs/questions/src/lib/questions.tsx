@@ -9,7 +9,7 @@ import { QuestionService } from '../../../api-services/src/lib/question-service'
 export interface QuestionsProps {}
 
 export function Questions(props: QuestionsProps) {
-  let { path, url } = useRouteMatch();
+  const { path, url } = useRouteMatch();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
