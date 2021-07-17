@@ -12,6 +12,7 @@ import {useEffect, useState} from "react";
 import {LectureService, LectureUnitService} from "@seba/api-services";
 import AddIcon from '@material-ui/icons/Add';
 import {ILecture} from "@seba/models";
+import { AddQuesionTrigger } from '@seba/questions';
 
 /*import { Card, CardMedia, IconButton } from '@material-ui/core';*/
 /* eslint-disable-next-line */
@@ -61,7 +62,7 @@ export function LectureWatch(props: LectureWatchProps) {
   const [Title, setTitle] = useState();
   const [Description, setDescription] = useState();
   //const [VPath, setVPath] = useState();
-  
+
 
   useEffect(() => {
     console.log(params.unit_id)
@@ -81,7 +82,7 @@ export function LectureWatch(props: LectureWatchProps) {
     <main>
       <div className={classes.root}>
         <h2>{Title}</h2>
-        
+
       </div>
       <div className={classes.root}>
         <Grid item xs={9}>
@@ -115,6 +116,11 @@ export function LectureWatch(props: LectureWatchProps) {
           </Paper>
         </Grid>
       </div>
+      <div>
+        <Grid item xs = {9}>
+          <AddQuesionTrigger/>
+        </Grid>
+      </div>
 
       <div className={classes.root}>
         <Grid item xs = {9}>
@@ -138,7 +144,7 @@ export function LectureWatch(props: LectureWatchProps) {
                   <AddIcon
                     //onClick={this.joinGroup}
                   >
-                  </AddIcon>             
+                  </AddIcon>
                 </Grid>
               </div>
               <p>
@@ -148,7 +154,7 @@ export function LectureWatch(props: LectureWatchProps) {
           </Paper>
         </Grid>
       </div>
-      
+
     </main>
   );
 }
