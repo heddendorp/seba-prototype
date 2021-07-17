@@ -1,4 +1,12 @@
-import {Button, TextField} from "@material-ui/core";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField
+} from "@material-ui/core";
 import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {useStyles} from "./style";
 import {LectureService} from "@seba/api-services";
@@ -19,6 +27,8 @@ export function LectureForm(props: CreateLectureFormProps) {
   const [shortTitle, setShortTitle] = useState("");
   const [semester, setSemester] = useState("");
 
+  const [deleteAlert, setDeleteAlert] = useState(false);
+
   useEffect(() => {
     if (props.lecture_id !== undefined) {
       const getLecture = async () => await LectureService.getById(props.lecture_id as string);
@@ -31,6 +41,43 @@ export function LectureForm(props: CreateLectureFormProps) {
     }
   }, [props.lecture_id]);
 
+  function DeleteButton() {
+    if (props.lecture_id !== undefined)
+      return (
+        <div>
+          <Button
+            fullWidth
+            variant="contained"
+            color="secondary"
+            onClick={handleOpenDialog}
+          >
+            Delete
+          </Button>
+          <Dialog
+            open={deleteAlert}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Are you sure you want to delete the lecture?</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Deleting the lecture will be permanent and cannot be undone!
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleClickDelete} color="secondary" href="/home">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      );
+    return null;
+  }
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
@@ -48,6 +95,17 @@ export function LectureForm(props: CreateLectureFormProps) {
     e.preventDefault();
     props.handleSubmit(title, shortTitle, semester);
   };
+
+  const handleOpenDialog = () => setDeleteAlert(true);
+
+  const handleCloseDialog = () => setDeleteAlert(false);
+
+  const handleClickDelete = async () => {
+    if (props.lecture_id !== undefined)
+      await LectureService.delete(props.lecture_id);
+
+    setDeleteAlert(false);
+  }
 
   return (
     <form className={classes.form} onSubmit={handleSubmit}>
@@ -95,6 +153,7 @@ export function LectureForm(props: CreateLectureFormProps) {
       >
         Submit
       </Button>
+      <DeleteButton/>
     </form>
   );
 }

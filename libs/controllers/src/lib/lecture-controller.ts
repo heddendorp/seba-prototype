@@ -83,4 +83,25 @@ router.patch(
   }
 );
 
+router.delete(
+  "/:lectureId",
+  passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    if (+req.user.role !== Role.LECTURER)
+      return res.status(401).json({
+        message: "Only lecturers can delete lectures."
+      });
+
+    Lecture.findById(req.params.lectureId).then(lecture => {
+      if (!lecture.lecturer._id.equals(req.user._id))
+        return res.status(401).json({
+          message: "You can only delete your own lectures."
+        });
+
+      // TODO: Delete recursively (Units -> Quiz -> Option & co)
+      lecture.delete();
+    });
+  }
+)
+
 export const lectureRouter = router;

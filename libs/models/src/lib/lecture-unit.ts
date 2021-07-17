@@ -1,9 +1,10 @@
 import * as mongoose from "mongoose";
 import {IQuiz} from "./quiz";
 import {IQuestion} from "./question";
+import {ILecture} from "./lecture";
 
 export interface ILectureUnit extends mongoose.Document {
-  lecture: string,
+  lecture: string | ILecture,
   title: string,
   description: string,
   publish_date: Date,

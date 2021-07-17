@@ -5,6 +5,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Drawer,
   IconButton,
   List,
@@ -16,7 +17,6 @@ import {ILecture, ILectureUnit, IUser, Role} from '@seba/models';
 import React, {useEffect, useState} from 'react';
 import {UserService} from "@seba/api-services";
 import {LectureWatch} from "@seba/lecture/watch";
-import {LectureQuestions} from "@seba/lecture/questions";
 
 import {CreateLectureUnit} from '@seba/lecture/create-unit';
 import {CreateLecture} from "@seba/lecture/create";
@@ -27,9 +27,10 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import EditLecture from "../../../lecture/create/src/lib/edit-lecture";
 import {EditLectureUnit} from "../../../lecture/create-unit/src/lib/edit-lecture-unit";
 import Questions from "../../../questions/src/lib/questions";
+import {Home} from "@seba/home";
 
 export function Navigation() {
-  const { path, url } = useRouteMatch();
+  const {path, url} = useRouteMatch();
   const classes = useStyles();
   const logoPath = "/assets/logo.png";
 
@@ -147,11 +148,21 @@ export function Navigation() {
                 <Lectures/>
                 <Box border={1}/>
                 <CreateButton/>
+                <Box border={1}/>
+                <div>
+                  <Button className={classes.logoutButton} color="secondary"
+                          onClick={async () => await UserService.logout()} href="/">
+                    Logout
+                  </Button>
+                </div>
               </List>
             </nav>
           </Drawer>
           <main className={classes.content}>
             <Switch>
+              <Route path={`${path}/home`}>
+                <Home/>
+              </Route>
               <Route path={`${path}/lecture/create`}>
                 <CreateLecture/>
               </Route>
