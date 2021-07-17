@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
 import {Home} from "@seba/home";
-import { Questions } from '@seba/questions';
+import { SocketContext, socket } from '@seba/context';
 
 let theme = createMuiTheme({
   palette: {
@@ -44,6 +44,7 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <SocketContext.Provider value={socket}>
       <CssBaseline />
       <BrowserRouter>
         <div className={classes.root}>
@@ -56,6 +57,7 @@ export const App = () => {
           </main>
         </div>
       </BrowserRouter>
+      </SocketContext.Provider>
     </ThemeProvider>
   );
 };

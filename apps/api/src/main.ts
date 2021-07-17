@@ -1,5 +1,7 @@
 import * as express from 'express';
+import * as http from 'http';
 import * as mongoose from "mongoose";
+import {Server} from "socket.io";
 import {userRouter} from "@seba/controllers";
 import * as passport from "passport";
 import {initializePassport} from "@seba/auth";
@@ -11,6 +13,9 @@ import {lectureUnitRouter} from "../../../libs/controllers/src/lib/lecture-unit-
 import { questionRouter } from '../../../libs/controllers/src/lib/question-controller';
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server,{cors:{}});
+
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json({type: ["application/json", "text/plain"]}));
@@ -27,7 +32,7 @@ app.use("/lecture-unit", lectureUnitRouter);
 app.use("/question", questionRouter);
 
 const port = process.env.port || 3333;
-const server = app.listen(port, async () => {
+server.listen(port, async () => {
   console.log('Listening at http://localhost:' + port + '/api');
 
   const url = "mongodb://localhost:27017/learn-with-me";
@@ -37,3 +42,13 @@ const server = app.listen(port, async () => {
   });
 
 server.on('error', console.error);
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.send('Connected');
+  // on new chat message broadcast it to other users
+  socket.on('chatMessage', (data) => { 
+    const message = { text: data, id: new Date().getTime().toString() };
+    io.emit('chatMessage', message);
+  });
+});

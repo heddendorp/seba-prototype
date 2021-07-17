@@ -12,6 +12,7 @@ import {useEffect, useState} from "react";
 import {LectureService, LectureUnitService} from "@seba/api-services";
 import AddIcon from '@material-ui/icons/Add';
 import {ILecture} from "@seba/models";
+import {Chat} from "@seba/chat";
 
 /*import { Card, CardMedia, IconButton } from '@material-ui/core';*/
 /* eslint-disable-next-line */
@@ -99,9 +100,7 @@ export function LectureWatch(props: LectureWatchProps) {
         </Grid>
         <Grid item xs={3}>
           <Paper variant="outlined" className={classes.chat}>
-            <Container>
-              <h3>Chatbox comes here!</h3>
-            </Container>
+            <Chat></Chat>
           </Paper>
         </Grid>
       </div>
