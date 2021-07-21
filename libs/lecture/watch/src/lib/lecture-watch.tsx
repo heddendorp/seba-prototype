@@ -13,6 +13,9 @@ import {LectureService, LectureUnitService} from "@seba/api-services";
 import AddIcon from '@material-ui/icons/Add';
 import {ILecture} from "@seba/models";
 import {Chat} from "@seba/chat";
+import {Question} from "@seba/lecture/questions"
+
+import Typography from '@material-ui/core/Typography';
 
 /*import { Card, CardMedia, IconButton } from '@material-ui/core';*/
 /* eslint-disable-next-line */
@@ -26,17 +29,35 @@ const useStyles = makeStyles((theme: Theme) =>
       font: 'Roboto',
       display: 'flex',
       flexDirection: 'row',
+      
+    },
+    text: {
+      padding: theme.spacing(2, 2, 0),
     },
     chat: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(1),
       border: '1px solid black',
-      borderRadius: 3,
-      backgroundColor: '#d3d3d3',
+      //borderRadius: 3,
+      backgroundColor: '#dfdfdf',
       width: '75%',
+      
+      //overflow: 'auto',
+      //fontSize: '5 px', //does not work, check why
+      //display: 'inline'
+    },
+    paper:{
+      paddingBottom: 50,
+    },
+    list:{
+      marginBottom: theme.spacing(2),
     },
     media: {
       width: '97%',
-
+    },
+    detail: {
+      padding: theme.spacing(2),
+      font: 'Calibri',
+      width: '97%',
     },
     doubts: {
       padding: theme.spacing(2),
@@ -45,12 +66,12 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '97%',
     },
     groups: {
-      padding: theme.spacing(3),
+      padding: theme.spacing(1),
       border: '1px solid black',
-      borderRadius: 3,
+      //borderRadius: 3,
       backgroundColor: '#d3d3d3',
       width: '75%',
-      height: '10 px',
+      //height: '10 px',
     }
   })
 );
@@ -99,15 +120,18 @@ export function LectureWatch(props: LectureWatchProps) {
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper variant="outlined" className={classes.chat}>
-            <Chat></Chat>
+          <Paper square className={classes.chat}>
+            <Typography className={classes.text} variant="h6" gutterBottom>
+              Group chatbox
+            </Typography>
+            <Chat className={classes.chat}></Chat>
           </Paper>
         </Grid>
       </div>
 
       <div>
         <Grid item xs = {9}>
-          <Paper variant="outlined" className={classes.doubts}>
+          <Paper variant="outlined" className={classes.detail}>
             <Container>
               <h4>{Description}</h4>
             </Container>
@@ -118,8 +142,8 @@ export function LectureWatch(props: LectureWatchProps) {
       <div className={classes.root}>
         <Grid item xs = {9}>
           <Paper variant="outlined" className={classes.doubts}>
-          <Container>
-            <h3>All doubts</h3>
+            <Container>
+              <h3>All doubts</h3>
               <p>
                 Doubt 1
               </p>

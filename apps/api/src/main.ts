@@ -46,9 +46,10 @@ server.on('error', console.error);
 io.on('connection', (socket) => {
   console.log('a user connected');
   socket.send('Connected');
+  
   // on new chat message broadcast it to other users
   socket.on('chatMessage', (data) => { 
-    const message = { text: data, id: new Date().getTime().toString() };
+    const message = { text: data, id: new Date().getTime().toString(), userid: socket.id }; //extract the username here
     io.emit('chatMessage', message);
   });
 });

@@ -1,7 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Grid, List, ListItem} from '@material-ui/core'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+
+import {List, ListItem, ListItemText} from '@material-ui/core' //remove grid if not useful
+
 import {SocketContext} from '@seba/context';
+import { __classPrivateFieldSet } from "tslib";
 const ENDPOINT = "http://localhost:3333";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    list: {
+      marginBottom: theme.spacing(2),
+    },
+  }),
+);
 
 
 /* eslint-disable-next-line */
@@ -10,7 +22,7 @@ export interface ChatProps {}
 export function Chat(props: ChatProps) {
   // state to keep track of the messages
   const [messages, setMessages] = useState([]);
-
+  const classes = useStyles();
   const socket = useContext(SocketContext);
 
   // keydown handler to send messages on enter
@@ -25,21 +37,23 @@ export function Chat(props: ChatProps) {
   // use effect to connect to the socket
   useEffect(() => {
     socket.on("message", (data) => {
-      console.log("Received message: " + data);
+      console.log("Received message hello: " + data);
     });
     // add the messages to the state
     socket.on("chatMessage", (data) => {  
-      console.log("Received message: " + data.text);
+      //console.log("Received message chatMessage: " + data.text);
       const chatMessages = messages.slice();
-      console.log(chatMessages);
+      //console.log(chatMessages);
       setMessages([...chatMessages, data]);
     });
   }, [socket, messages]);
   // show a list of chat messages with a text field on the bottom
   return (
-      <List>
+      <List className={classes.list}>
         {messages.map((message) => (
-           <ListItem key={message.id}>{message.text}</ListItem>
+           <ListItem button key={message.id}>
+             <ListItemText primary={message.userid} secondary={message.text}/>
+           </ListItem>
         ))}
         <ListItem>
           <input type="text" placeholder="Type a message" onKeyDown={sendMessage} />
