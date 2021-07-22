@@ -40,7 +40,7 @@
     "material-ui-dropzone": "^3.5.0",
     "moment": "^2.29.1",
     "mongodb-client-encryption": "1.2.4",
-    "mongoose": "^5.12.12",
+    "mongoose": "^5.13.3",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "password-hash": "^1.2.2",
@@ -50,7 +50,7 @@
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.0.0",
     "typescript-logging": "^1.0.0",
-    "victory": "^35.8.5"
+    "victory": "^35.9.1"
   },
   "devDependencies": {
     "@babel/core": "7.12.13",
