@@ -6,7 +6,7 @@ import { ICreateQuizTransport, IQuizTransport } from '@seba/api-interfaces';
 const router = express.Router();
 
 router.post(
-  '',
+  "",
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
@@ -15,6 +15,7 @@ router.post(
       });
     const quizTransport: ICreateQuizTransport = req.body;
     const quiz = new Quiz({
+      unit_id: quizTransport.unit_id,
       timestamp: quizTransport.timestamp,
       questions: quizTransport.questions,
     });
@@ -23,7 +24,13 @@ router.post(
       if (err) {
         console.log(err);
         return res.status(500).json({ message: 'Internal server error.' });
-      } else console.dir(quiz);
+      } else {
+        LectureUnit.findById(quizTransport.unit_id)
+          .then(async unit => {
+            unit.quizzes.push(quiz._id);
+            await unit.save();
+            })
+      }
       return res.status(200).json(quiz);
     });
   }
@@ -38,25 +45,17 @@ router.put(
       return res.status(401).json({
         message: 'Only lecturers can update quizzes.',
       });
-    const quizTransport: ICreateQuizTransport = req.body;
-    Quiz.findByIdAndDelete(req.params.id, {}, (err) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ message: 'Internal server error.' });
-      } else {
-        const quiz = new Quiz({
-          timestamp: quizTransport.timestamp,
-          questions: quizTransport.questions,
-        });
-        quiz.save(function (err) {
-          if (err) {
-            console.log(err);
-            return res.status(500).json({ message: 'Internal server error.' });
-          } else console.dir(quiz);
-          return res.status(200).json(quiz);
-        });
-      }
-    });
+
+    Quiz.findById(req.params.id).then(quiz => {
+      quiz.overwrite(req.body);
+      quiz.save( function (err) {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ message: 'Internal server error.' });
+        }
+        return res.status(200).json(quiz);
+      });
+    })
   }
 );
 
@@ -69,51 +68,27 @@ router.delete(
         message: 'Only lecturers can delete quizzes.',
       });
 
-    const quiz = new Quiz({
-      timestamp: req.body.timestamp,
-      quizQuestions: [],
-    });
-    /*
-        const result = await Quiz.find({lecturer: req.user._id}).populate("units").exec();
-        LectureUnit.findById(req.params.lectureUnitId, function (err, result) {
-          if (err) {
-            console.log(err);
-            return res.status(500).json({message: "Internal server error."});
-          } else
-            return res.status(200).json(result);
-        });
-
-     */
     Quiz.findByIdAndRemove(req.params.quizId, null, function (err, result) {
       if (err) {
         console.log(err);
         return res.status(500).json({ message: 'Internal server error.' });
-      } else return res.status(200).json(result);
+      } else {
+        //todo lösche idobject id in der unit
+        //LectureUnit.findOneAndUpdate({_id: result.unit_id}, { $pullAll: { quizzes:  result._id }})
+        return res.status(200).json(result);
+      }
     });
-
-    //use quiz.deleteone, oder findanddelete oder einfach find.remove
   }
 );
 
 router.get(
-  '',
-  //passport.authenticate("jwt", {session: false}),
+  '/:lectureUnitId',
+  passport.authenticate("jwt", {session: false}),
   async (req, res) => {
-    //todo the populate for subthings
-    const quizzes = await Quiz.find({})
-      .populate({
-        path: 'quizQuestions',
-        model: 'QuizQuestion',
-        populate: [
-          {
-            path: 'options',
-            model: 'QuizOption',
-          },
-        ],
-      })
 
-      .exec();
-    res.json(quizzes);
+    await LectureUnit.findById(req.params.lectureUnitId).populate("quizzes").exec()
+      .then(result => res.json(result.quizzes));
+    //todo error handling
   }
 );
 

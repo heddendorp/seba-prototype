@@ -9,7 +9,7 @@ export interface ILectureUnit extends mongoose.Document {
   description: string,
   publish_date: Date,
   video_path: string,
-  quizzes:  [IQuiz] | [string],
+  quizzes:  [IQuiz],
   questions: [IQuestion] | [string]
 }
 

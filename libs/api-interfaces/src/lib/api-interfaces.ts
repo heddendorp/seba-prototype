@@ -40,6 +40,7 @@ export interface IRegisterTransport extends Record<string, unknown> {
 }
 
 export interface ICreateQuizTransport extends Record<string, unknown> {
+  unit_id: string
   timestamp: number;
   questions: {
     question: string;
