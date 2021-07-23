@@ -1,42 +1,28 @@
-/* eslint-disable-next-line */
 import {
   Button,
   Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogProps,
   DialogTitle,
-  Divider,
-  FormControl,
   FormControlLabel,
-  FormGroup,
-  FormLabel,
   Grid,
-  Paper,
   TextField,
 } from '@material-ui/core';
 import React, { useEffect, useReducer, useState } from 'react';
 import {ICreateQuizTransport, IQuizTransport} from '@seba/api-interfaces';
-import { QuizService } from '../../../../../api-services/src/lib/quiz-service';
-import {
-  IQuizQuestion,
-  QuizQuestion,
-} from '../../../../../models/src/lib/quiz-question';
-import { IQuiz, IQuizAnswer } from '@seba/models';
 import { useStyles } from '../styles';
 
+/* eslint-disable-next-line */
 export interface EditQuizDialogProps {
   quiz?: any;
   open: boolean;
-  //onClose: (quiz: any) => DialogProps['onClose'];
-  //handleCreate: (quiz: IQuizTransport) => void;
   handleClose: (quiz?: IQuizTransport | null) => void;
 }
 
 const emptyAnswer = { answer: '', isCorrect: false };
 const emptyQuestion = { question: '', answers: [{ ...emptyAnswer }] };
-const emptyQuiz = { unit_id: '', timestamp: 0, questions: [{ ...emptyQuestion }] };
+const emptyQuiz = { unit_id: '', timestamp: 6, questions: [{ ...emptyQuestion }] };
 
 //function reducer(state: IQuiz, action: {type: string; payload: IQuiz}): IQuiz {
 function reducer(state: ICreateQuizTransport, action) {

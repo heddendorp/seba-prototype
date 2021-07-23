@@ -166,7 +166,6 @@ export function LectureWatch(props: LectureWatchProps) {
             </Paper>
           </Grid>
         </Grid>
-        <Button onClick={() => setQuizOpen(true)}>Testing: Open Quiz Dialog</Button>
         {currentQuiz && <SubmitQuizDialog quiz={currentQuiz} open={quizOpen} handleClose={handleSubmitQuiz}/>}
         <Grid item container spacing={4} alignItems="stretch">
           <Grid item xs={8} container direction="column" spacing={2}>
