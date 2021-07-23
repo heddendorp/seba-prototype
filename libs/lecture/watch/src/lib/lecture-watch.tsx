@@ -19,12 +19,13 @@ import { LectureUnitService, UserService } from '@seba/api-services';
 import AddIcon from '@material-ui/icons/Add';
 import { AddQuesionTrigger } from '@seba/questions';
 import { useStyles } from './style';
-import { IUser, Role } from '@seba/models';
+import {IQuiz, IQuizAnswer, IUser, Role} from '@seba/models';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import Chat from './chat/chat';
 import StudyGroup from './study-group/study-group';
 import { SocketContext } from '@seba/context';
 import { createRef } from 'react';
+import SubmitQuizDialog from "../../../quizzes/src/lib/submit-quiz-dialog";
 
 const BASE_API_URL = 'http://localhost:3333';
 
@@ -44,6 +45,7 @@ export function LectureWatch(props: LectureWatchProps) {
 
   // state to save the current study group
   const [currentStudyGroup, setCurrentStudyGroup] = useState<string>();
+  const [quizOpen, setQuizOpen] = useState<boolean>(false);
 
   // effect to set up and close the socket for a studyGroup
   useEffect(() => {
@@ -68,7 +70,7 @@ export function LectureWatch(props: LectureWatchProps) {
     })
     return () => {
       socket.off('sync');
-    }	
+    }
   }, [currentStudyGroup]);
 
   // reference of the video element
@@ -78,6 +80,9 @@ export function LectureWatch(props: LectureWatchProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [videoPath, setVideoPath] = useState('');
+  const [quizzes, setQuizzes] = useState<[IQuiz]>();
+  const [currentTime, setCurrentTime] = useState<number>();
+  const [currentQuiz, setCurrentQuiz] = useState<IQuiz>();
 
 
   useEffect(() => {
@@ -87,8 +92,20 @@ export function LectureWatch(props: LectureWatchProps) {
       setTitle(unit.title);
       setDescription(unit.description);
       setVideoPath(BASE_API_URL + unit.video_path);
+      setQuizzes(unit.quizzes);
     });
   }, [params.unit_id]);
+
+  useEffect(()=>{
+    if(!quizzes || !currentTime || !videoRef.current) return;
+    console.log(quizzes, currentTime);
+    const comingQuiz = quizzes.find(quiz => Math.abs(quiz.timestamp - currentTime)<1);
+    if(comingQuiz){
+      videoRef.current.pause();
+      setCurrentQuiz(comingQuiz);
+      setQuizOpen(true);
+    }
+  }, [quizzes, currentTime])
 
   function handleClickPlay() {
     socket.emit('sync',{group_id: currentStudyGroup, syncEvent: SyncEvent.PLAY});
@@ -96,6 +113,17 @@ export function LectureWatch(props: LectureWatchProps) {
 
   function handleClickPause() {
     socket.emit('sync',{group_id: currentStudyGroup, syncEvent: SyncEvent.PAUSE});
+  }
+
+  function handleSubmitQuiz(answers) {
+    //console.log(answers)
+
+    setQuizOpen(false)
+  }
+
+  function onProg (e) {
+    //todo
+    setCurrentTime(e.target.currentTime);
   }
 
   return (
@@ -118,6 +146,7 @@ export function LectureWatch(props: LectureWatchProps) {
                   src={videoPath}
                   onPause={handleClickPause}
                   onPlay={handleClickPlay}
+                  onTimeUpdate={onProg}
                 >
                   Your browser does not support this video type.
                 </video>
@@ -137,6 +166,8 @@ export function LectureWatch(props: LectureWatchProps) {
             </Paper>
           </Grid>
         </Grid>
+        <Button onClick={() => setQuizOpen(true)}>Testing: Open Quiz Dialog</Button>
+        {currentQuiz && <SubmitQuizDialog quiz={currentQuiz} open={quizOpen} handleClose={handleSubmitQuiz}/>}
         <Grid item container spacing={4} alignItems="stretch">
           <Grid item xs={8} container direction="column" spacing={2}>
             <Grid item>

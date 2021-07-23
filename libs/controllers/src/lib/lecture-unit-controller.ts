@@ -59,7 +59,7 @@ router.get(
   "/:lectureUnitId",
   passport.authenticate("jwt", {session: false}),
   async (req, res) => {
-    await LectureUnit.findById(req.params.lectureUnitId, function (err, result) {
+    await LectureUnit.findById(req.params.lectureUnitId).populate("quizzes").exec(function (err, result) {
       if (err) {
         console.log(err);
         return res.status(500).json({message: "Internal server error."});

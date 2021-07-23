@@ -15,6 +15,7 @@ export interface IQuizQuestion extends mongoose.Document {
   subquestions: IQuizSubmission[];
 }
 export interface IQuiz extends mongoose.Document {
+  unit_id: string,
   timestamp: number,
   questions: Array<IQuizQuestion>
 }
@@ -36,6 +37,8 @@ const QuizQuestionSchema = new mongoose.Schema({
 });
 
 export const QuizSchema = new mongoose.Schema({
+  //todo add lecture unit?
+  unit_id: String,
   timestamp: Number,
   questions: [QuizQuestionSchema]
 });

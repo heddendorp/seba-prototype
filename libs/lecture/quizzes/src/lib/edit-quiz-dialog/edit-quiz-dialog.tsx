@@ -17,7 +17,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import React, { useEffect, useReducer, useState } from 'react';
-import { IQuizTransport } from '@seba/api-interfaces';
+import {ICreateQuizTransport, IQuizTransport} from '@seba/api-interfaces';
 import { QuizService } from '../../../../../api-services/src/lib/quiz-service';
 import {
   IQuizQuestion,
@@ -36,10 +36,10 @@ export interface EditQuizDialogProps {
 
 const emptyAnswer = { answer: '', isCorrect: false };
 const emptyQuestion = { question: '', answers: [{ ...emptyAnswer }] };
-const emptyQuiz = { timestamp: 0, questions: [{ ...emptyQuestion }] };
+const emptyQuiz = { unit_id: '', timestamp: 0, questions: [{ ...emptyQuestion }] };
 
 //function reducer(state: IQuiz, action: {type: string; payload: IQuiz}): IQuiz {
-function reducer(state, action) {
+function reducer(state: ICreateQuizTransport, action) {
   switch (action.type) {
     case 'reset': {
       return action.payload ? { ...action.payload } : { ...emptyQuiz };

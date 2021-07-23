@@ -24,8 +24,8 @@ export class QuizService extends BaseService {
     return (await response.json()) as IQuizTransport;
   }
 
-  public static async getAll() {
-    const response = await this.authenticatedRequest('GET', 'quiz');
+  public static async getByUnitId(unit_id: string) {
+    const response = await this.authenticatedRequest('GET',   `quiz/${unit_id}`);
     return (await response.json()) as [IQuizTransport];
   }
 }
