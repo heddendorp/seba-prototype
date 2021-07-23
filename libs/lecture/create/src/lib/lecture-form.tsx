@@ -55,7 +55,6 @@ export function LectureForm(props: CreateLectureFormProps) {
           </Button>
           <Dialog
             open={deleteAlert}
-            onClose={handleCloseDialog}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >

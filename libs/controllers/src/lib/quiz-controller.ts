@@ -164,7 +164,7 @@ router.get(
       });
 
 
-    const answer = new QuizAnswer({
+    const answer = new QuizAnswerOption({
       text: req.body.text,
       isCorrect: false,
       //todo change to correct value

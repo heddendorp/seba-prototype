@@ -46,8 +46,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         setTitle(unit.title);
         setDateTime((moment(unit.publish_date)).format().slice(0, -9));
         setDescription(unit.description);
-        // TODO: Correct video path
-        setVideoPath(unit.video_path);
+        setVideoPath("http://localhost:3333" + unit.video_path);
       });
     }
   }, [props.unit_id]);
@@ -121,12 +120,8 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
     if (props.unit_id !== undefined) {
       return (
         <Grid item xs={12}>
-          <video controls width="100%">
-            <source
-              src={video_path}
-              type=".mp4"
-            />
-            Sorry, your browser does not support embedded videos.
+          <video controls width="100%" src={video_path}>
+            Your browser does not support this video type.
           </video>
         </Grid>
       );

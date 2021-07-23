@@ -6,7 +6,8 @@ import * as uuid from "uuid";
 import * as fs from "fs";
 
 const router = express.Router();
-const BASE_FILE_PATH = "../../../../apps/api/src/assets/videos/";
+const BASE_FILE_PATH = __dirname + "/assets/";
+const PREFIX = "/videos";
 
 router.post("/video",
   passport.authenticate("jwt", {session: false}),
@@ -16,11 +17,11 @@ router.post("/video",
         message: "No video file passed."
       });
 
-    const video_path = path.join(BASE_FILE_PATH, uuid.v4() + "." + path.extname(req.files["video"].name));
-    req.files["video"].mv(video_path);
+    const relative_path = path.join(PREFIX, uuid.v4() + path.extname(req.files["video"].name));
+    req.files["video"].mv(path.join(BASE_FILE_PATH, relative_path));
 
     return res.status(200).json({
-      video_path: video_path,
+      video_path: relative_path,
       message: "Success."
     })
   }

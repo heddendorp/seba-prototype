@@ -79,6 +79,9 @@
     },
     "questions": {
       "tags": ["scope:app"]
+    },
+    "study-group": {
+      "tags": []
     }
   }
 }

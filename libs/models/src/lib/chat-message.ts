@@ -1,14 +1,13 @@
 import * as mongoose from "mongoose";
+import {IUser} from "@seba/models";
 
 export interface IChatMessage extends Document {
   text: string,
-  timestamp: Date,
-  author: string
+  author: IUser | string
 }
 
 export const ChatMessageSchema = new mongoose.Schema({
   text: String,
-  timestamp: Date,
   author: String
 });
 

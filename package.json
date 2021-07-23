@@ -48,6 +48,8 @@
     "react-dom": "17.0.2",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "0.13.7",
+    "socket.io": "^4.1.3",
+    "socket.io-client": "^4.1.3",
     "tslib": "^2.0.0",
     "typescript-logging": "^1.0.0",
     "victory": "^35.8.5"

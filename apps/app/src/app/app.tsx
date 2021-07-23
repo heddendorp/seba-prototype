@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   BrowserRouter,
+  Redirect,
 } from 'react-router-dom';
 import {
   createMuiTheme,
@@ -13,10 +14,12 @@ import {
   ThemeProvider,
 } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
-import {Home} from "@seba/home";
-import { Questions } from '@seba/questions';
+import AppContainer from './app-container/app-container';
 
 let theme = createMuiTheme({
+  shape:{
+    borderRadius: 8,
+  },
   palette: {
     primary: {
       main: green[500],
@@ -25,18 +28,18 @@ let theme = createMuiTheme({
       main: red[500],
     },
   },
+  overrides:{
+    MuiPaper:{
+      rounded:{
+        borderRadius: 16,
+      }
+    }
+  }
 });
 theme = responsiveFontSizes(theme);
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3),
-  },
+  
 }));
 
 export const App = () => {
@@ -46,15 +49,20 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <div className={classes.root}>
-          <main className={classes.content}>
             <Switch>
-              <Route path="/" exact={true} component={Login}/>
-              <Route path="/signup" component={SignUp}/>
-              <Route path="/home" component={Home}/>
+              <Route path="/" exact={true}>
+                <Redirect to="/login"></Redirect>
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/signup">
+                <SignUp />
+              </Route>
+              <Route path="/app">
+                <AppContainer/>
+              </Route>
             </Switch>
-          </main>
-        </div>
       </BrowserRouter>
     </ThemeProvider>
   );
