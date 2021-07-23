@@ -1,31 +1,31 @@
 import * as express from 'express';
 import * as http from 'http';
-import * as mongoose from "mongoose";
-import {Server} from "socket.io";
+import * as mongoose from 'mongoose';
+import { Server } from 'socket.io';
 import {
   lectureRouter,
   lectureUnitRouter,
   questionRouter,
   quizRouter,
   studyGroupRouter,
-  userRouter
-} from "@seba/controllers";
-import * as passport from "passport";
-import {initializePassport} from "@seba/auth";
-import * as bodyParser from "body-parser";
-import * as cors from "cors";
-import * as fileUpload from "express-fileupload";
-import * as path from "path";
+  userRouter,
+} from '@seba/backend/controllers';
+import * as passport from 'passport';
+import { initializePassport } from '@seba/backend/auth';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as fileUpload from 'express-fileupload';
+import * as path from 'path';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server,{cors:{}});
+const io = new Server(server, { cors: {} });
 
 // Server config
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json({type: ["application/json", "text/plain"]}));
-app.use(fileUpload({createParentPath: true}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ type: ['application/json', 'text/plain'] }));
+app.use(fileUpload({ createParentPath: true }));
 
 // Authentication via Passport.js
 app.use(passport.initialize());
@@ -33,15 +33,15 @@ app.use(passport.session());
 initializePassport(passport);
 
 // Controller routing
-app.use("/user", userRouter);
-app.use("/lecture", lectureRouter);
-app.use("/lecture-unit", lectureUnitRouter);
-app.use("/question", questionRouter);
-app.use("/quiz", quizRouter);
-app.use("/study-group", studyGroupRouter);
+app.use('/user', userRouter);
+app.use('/lecture', lectureRouter);
+app.use('/lecture-unit', lectureUnitRouter);
+app.use('/question', questionRouter);
+app.use('/quiz', quizRouter);
+app.use('/study-group', studyGroupRouter);
 
 // File streaming
-app.use(express.static(path.join(__dirname, "/assets")));
+app.use(express.static(path.join(__dirname, '/assets')));
 
 // Start server
 const port = process.env.port || 3333;
@@ -49,27 +49,31 @@ server.listen(port, async () => {
   console.log('Listening at http://localhost:' + port);
 
   // Connect to database
-  const url = "mongodb://localhost:27017/learn-with-me";
-  mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => console.log("Connected to database"))
-    .catch(console.error.bind(console, "Connection error:"))
+  const url = 'mongodb://localhost:27017/learn-with-me';
+  mongoose
+    .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to database'))
+    .catch(console.error.bind(console, 'Connection error:'));
 });
 
 server.on('error', console.error);
 
 // Setup and configure sockets for study groups
-io.on("connection", socket => {
-  socket.on("groupConnect", (group_id) => {
+io.on('connection', (socket) => {
+  socket.on('groupConnect', (group_id) => {
     console.log(`${socket.id} connected to group ${group_id}`);
     socket.join(group_id);
   });
 
-  socket.on("message", (data) => {
-    io.to(data.group_id).emit("message", {author: data.author, message: data.message});
+  socket.on('message', (data) => {
+    io.to(data.group_id).emit('message', {
+      author: data.author,
+      message: data.message,
+    });
   });
 
-  socket.on("sync", (data) => {
+  socket.on('sync', (data) => {
     console.log(data);
-    io.to(data.group_id).emit("sync", data.syncEvent);
-  })
+    io.to(data.group_id).emit('sync', data.syncEvent);
+  });
 });

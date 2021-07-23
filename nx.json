@@ -22,12 +22,6 @@
     "api": {
       "tags": ["scope:api"]
     },
-    "api-interfaces": {
-      "tags": ["scope:shared"]
-    },
-    "api-services": {
-      "tags": ["scope:app"]
-    },
     "app": {
       "tags": ["scope:app"]
     },
@@ -35,53 +29,53 @@
       "tags": ["scope:app"],
       "implicitDependencies": ["app"]
     },
-    "auth": {
+    "shared": {
+      "tags": ["scope:shared"]
+    },
+    "frontend-api-services": {
+      "tags": ["scope:app"]
+    },
+    "backend-auth": {
       "tags": ["scope:api"]
     },
-    "chat": {
+    "frontend-context": {
       "tags": ["scope:app"]
     },
-    "context": {
-      "tags": ["scope:app"]
-    },
-    "controllers": {
+    "backend-controllers": {
       "tags": ["scope:api"]
     },
-    "home": {
+    "frontend-home": {
       "tags": ["scope:app"]
     },
-    "lecture-create": {
+    "frontend-login": {
       "tags": ["scope:app"]
     },
-    "lecture-create-unit": {
+    "frontend-navigation": {
       "tags": ["scope:app"]
     },
-    "lecture-questions": {
-      "tags": ["scope:app"]
-    },
-    "lecture-quizzes": {
-      "tags": ["scope:app"]
-    },
-    "lecture-statistics": {
-      "tags": ["scope:app"]
-    },
-    "lecture-watch": {
-      "tags": ["scope:app"]
-    },
-    "login": {
-      "tags": ["scope:app"]
-    },
-    "models": {
+    "backend-models": {
       "tags": ["scope:api"]
     },
-    "navigation": {
+    "frontend-lecture-create": {
       "tags": ["scope:app"]
     },
-    "questions": {
+    "frontend-lecture-create-unit": {
       "tags": ["scope:app"]
     },
-    "study-group": {
-      "tags": []
+    "frontend-lecture-quizzes": {
+      "tags": ["scope:app"]
+    },
+    "frontend-lecture-questions": {
+      "tags": ["scope:app"]
+    },
+    "frontend-lecture-statistics": {
+      "tags": ["scope:app"]
+    },
+    "frontend-lecture-watch": {
+      "tags": ["scope:app"]
+    },
+    "backend-services": {
+      "tags": ["scope:api"]
     }
   }
 }
