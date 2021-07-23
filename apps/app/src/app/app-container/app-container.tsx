@@ -60,9 +60,6 @@ export function AppContainer(props: AppContainerProps) {
   return (
     <LectureProvider>
       <SocketContext.Provider value={socket}>
-      {/* <Typography variant="h3" component="h1" gutterBottom className={classes.title}>
-        Learn With Me
-      </Typography> */}
       <div className={classes.root}>
         <Drawer
           variant="permanent"

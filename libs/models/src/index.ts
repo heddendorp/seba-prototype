@@ -1,4 +1,3 @@
-export * from './lib/answer';
 export * from './lib/lecture';
 export * from './lib/lecture-unit';
 export * from './lib/question';

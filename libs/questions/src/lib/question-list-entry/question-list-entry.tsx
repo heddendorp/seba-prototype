@@ -6,6 +6,7 @@ import { QuestionService } from '../../../../api-services/src/lib/question-servi
 /* eslint-disable-next-line */
 export interface QuestionListEntryProps {
   question: any;
+  onQuestionUpdate: (question: any) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,27 +20,25 @@ const useStyles = makeStyles((theme: Theme) =>
 export function QuestionListEntry(props: QuestionListEntryProps) {
   const classes = useStyles();
   const upvote = () =>{
-    QuestionService.upvote(props.question._id)
+    QuestionService.upvote(props.question._id).then(question => props.onQuestionUpdate(question));
   }
   return (
-    <Paper variant="outlined" className={classes.padded}>
       <Grid container alignItems="stretch">
         <Grid item xs container justify="space-around"  direction="column">
             <Grid item container alignItems='center' spacing={2}>
-              <IconButton onClick={upvote}><ThumbUpIcon/></IconButton> <span>{props.question.upVotes}</span>
+              <IconButton onClick={upvote}><ThumbUpIcon/></IconButton> <span>{props.question.upVotes.length}</span>
             </Grid>
             <Grid item>
               <RadioButtonUncheckedIcon/>
             </Grid>
           </Grid>
         <Grid item xs={11}>
-          <h1>Question {props.question._id}</h1>
+          <h1>{props.question.title}</h1>
           <p>
             {props.question.text}
           </p>
         </Grid>
       </Grid>
-    </Paper>
   );
 }
 
