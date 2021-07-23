@@ -1,4 +1,4 @@
-import {Button, Container, CssBaseline, Link, TextField, Typography} from "@material-ui/core";
+import {Button, Container, Grid, Link, Paper, TextField, Typography} from "@material-ui/core";
 
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import {Alert} from '@material-ui/lab';
@@ -31,7 +31,7 @@ export function Login() {
         setError(false);
         StorageService.setToken(body.token)
 
-        history.push("/home", {
+        history.push("/app", {
           role: body.user.role
         });
       }
@@ -49,24 +49,32 @@ export function Login() {
   const getAlert = () => {
     if (error)
       return (
-        <Alert className={classes.form} severity="error">{errorMessage}</Alert>
+        <Alert severity="error">{errorMessage}</Alert>
       );
     return;
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline/>
-      <div className={classes.paper}>
-        <img className={classes.logo} src={logoPath} alt="Learn with me"/>
-        <Typography component="h1" variant="h5">
+    <Container maxWidth="sm" className={classes.fullHeight}>
+      <Grid container direction="column" justify="center" className={classes.fullHeight}>
+          <Grid item>
+          <Paper elevation={3} className={classes.padding}>
+            <Grid container direction="column" spacing={2} alignItems="center">
+              <Grid item>
+              <img src={logoPath} alt="Learn with me"/>
+                </Grid>
+                <Grid item>
+                <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+                </Grid>
+                <Grid item>
+                <form onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             required
             fullWidth
+            margin="normal"
             label="Username"
             autoFocus
             autoComplete="username"
@@ -81,21 +89,29 @@ export function Login() {
             type="password"
             onChange={onChangePassword}
           />
-          {getAlert()}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
           >
             Sign In
           </Button>
-          <Link href="signup" variant="body2">
+          
+        </form>
+                </Grid>
+                <Grid item>
+                {getAlert()}
+                </Grid>
+                <Grid item>
+                <Link href="signup" variant="body2">
             {"Don't have an account? Sign Up"}
           </Link>
-        </form>
-      </div>
+                </Grid>
+            </Grid>
+          </Paper>
+          </Grid>
+      </Grid>
     </Container>
   );
 }

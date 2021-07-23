@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as passport from "passport";
-import {Lecture, Role} from "@seba/models";
+import {IUser, Lecture, Role} from "@seba/models";
+import {DeletionService} from "../../../services/src/lib/deletion-service";
 
 const router = express.Router();
 
@@ -93,13 +94,12 @@ router.delete(
       });
 
     Lecture.findById(req.params.lectureId).then(lecture => {
-      if (!lecture.lecturer._id.equals(req.user._id))
+      if (!(lecture.lecturer as IUser)._id.equals(req.user._id))
         return res.status(401).json({
           message: "You can only delete your own lectures."
         });
 
-      // TODO: Delete recursively (Units -> Quiz -> Option & co)
-      lecture.delete();
+      DeletionService.deleteLecture(req.params.lectureId);
     });
   }
 )

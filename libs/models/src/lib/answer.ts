@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 import {IUser, UserSchema} from "./user";
 
 export interface IAnswer extends mongoose.Document{
-  author: IUser,
+  author: IUser | string,
   text: string,
   markedAsCorrect: boolean
 }

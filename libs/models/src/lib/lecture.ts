@@ -6,8 +6,8 @@ export interface ILecture extends mongoose.Document {
   title: string,
   short_title: string,
   semester: string,
-  lecturer: IUser,
-  units: [ILectureUnit]
+  lecturer: IUser | string,
+  units: [ILectureUnit] | [string]
 }
 
 export const LectureSchema = new mongoose.Schema({

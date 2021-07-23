@@ -1,161 +1,160 @@
-import './lecture-watch.module.scss';
 import {
+  Button,
   Container,
-  createStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grid,
-  makeStyles,
+  IconButton,
+  ListItem,
+  ListItemText,
   Paper,
-  Theme,
+  TextField,
+  Typography,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import {useEffect, useState} from "react";
-import {LectureService, LectureUnitService} from "@seba/api-services";
+import React, { useContext, useEffect, useState } from 'react';
+import { LectureUnitService, UserService } from '@seba/api-services';
 import AddIcon from '@material-ui/icons/Add';
-import {ILecture} from "@seba/models";
 import { AddQuesionTrigger } from '@seba/questions';
+import { useStyles } from './style';
+import { IUser, Role } from '@seba/models';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import Chat from './chat/chat';
+import StudyGroup from './study-group/study-group';
+import { SocketContext } from '@seba/context';
+import { createRef } from 'react';
 
-/*import { Card, CardMedia, IconButton } from '@material-ui/core';*/
-/* eslint-disable-next-line */
+const BASE_API_URL = 'http://localhost:3333';
+
+export enum SyncEvent {
+  PLAY,
+  PAUSE,
+}
 
 export interface LectureWatchProps {}
-type WatchLectureURLParams = { unit_id: string }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      font: 'Roboto',
-      display: 'flex',
-      flexDirection: 'row',
-    },
-    chat: {
-      padding: theme.spacing(2),
-      border: '1px solid black',
-      borderRadius: 3,
-      backgroundColor: '#d3d3d3',
-      width: '75%',
-    },
-    media: {
-      width: '97%',
-
-    },
-    doubts: {
-      padding: theme.spacing(2),
-      font: 'Calibri',
-      backgroundColor: '#ffffff',
-      width: '97%',
-    },
-    groups: {
-      padding: theme.spacing(3),
-      border: '1px solid black',
-      borderRadius: 3,
-      backgroundColor: '#d3d3d3',
-      width: '75%',
-      height: '10 px',
-    }
-  })
-);
+type WatchLectureURLParams = { unit_id: string };
 
 export function LectureWatch(props: LectureWatchProps) {
   const params = useParams<WatchLectureURLParams>();
   const classes = useStyles();
+  const socket = useContext(SocketContext);
 
-  const [Title, setTitle] = useState();
-  const [Description, setDescription] = useState();
-  //const [VPath, setVPath] = useState();
+  // state to save the current study group
+  const [currentStudyGroup, setCurrentStudyGroup] = useState<string>();
+
+  // effect to set up and close the socket for a studyGroup
+  useEffect(() => {
+    if (currentStudyGroup) {
+      console.log(`Setting up socket for ${currentStudyGroup}`);
+      socket.emit('groupConnect', currentStudyGroup);
+    }
+    socket.on('sync', (syncEvent: SyncEvent) => {
+      console.info(syncEvent);
+    if (videoRef.current) {
+      switch (+syncEvent) {
+        case SyncEvent.PLAY:
+          videoRef.current.play();
+          break;
+        case SyncEvent.PAUSE:
+          videoRef.current.pause();
+          break;
+        default:
+          throw new Error('Not implemented');
+      }
+    }
+    })
+    return () => {
+      socket.off('sync');
+    }	
+  }, [currentStudyGroup]);
+
+  // reference of the video element
+  const videoRef = createRef<HTMLVideoElement>();
+
+  const [user, setUser] = useState<IUser>();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [videoPath, setVideoPath] = useState('');
 
 
   useEffect(() => {
-    console.log(params.unit_id)
-    const getLectureUnit = async () => await LectureUnitService.getById(params.unit_id);
+    UserService.getCurrent().then((user) => setUser(user));
 
-    getLectureUnit().then(unit => {
-      setTitle(unit.title)
-      setDescription(unit.description)
-      //setShortTitle(lecture.short_title)
-      //setSemester(lecture.semester)
+    LectureUnitService.getById(params.unit_id).then((unit) => {
+      setTitle(unit.title);
+      setDescription(unit.description);
+      setVideoPath(BASE_API_URL + unit.video_path);
     });
-
-    //renderDelayed();
   }, [params.unit_id]);
 
+  function handleClickPlay() {
+    socket.emit('sync',{group_id: currentStudyGroup, syncEvent: SyncEvent.PLAY});
+  }
+
+  function handleClickPause() {
+    socket.emit('sync',{group_id: currentStudyGroup, syncEvent: SyncEvent.PAUSE});
+  }
+
   return (
-    <main>
-      <div className={classes.root}>
-        <h2>{Title}</h2>
-
-      </div>
-      <div className={classes.root}>
-        <Grid item xs={9}>
-          <Paper variant="outlined" className={classes.media}>
-            <Container>
-            <video controls width="100%">
-              <source
-                src="https://test-videos.co.uk/vids/bigbuckbunny/mp4/av1/360/Big_Buck_Bunny_360_10s_1MB.mp4"
-                type="video/mp4"
+    <div style={{ padding: 32 }}>
+      <Grid container spacing={4} direction="column">
+        <Grid item>
+          <Typography variant="h2" component="h1">
+            Watch: {title}
+          </Typography>
+        </Grid>
+        <Grid item container spacing={4} alignItems="stretch">
+          <Grid item xs={8} container direction="column" spacing={2}>
+            <Grid item>
+              <Paper variant="outlined" className={classes.hideOverflow}>
+                <video
+                  id="video_stream"
+                  controls
+                  width="100%"
+                  ref={videoRef}
+                  src={videoPath}
+                  onPause={handleClickPause}
+                  onPlay={handleClickPlay}
+                >
+                  Your browser does not support this video type.
+                </video>
+              </Paper>
+            </Grid>
+            <Grid item>
+              <Paper variant="outlined" className={classes.padded}>
+                <Typography variant="h4" component="h2">
+                  {description}
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+          <Grid item xs>
+            <Paper variant="outlined" className={classes.padded} style={{height:'100%'}}>
+              <Chat groupId={currentStudyGroup} socket={socket} user={user} />
+            </Paper>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={4} alignItems="stretch">
+          <Grid item xs={8} container direction="column" spacing={2}>
+            <Grid item>
+              <Paper variant="outlined" className={classes.padded}></Paper>
+            </Grid>
+          </Grid>
+          <Grid item xs>
+            <Paper variant="outlined" className={classes.padded}>
+              <StudyGroup
+                user={user}
+                studyGroupId={currentStudyGroup}
+                onStudyGroupChange={(id) => setCurrentStudyGroup(id)}
               />
-              Sorry, your browser does not support embedded videos.
-            </video>
-            </Container>
-          </Paper>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Paper variant="outlined" className={classes.chat}>
-            <Container>
-              <h3>Chatbox comes here!</h3>
-            </Container>
-          </Paper>
-        </Grid>
-      </div>
-
-      <div>
-        <Grid item xs = {9}>
-          <Paper variant="outlined" className={classes.doubts}>
-            <Container>
-              <h4>{Description}</h4>
-            </Container>
-          </Paper>
-        </Grid>
-      </div>
-      <div>
-        <Grid item xs = {9}>
-          <AddQuesionTrigger/>
-        </Grid>
-      </div>
-
-      <div className={classes.root}>
-        <Grid item xs = {9}>
-          <Paper variant="outlined" className={classes.doubts}>
-          <Container>
-            <h3>All doubts</h3>
-              <p>
-                Doubt 1
-              </p>
-            </Container>
-          </Paper>
-        </Grid>
-        <Grid item xs = {3}>
-          <Paper variant="outlined" className={classes.groups}>
-            <Container>
-              <div className={classes.root}>
-                <Grid item xs = {10}>
-                  <h3>Study rooms</h3>
-                </Grid>
-                <Grid item xs = {2}>
-                  <AddIcon
-                    //onClick={this.joinGroup}
-                  >
-                  </AddIcon>
-                </Grid>
-              </div>
-              <p>
-                  To join a group, click on the + icon.
-              </p>
-            </Container>
-          </Paper>
-        </Grid>
-      </div>
-
-    </main>
+      </Grid>
+    </div>
   );
 }
 

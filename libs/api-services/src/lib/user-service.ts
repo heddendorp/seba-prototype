@@ -20,5 +20,6 @@ export class UserService extends BaseService {
   public static async logout() {
     await this.request("GET", "user/logout");
     StorageService.removeToken();
+    location.replace("/");
   }
 }

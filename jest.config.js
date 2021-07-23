@@ -18,5 +18,6 @@ module.exports = {
     '<rootDir>/libs/context',
     '<rootDir>/libs/chat',
     '<rootDir>/libs/questions',
+    '<rootDir>/libs/study-group',
   ],
 };

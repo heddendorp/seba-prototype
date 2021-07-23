@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 import {Schema} from "mongoose";
-import {IUser} from "@seba/models";
+import {IUser} from "./user";
 import {IChatMessage} from "./chat-message";
 
 export interface IStudyGroup extends Document {

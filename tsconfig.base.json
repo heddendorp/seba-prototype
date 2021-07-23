@@ -31,7 +31,8 @@
       "@seba/login": ["libs/login/src/index.ts"],
       "@seba/models": ["libs/models/src/index.ts"],
       "@seba/navigation": ["libs/navigation/src/index.ts"],
-      "@seba/questions": ["libs/questions/src/index.ts"]
+      "@seba/questions": ["libs/questions/src/index.ts"],
+      "@seba/study-group": ["libs/study-group/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

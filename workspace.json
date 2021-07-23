@@ -523,6 +523,27 @@
           }
         }
       }
+    },
+    "study-group": {
+      "root": "libs/study-group",
+      "sourceRoot": "libs/study-group/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/study-group/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/study-group"],
+          "options": {
+            "jestConfig": "libs/study-group/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }

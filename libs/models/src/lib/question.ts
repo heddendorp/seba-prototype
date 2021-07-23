@@ -4,10 +4,10 @@ import {IAnswer} from "./answer";
 
 export interface IQuestion extends mongoose.Document {
   timestamp: number,
-  author: IUser,
+  author: IUser | string,
   text: string,
   upVotes: number,
-  answers: Array<IAnswer>,
+  answers: [IAnswer] | [string],
   isAnswered: boolean
 }
 

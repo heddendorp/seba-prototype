@@ -59,7 +59,7 @@ export function QuizListEntry(props: QuizListEntryProps) {
                     <FormLabel>{question.question}</FormLabel>
                     <FormGroup>
                       {
-                        question.answers.map((answer: IQuizAnswer) => {
+                        question.answer_options.map((answer: IQuizAnswer) => {
                           return (
                             //icons?
                             <FormControlLabel key={answer._id}

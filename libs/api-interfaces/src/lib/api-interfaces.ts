@@ -1,4 +1,4 @@
-import { IAnswer, IQuizSubmission, Role } from '@seba/models';
+import {Role} from '@seba/models';
 
 export interface ICreateLectureTransport extends Record<string, unknown> {
   title: string;
@@ -47,7 +47,7 @@ export interface ICreateQuizTransport extends Record<string, unknown> {
   }[];
 }
 
-export interface IQuizTransport extends ICreateQuizTransport{
+export interface IQuizTransport extends ICreateQuizTransport {
   _id: string;
 }
 
@@ -64,4 +64,18 @@ export interface IQuizAnswerTransport extends Record<string, unknown> {
   question_id: string;
   text: string;
   isCorrect: boolean;
+}
+
+export interface ICreateStudyGroupTransport extends Record<string, unknown> {
+  student_id: string;
+}
+
+export interface ICreateStudyGroupResponse extends Record<string, unknown> {
+  group_id: string;
+  message: string;
+}
+
+export interface IJoinStudyGroupTransport extends Record<string, unknown> {
+  group_id: string;
+  student_id: string
 }

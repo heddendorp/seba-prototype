@@ -28,10 +28,6 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing(2)
   },
-  editButton: {
-    top: "0px",
-    right: "0px",
-  },
   logoutButton: {
     padding: theme.spacing(2),
     textTransform: "none",

@@ -10,9 +10,9 @@ export interface IQuizAnswer extends mongoose.Document {
   isCorrrect: boolean;
 }
 export interface IQuizQuestion extends mongoose.Document {
-    question: string;
-    answers: IQuizAnswer[];
-    subquestions: IQuizSubmission[];
+  question: string;
+  answers: IQuizAnswer[];
+  subquestions: IQuizSubmission[];
 }
 export interface IQuiz extends mongoose.Document {
   timestamp: number,
@@ -37,8 +37,7 @@ const QuizQuestionSchema = new mongoose.Schema({
 
 export const QuizSchema = new mongoose.Schema({
   timestamp: Number,
-  questions: [QuizQuestionSchema],
-  //todo submission
+  questions: [QuizQuestionSchema]
 });
 
 export const Quiz = mongoose.model<IQuiz>("Quiz", QuizSchema);
