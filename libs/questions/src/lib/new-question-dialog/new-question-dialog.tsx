@@ -8,22 +8,26 @@ import {
   DialogTitle,
   TextField
 } from '@material-ui/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface NewQuestionDialogProps {
   open: boolean;
+  timestamp: number;
   onClose: (question: any) => DialogProps['onClose'];
 }
 
 export function NewQuestionDialog(props: NewQuestionDialogProps) {
   const [question, setQuestion] = useState<any>([]);
+  useEffect(() => {
+    setQuestion({timestamp: props.timestamp});
+  }, [props.timestamp]);
   return (
     <Dialog open={props.open} onClose={props.onClose(null)}>
       <DialogTitle>Add your question</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Enter your question here to attach it to the current timestamp in the video.
+          Enter your question here to attach it to {props.timestamp} second mark in the video.
         </DialogContentText>
         <TextField autoFocus label='Question Title' required type='text' fullWidth
                    onChange={e => setQuestion({ ...question, title: e.target.value })} />

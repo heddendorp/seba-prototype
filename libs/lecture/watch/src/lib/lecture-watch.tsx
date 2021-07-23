@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 import { LectureUnitService, UserService } from '@seba/api-services';
 import AddIcon from '@material-ui/icons/Add';
-import { AddQuesionTrigger } from '@seba/questions';
+import { AddQuesionTrigger, LectureQuestions } from '@seba/questions';
 import { useStyles } from './style';
 import {IQuiz, IQuizAnswer, IUser, Role} from '@seba/models';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
@@ -171,7 +171,9 @@ export function LectureWatch(props: LectureWatchProps) {
         <Grid item container spacing={4} alignItems="stretch">
           <Grid item xs={8} container direction="column" spacing={2}>
             <Grid item>
-              <Paper variant="outlined" className={classes.padded}></Paper>
+              <Paper variant="outlined" className={classes.padded}>
+                <LectureQuestions lecureUnitId={params.unit_id} videoReference={videoRef}/>
+              </Paper>
             </Grid>
           </Grid>
           <Grid item xs>
