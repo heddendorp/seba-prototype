@@ -42,21 +42,9 @@ export function LectureWatch(props: LectureWatchProps) {
 
   // effect to set up and close the socket for a studyGroup
   useEffect(() => {
-    if (currentStudyGroup) {
-      socket.emit('groupConnect', currentStudyGroup, (group: any) => {
-        console.log(group);
-        if (!group) {
-          setWrongGroupIdOpen(true);
-          setCurrentStudyGroup(undefined);
-        }else{
-          setStudyGroup(group);
-        }
-      });
-    }
     socket.on('sync', (data: any) => {
       const video = document.getElementById("video_stream") as HTMLVideoElement;
       video.currentTime = data.currentTime;
-      console.log(+data.syncEvent)
       switch (+data.syncEvent) {
         case SyncEvent.PLAY:
           video.play();
@@ -66,13 +54,25 @@ export function LectureWatch(props: LectureWatchProps) {
           break;
         default:
           throw new Error('Not implemented');
-
       }
     });
     return () => {
       socket.off('sync');
     };
   }, [currentStudyGroup]);
+
+  const joinStudyGroup = (groupId: string) => {
+    socket.emit('groupConnect', groupId, (group: any) => {
+      if (!group) {
+        setWrongGroupIdOpen(true);
+        setStudyGroup(undefined);
+        setCurrentStudyGroup(undefined);
+      }else{
+        setStudyGroup(group);
+        setCurrentStudyGroup(groupId);
+      }
+    });
+  };
 
   const [user, setUser] = useState<IUser>();
   const [title, setTitle] = useState('');
@@ -206,7 +206,7 @@ export function LectureWatch(props: LectureWatchProps) {
               <StudyGroup
                 user={user}
                 studyGroupId={currentStudyGroup}
-                onStudyGroupChange={(id) => setCurrentStudyGroup(id)}
+                onStudyGroupChange={(id) => joinStudyGroup(id)}
               />
               <Dialog
                 open={wrongGroupIdOpen}

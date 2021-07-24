@@ -6,7 +6,7 @@ import {useStyles} from "../style";
 export interface ChatProps {
   socket: any;
   group: any;
-  groupId: string;
+  groupId?: string;
   user: any;
 }
 
@@ -31,7 +31,6 @@ export function Chat(props: ChatProps) {
     if (props.group) {
       setMessages(props.group.chat);
       props.socket.on('message', (data: any) => {
-        console.log(data);
         setMessages(messages => messages.concat(data));
       });
     }
@@ -42,20 +41,20 @@ export function Chat(props: ChatProps) {
   return (
     <div style={{ height: '100%', overflow: 'auto' }}>
       <h3>Chat</h3>
-      {props.group && (
+      {props.groupId && (
         <>
           {messages.map((message) => (
             <>
               {
                 props.user.display_name == message.author ?
-                  <ListItem class={classes.sentMessage} key={message._id}>
+                  <ListItem className={classes.sentMessage} key={message._id}>
                     <ListItemText
                       primary={message.author}
                       secondary={message.message}
                     />
                   </ListItem>
                   :
-                  <ListItem class={classes.receivedMessage} key={message._id}>
+                  <ListItem className={classes.receivedMessage} key={message._id}>
                     <ListItemText
                       primary={message.author}
                       secondary={message.message}
