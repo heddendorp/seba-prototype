@@ -18,7 +18,7 @@ import {useStyles} from './styles';
 export interface SubmitQuizDialogProps {
   quiz: IQuiz;
   open: boolean;
-  handleClose: (answers: {}) => void;
+  handleClose: (answers: any) => void;
 }
 
 export function SubmitQuizDialog(props: SubmitQuizDialogProps) {
@@ -26,7 +26,7 @@ export function SubmitQuizDialog(props: SubmitQuizDialogProps) {
 
   const classes = useStyles();
 
-  const updateAnswer = (questionId, answer: IQuizAnswer, checked: boolean) => {
+  const updateAnswer = (questionId: string, answer: IQuizAnswer, checked: boolean) => {
     setAnswers((state) => {
       if (!checked) {
         const newState = {...state}
