@@ -37,6 +37,9 @@ export function LectureWatch(props: LectureWatchProps) {
   const [quizOpen, setQuizOpen] = useState<boolean>(false);
   const [wrongGroupIdOpen, setWrongGroupIdOpen] = useState<boolean>(false);
 
+  // reference of the video element
+  const videoRef = createRef<HTMLVideoElement>();
+
   // effect to set up and close the socket for a studyGroup
   useEffect(() => {
     if (currentStudyGroup) {
@@ -50,27 +53,26 @@ export function LectureWatch(props: LectureWatchProps) {
         }
       });
     }
-    socket.on('sync', (syncEvent: SyncEvent) => {
-      if (videoRef.current) {
-        switch (+syncEvent) {
-          case SyncEvent.PLAY:
-            videoRef.current.play();
-            break;
-          case SyncEvent.PAUSE:
-            videoRef.current.pause();
-            break;
-          default:
-            throw new Error('Not implemented');
-        }
+    socket.on('sync', (data: any) => {
+      const video = document.getElementById("video_stream") as HTMLVideoElement;
+      video.currentTime = data.currentTime;
+      console.log(+data.syncEvent)
+      switch (+data.syncEvent) {
+        case SyncEvent.PLAY:
+          video.play();
+          break;
+        case SyncEvent.PAUSE:
+          video.pause();
+          break;
+        default:
+          throw new Error('Not implemented');
+
       }
     });
     return () => {
       socket.off('sync');
     };
   }, [currentStudyGroup]);
-
-  // reference of the video element
-  const videoRef = createRef<HTMLVideoElement>();
 
   const [user, setUser] = useState<IUser>();
   const [title, setTitle] = useState('');
@@ -115,6 +117,7 @@ export function LectureWatch(props: LectureWatchProps) {
     socket.emit('sync', {
       group_id: currentStudyGroup,
       syncEvent: SyncEvent.PLAY,
+      currentTime: (document.getElementById("video_stream") as HTMLVideoElement).currentTime
     });
   }
 
@@ -122,6 +125,7 @@ export function LectureWatch(props: LectureWatchProps) {
     socket.emit('sync', {
       group_id: currentStudyGroup,
       syncEvent: SyncEvent.PAUSE,
+      currentTime: (document.getElementById("video_stream") as HTMLVideoElement).currentTime
     });
   }
 
@@ -192,7 +196,7 @@ export function LectureWatch(props: LectureWatchProps) {
               <Paper variant="outlined" className={classes.padded}>
                 <LectureQuestions
                   lecureUnitId={params.unit_id}
-                  videoReference={videoRef}
+                  currentTime={currentTime}
                 />
               </Paper>
             </Grid>

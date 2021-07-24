@@ -6,7 +6,7 @@ import QuestionListEntry from '../question-list-entry/question-list-entry';
 
 /* eslint-disable-next-line */
 export interface LectureQuestionsProps {
-  videoReference: any;
+  currentTime: number;
   lecureUnitId: string;
 }
 
@@ -69,7 +69,7 @@ export function LectureQuestions(props: LectureQuestionsProps) {
       <h3>Questions</h3>
       <AddQuesionTrigger
         lecureUnitId={props.lecureUnitId}
-        videoReference={props.videoReference}
+        currentTime={props.currentTime}
         onNewQuestion={handleQuestionAdded}
       />
       <Grid container spacing={1} direction="column">

@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as passport from 'passport';
 import {LectureUnit, Quiz, Role} from '@seba/backend/models';
 import {ICreateQuizTransport} from '@seba/shared';
+import {DeletionService} from "@seba/backend/services";
 
 const router = express.Router();
 
@@ -67,16 +68,8 @@ router.delete(
         message: 'Only lecturers can delete quizzes.',
       });
 
-    Quiz.findByIdAndRemove(req.params.quizId, null, function (err, result) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({message: 'Internal server error.'});
-      } else {
-        //todo lösche idobject id in der unit
-        //LectureUnit.findOneAndUpdate({_id: result.unit_id}, { $pullAll: { quizzes:  result._id }})
-        return res.status(200).json(result);
-      }
-    });
+    await DeletionService.deleteQuiz(req.params.quizId).catch(err => res.json(err).status(500));
+    res.json({message: "Success."}).status(200);
   }
 );
 

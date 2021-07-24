@@ -170,85 +170,89 @@ export function Navigation() {
       <Divider />
       <List component="nav">
         {context.lectures !== undefined &&
-          context.lectures.map((lecture) => (
-            <>
-              <ListItem button onClick={() => setOpenLecture(lecture._id)}>
-                <ListItemIcon>
-                  <LectureIcon />
-                </ListItemIcon>
-                <ListItemText primary={lecture.short_title} />
-                {openLecture == lecture._id ? <ExpandLess /> : <ExpandMore />}
-              </ListItem>
-              <Collapse
-                in={openLecture == lecture._id}
-                timeout="auto"
-                unmountOnExit
-                style={{ marginLeft: 16 }}
-              >
-                {user !== undefined && +user.role === Role.LECTURER && (
-                  <>
-                    <ListItemLink
-                      to={`${url}/lecture/${lecture._id}/edit`}
-                      icon={<LectureEditIcon />}
-                      primary={`Edit ${lecture.short_title}`}
-                    />
-                    <ListItemLink
-                      icon={<ShowChart />}
-                      primary="Statistics"
-                      to={`${url}/lecture/${lecture._id}/statistics`}
-                    />
-                  </>
-                )}
-                {lecture.units.map((unit) => (
-                  <>
-                    <ListItem button onClick={() => setOpenUnit(unit._id)}>
-                      <ListItemIcon>
-                        <UnitIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={unit.title} />
-                      {openUnit == unit._id ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse
-                      in={openUnit == unit._id}
-                      timeout="auto"
-                      unmountOnExit
-                      style={{ marginLeft: 16 }}
-                    >
-                      {user !== undefined && +user.role === Role.LECTURER && (
-                        <ListItemLink
-                          to={`${url}/unit/${unit._id}/edit`}
-                          icon={<UnitEditIcon />}
-                          primary={`Edit ${unit.title}`}
-                        />
-                      )}
+        context.lectures.map((lecture) => (
+          <>
+            <ListItem button onClick={() => setOpenLecture(lecture._id)}>
+              <ListItemIcon>
+                <LectureIcon/>
+              </ListItemIcon>
+              <ListItemText primary={lecture.short_title}/>
+              {openLecture == lecture._id ? <ExpandLess/> : <ExpandMore/>}
+            </ListItem>
+            <Collapse
+              in={openLecture == lecture._id}
+              timeout="auto"
+              unmountOnExit
+              style={{marginLeft: 16}}
+            >
+              {user !== undefined && +user.role === Role.LECTURER && (
+                <>
+                  <ListItemLink
+                    to={`${url}/lecture/${lecture._id}/edit`}
+                    icon={<LectureEditIcon/>}
+                    primary={`Edit ${lecture.short_title}`}
+                  />
+                  <ListItemLink
+                    icon={<ShowChart/>}
+                    primary="Statistics"
+                    to={`${url}/lecture/${lecture._id}/statistics`}
+                  />
+                </>
+              )}
+              {lecture.units.map((unit) => (
+                <>
+                  <ListItem button onClick={() => setOpenUnit(unit._id)}>
+                    <ListItemIcon>
+                      <UnitIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={unit.title}/>
+                    {openUnit == unit._id ? <ExpandLess/> : <ExpandMore/>}
+                  </ListItem>
+                  <Collapse
+                    in={openUnit == unit._id}
+                    timeout="auto"
+                    unmountOnExit
+                    style={{marginLeft: 16}}
+                  >
+                    {user !== undefined && +user.role === Role.LECTURER && (
+                      <ListItemLink
+                        to={`${url}/unit/${unit._id}/edit`}
+                        icon={<UnitEditIcon/>}
+                        primary={`Edit ${unit.title}`}
+                      />
+                    )}
+                    {user !== undefined && +user.role == Role.STUDENT &&
                       <ListItemLink
                         to={`${url}/unit/${unit._id}/watch`}
-                        icon={<OndemandVideo />}
+                        icon={<OndemandVideo/>}
                         primary="Watch"
                       />
-                      <ListItemLink
-                        to={`${url}/unit/${unit._id}/questions`}
-                        icon={<QuestionAnswer />}
-                        primary="Questions"
-                      />
+                    }
+                    <ListItemLink
+                      to={`${url}/unit/${unit._id}/questions`}
+                      icon={<QuestionAnswer/>}
+                      primary="Questions"
+                    />
+                    {user !== undefined && +user.role == Role.LECTURER &&
                       <ListItemLink
                         to={`${url}/unit/${unit._id}/quizzes`}
-                        icon={<Assignment />}
+                        icon={<Assignment/>}
                         primary="Quizzes"
                       />
-                    </Collapse>
-                  </>
-                ))}
-                {user !== undefined && +user.role === Role.LECTURER && (
-                  <ListItemLink
-                    icon={<UnitAddIcon />}
-                    primary="Create Unit"
-                    to={`${url}/lecture/${lecture._id}/unit/create`}
-                  />
-                )}
-              </Collapse>
-            </>
-          ))}
+                    }
+                  </Collapse>
+                </>
+              ))}
+              {user !== undefined && +user.role === Role.LECTURER && (
+                <ListItemLink
+                  icon={<UnitAddIcon/>}
+                  primary="Create Unit"
+                  to={`${url}/lecture/${lecture._id}/unit/create`}
+                />
+              )}
+            </Collapse>
+          </>
+        ))}
         {user !== undefined && +user.role === Role.LECTURER && (
           <ListItemLink
             icon={<LectureAddIcon />}

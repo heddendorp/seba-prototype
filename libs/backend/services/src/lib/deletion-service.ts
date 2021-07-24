@@ -1,14 +1,22 @@
-import {Lecture, LectureUnit, Question, Quiz} from "../../../models/src";
+import {Lecture, LectureUnit, Question, Quiz} from "@seba/backend/models";
 import * as fs from "fs";
-import path = require("path");
+import * as path from "path";
 
 export class DeletionService {
 
   public static async deleteQuiz(id: string) {
+    LectureUnit.findOne({quizzes: id}).then(unit => {
+      unit.quizzes.pull(id);
+      unit.save()
+    });
     await Quiz.findByIdAndDelete(id);
   }
 
   public static async deleteQuestion(id: string) {
+    LectureUnit.findOne({questions: id}).then(unit => {
+      unit.questions.pull(id);
+      unit.save()
+    });
     await Question.findByIdAndDelete(id);
   }
 
@@ -24,6 +32,10 @@ export class DeletionService {
       }
     });
 
+    Lecture.findOne({units: id}).then(lecture => {
+      lecture.units.pull(id);
+      lecture.save()
+    });
     await LectureUnit.findByIdAndDelete(id);
   }
 

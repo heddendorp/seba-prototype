@@ -110,7 +110,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
               <Button
                 onClick={handleClickDelete}
                 color="secondary"
-                href="/home"
+                href="/app/home"
               >
                 Delete
               </Button>
@@ -196,10 +196,10 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         <Grid item xs={12}>
           <div className={classes.finishButton}>
             <Button autoFocus>Cancel</Button>
+            <DeleteButton/>
             <Button color="primary" type="submit">
               Submit
             </Button>
-            <DeleteButton/>
           </div>
         </Grid>
       </Grid>
