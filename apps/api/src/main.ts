@@ -76,6 +76,9 @@ io.on('connection', (socket) => {
 
   socket.on('sync', (data) => {
     console.log(data);
-    io.to(data.group_id).emit('sync', data.syncEvent);
+    io.to(data.group_id).emit('sync', {
+      syncEvent: data.syncEvent,
+      currentTime: data.currentTime
+    });
   });
 });

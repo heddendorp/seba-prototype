@@ -5,7 +5,7 @@ import {QuestionService} from '@seba/frontend/api-services';
 
 /* eslint-disable-next-line */
 export interface AddQuesionTriggerProps {
-  videoReference: any;
+  currentTime: number;
   lecureUnitId: string;
   onNewQuestion: (question: any) => void;
 }
@@ -18,7 +18,7 @@ export function AddQuesionTrigger(props: AddQuesionTriggerProps) {
 
   // click handler to open the dialog
   const handleClick = () => {
-    setTimestamp(Math.round(props.videoReference.current.currentTime));
+    setTimestamp(Math.round(props.currentTime));
     setOpen(true);
   };
 
