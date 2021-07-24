@@ -1,6 +1,6 @@
 import { BaseService } from './base-service';
 import { IUser } from '@seba/backend/models';
-import { ILoginTransport, IRegisterTransport } from '@seba/api-interfaces';
+import { ILoginTransport, IRegisterTransport } from '@seba/shared';
 import { StorageService } from './storage-service';
 
 export class UserService extends BaseService {

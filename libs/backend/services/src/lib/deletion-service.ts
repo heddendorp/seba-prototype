@@ -1,5 +1,4 @@
 import {
-  Answer,
   Lecture,
   LectureUnit,
   Question,
@@ -14,15 +13,7 @@ export class DeletionService {
     await Quiz.findByIdAndDelete(id);
   }
 
-  public static async deleteAnswer(id: string) {
-    await Answer.findByIdAndDelete(id);
-  }
-
   public static async deleteQuestion(id: string) {
-    Question.findById(id).then(question =>
-      question.answers.forEach(answer_id => this.deleteAnswer(answer_id as string))
-    );
-
     await Question.findByIdAndDelete(id);
   }
 

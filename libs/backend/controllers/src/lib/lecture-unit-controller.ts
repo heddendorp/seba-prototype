@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import { ILecture, Lecture, LectureUnit, Role } from '@seba/backend/models';
+import {ILecture, IUser, Lecture, LectureUnit, Role} from '@seba/backend/models';
 import * as path from 'path';
 import * as uuid from 'uuid';
 import * as fs from 'fs';
@@ -118,7 +118,7 @@ router.delete(
       .populate('lecture')
       .exec();
     const lecture = unit.lecture as ILecture;
-    if (!lecture.lecturer._id.equals(req.user._id))
+    if (!(lecture.lecturer as IUser)._id.equals(req.user._id))
       return res.status(401).json({
         message: 'You can only delete your own lectures.',
       });

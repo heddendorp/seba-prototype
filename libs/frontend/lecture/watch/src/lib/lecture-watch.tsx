@@ -94,7 +94,7 @@ export function LectureWatch(props: LectureWatchProps) {
       setTitle(unit.title);
       setDescription(unit.description);
       setVideoPath(BASE_API_URL + unit.video_path);
-      setQuizzes(unit.quizzes);
+      setQuizzes(unit.quizzes as [IQuiz]);
     });
   }, [params.unit_id]);
 
