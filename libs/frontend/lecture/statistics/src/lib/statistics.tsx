@@ -1,4 +1,3 @@
-import './statistics.module.scss';
 import {
   Container,
   createStyles,
