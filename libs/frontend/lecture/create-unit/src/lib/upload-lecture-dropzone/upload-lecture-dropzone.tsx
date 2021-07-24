@@ -1,5 +1,5 @@
-import { DropzoneArea } from 'material-ui-dropzone';
-import { useStyles } from '../styles';
+import {DropzoneArea} from 'material-ui-dropzone';
+import {useStyles} from '../styles';
 
 export interface UploadLectureDropzoneProps {
   setFile: (file: File) => void;
@@ -7,7 +7,7 @@ export interface UploadLectureDropzoneProps {
 
 // Docs for the dropzone: https://yuvaleros.github.io/material-ui-dropzone/
 export function UploadLectureDropzone(props: UploadLectureDropzoneProps) {
-  const { setFile } = props;
+  const {setFile} = props;
   const classes = useStyles();
 
   const onChangeFile = (files: File[]) => {
@@ -22,8 +22,8 @@ export function UploadLectureDropzone(props: UploadLectureDropzoneProps) {
       showPreviews={true}
       showPreviewsInDropzone={false}
       useChipsForPreview
-      previewGridProps={{ container: { spacing: 1, direction: 'row' } }}
-      previewChipProps={{ classes: { root: classes.previewChip } }}
+      previewGridProps={{container: {spacing: 1, direction: 'row'}}}
+      previewChipProps={{classes: {root: classes.previewChip}}}
       previewText="Selected file:"
       onChange={onChangeFile}
       maxFileSize={1024 * 1024 * 1024} // Limited to 1 GB

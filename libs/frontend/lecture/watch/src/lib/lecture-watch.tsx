@@ -1,33 +1,13 @@
-import {
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  IconButton,
-  ListItem,
-  ListItemText,
-  Paper,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import {Grid, Paper, Typography,} from '@material-ui/core';
 import {useParams} from 'react-router-dom';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {createRef, useContext, useEffect, useState} from 'react';
 import {LectureUnitService, QuizService, UserService} from '@seba/frontend/api-services';
-import AddIcon from '@material-ui/icons/Add';
-import {
-  AddQuesionTrigger,
-  LectureQuestions,
-} from '@seba/frontend/lecture/questions';
+import {LectureQuestions,} from '@seba/frontend/lecture/questions';
 import {useStyles} from './style';
-import {IQuiz, IQuizAnswer, IUser, Role} from '@seba/backend/models';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import {IQuiz, IUser} from '@seba/backend/models';
 import Chat from './chat/chat';
 import StudyGroup from './study-group/study-group';
 import {SocketContext} from '@seba/frontend/context';
-import {createRef} from 'react';
 import SubmitQuizDialog from '../../../quizzes/src/lib/submit-quiz-dialog';
 
 const BASE_API_URL = 'http://localhost:3333';
@@ -129,7 +109,7 @@ export function LectureWatch(props: LectureWatchProps) {
   }
 
   function handleSubmitQuiz(answers: any) {
-    if(currentQuiz){
+    if (currentQuiz) {
       QuizService.submitAnswers(currentQuiz._id, answers);
     }
     setQuizOpen(false);
@@ -155,7 +135,7 @@ export function LectureWatch(props: LectureWatchProps) {
                   src={videoPath}
                   onPause={handleClickPause}
                   onPlay={handleClickPlay}
-                  onTimeUpdate={(e)=>setCurrentTime(e.target.currentTime)}
+                  onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
                 >
                   Your browser does not support this video type.
                 </video>

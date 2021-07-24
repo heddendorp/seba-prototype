@@ -1,9 +1,8 @@
-import { Grid } from '@material-ui/core';
-import { QuestionService } from '@seba/frontend/api-services';
-import { useEffect, useReducer } from 'react';
+import {Grid} from '@material-ui/core';
+import {QuestionService} from '@seba/frontend/api-services';
+import {useEffect, useReducer} from 'react';
 import AddQuesionTrigger from '../add-quesion-trigger/add-quesion-trigger';
 import QuestionListEntry from '../question-list-entry/question-list-entry';
-import QuestionList from '../question-list/question-list';
 
 /* eslint-disable-next-line */
 export interface LectureQuestionsProps {

@@ -1,9 +1,9 @@
 import LectureUnitForm from './lecture-unit-form';
-import { useParams } from 'react-router-dom';
-import { useLectureContext } from '@seba/frontend/context';
-import { useStyles } from './styles';
-import { LectureUnitService } from '@seba/frontend/api-services';
-import { IEditLectureUnitTransport } from '@seba/shared';
+import {useParams} from 'react-router-dom';
+import {useLectureContext} from '@seba/frontend/context';
+import {useStyles} from './styles';
+import {LectureUnitService} from '@seba/frontend/api-services';
+import {IEditLectureUnitTransport} from '@seba/shared';
 
 type EditUnitURLParams = {
   unit_id: string;
@@ -51,7 +51,7 @@ export function EditLectureUnit() {
 
   return (
     <div className={classes.root}>
-      <LectureUnitForm handleSubmit={handleSubmit} unit_id={params.unit_id} />
+      <LectureUnitForm handleSubmit={handleSubmit} unit_id={params.unit_id}/>
     </div>
   );
 }

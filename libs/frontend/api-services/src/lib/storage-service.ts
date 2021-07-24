@@ -6,6 +6,29 @@ export class StorageService {
   private static storage = localStorage;
 
   /**
+   * Getter for user jwt token
+   * @returns token
+   */
+  public static getToken(): string | null {
+    return this.getItem(StorageItem.token);
+  }
+
+  /**
+   * Setter for user jwt token
+   * @param token token
+   */
+  public static setToken(token: string): void {
+    this.setItem(StorageItem.token, token);
+  }
+
+  /**
+   * Remove token from storage.
+   */
+  public static removeToken(): void {
+    this.removeItem(StorageItem.token);
+  }
+
+  /**
    * Getter for an item in storage.
    * @param item Item to return
    * @returns
@@ -29,28 +52,5 @@ export class StorageService {
    */
   private static removeItem(item: StorageItem) {
     this.storage.removeItem(item);
-  }
-
-  /**
-   * Getter for user jwt token
-   * @returns token
-   */
-  public static getToken(): string | null {
-    return this.getItem(StorageItem.token);
-  }
-
-  /**
-   * Setter for user jwt token
-   * @param token token
-   */
-  public static setToken(token: string): void {
-    this.setItem(StorageItem.token, token);
-  }
-
-  /**
-   * Remove token from storage.
-   */
-  public static removeToken(): void {
-    this.removeItem(StorageItem.token);
   }
 }

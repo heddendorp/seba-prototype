@@ -1,9 +1,4 @@
-import {
-  Lecture,
-  LectureUnit,
-  Question,
-  Quiz
-} from "../../../models/src";
+import {Lecture, LectureUnit, Question, Quiz} from "../../../models/src";
 import * as fs from "fs";
 import path = require("path");
 
@@ -24,7 +19,7 @@ export class DeletionService {
 
       try {
         fs.unlinkSync(path.join(__dirname, "assets", unit.video_path));
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     });

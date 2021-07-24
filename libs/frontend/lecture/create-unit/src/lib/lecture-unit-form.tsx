@@ -10,10 +10,10 @@ import {
   TextField,
 } from '@material-ui/core';
 import UploadLectureDropzone from './upload-lecture-dropzone/upload-lecture-dropzone';
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { LectureUnitService } from '@seba/frontend/api-services';
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {LectureUnitService} from '@seba/frontend/api-services';
 import moment from 'moment';
-import { useStyles } from './styles';
+import {useStyles} from './styles';
 
 export interface LectureUnitFormProps {
   unit_id: string | undefined;
@@ -182,9 +182,9 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
             required
           />
         </Grid>
-        <Preview />
+        <Preview/>
         <Grid item xs={12}>
-          <UploadLectureDropzone setFile={setFile} />
+          <UploadLectureDropzone setFile={setFile}/>
         </Grid>
         <Grid item xs={12}>
           <LinearProgress
@@ -199,7 +199,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
             <Button color="primary" type="submit">
               Submit
             </Button>
-            <DeleteButton />
+            <DeleteButton/>
           </div>
         </Grid>
       </Grid>

@@ -1,18 +1,10 @@
-import {
-  Button,
-  Container,
-  Grid,
-  Link,
-  Paper,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import {Button, Container, Grid, Link, Paper, TextField, Typography,} from '@material-ui/core';
 
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { Alert } from '@material-ui/lab';
-import { useHistory } from 'react-router-dom';
-import { StorageService, UserService } from '@seba/frontend/api-services';
-import { useStyles } from './styles';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
+import {Alert} from '@material-ui/lab';
+import {useHistory} from 'react-router-dom';
+import {StorageService, UserService} from '@seba/frontend/api-services';
+import {useStyles} from './styles';
 
 export function Login() {
   const classes = useStyles();
@@ -77,7 +69,7 @@ export function Login() {
           <Paper elevation={3} className={classes.padding}>
             <Grid container direction="column" spacing={2} alignItems="center">
               <Grid item>
-                <img src={logoPath} alt="Learn with me" />
+                <img src={logoPath} alt="Learn with me"/>
               </Grid>
               <Grid item>
                 <Typography component="h1" variant="h5">

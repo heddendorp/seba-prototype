@@ -1,13 +1,13 @@
 import * as express from 'express';
-import { Request } from 'express';
+import {Request} from 'express';
 import * as passport from 'passport';
-import { genToken } from '@seba/backend/auth';
+import {genToken} from '@seba/backend/auth';
 
 const router = express.Router();
 
 router.post(
   '/register',
-  passport.authenticate('register', { session: false }),
+  passport.authenticate('register', {session: false}),
   async (req: Request, res) => {
     if (req.user.statusCode == 409)
       res.status(409).json({
@@ -30,7 +30,7 @@ router.post('/login', async (req, res, next) => {
     req.login(user, function (err) {
       if (err) return next(err);
 
-      const body = { id: user._id };
+      const body = {id: user._id};
       const token = genToken(body);
 
       res.cookie('token', token);
@@ -44,7 +44,7 @@ router.post('/login', async (req, res, next) => {
 
 router.get(
   '/current',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     res.status(200).json(req.user);
   }

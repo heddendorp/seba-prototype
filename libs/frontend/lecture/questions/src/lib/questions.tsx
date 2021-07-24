@@ -1,15 +1,16 @@
-import { Route, Link, useRouteMatch } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import {Link, Route, useRouteMatch} from 'react-router-dom';
+import {Button} from '@material-ui/core';
 import NewQuestionDialog from './new-question-dialog/new-question-dialog';
 import React from 'react';
 import QuestionList from './question-list/question-list';
-import { QuestionService } from '@seba/frontend/api-services';
+import {QuestionService} from '@seba/frontend/api-services';
 
 /* eslint-disable-next-line */
-export interface QuestionsProps {}
+export interface QuestionsProps {
+}
 
 export function Questions(props: QuestionsProps) {
-  const { path, url } = useRouteMatch();
+  const {path, url} = useRouteMatch();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -29,8 +30,8 @@ export function Questions(props: QuestionsProps) {
       <Button variant={'outlined'} onClick={handleClickOpen}>
         Add question
       </Button>
-      <NewQuestionDialog open={open} onClose={handleClose} />
-      <QuestionList />
+      <NewQuestionDialog open={open} onClose={handleClose}/>
+      <QuestionList/>
       <ul>
         <li>
           <Link to={`${url}/questions`}>questions root</Link>

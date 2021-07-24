@@ -1,15 +1,9 @@
-import {
-  Container,
-  createStyles,
-  Grid,
-  makeStyles,
-  Paper,
-  Theme,
-} from '@material-ui/core';
-import { VictoryChart, VictoryLine, VictoryTheme } from 'victory';
+import {Container, createStyles, Grid, makeStyles, Paper, Theme,} from '@material-ui/core';
+import {VictoryChart, VictoryLine, VictoryTheme} from 'victory';
 
 /* eslint-disable-next-line */
-export interface StatisticsProps {}
+export interface StatisticsProps {
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,12 +23,12 @@ export function Statistics(props: StatisticsProps) {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <VictoryChart theme={VictoryTheme.material}>
-              <VictoryLine />
+              <VictoryLine/>
             </VictoryChart>
           </Grid>
           <Grid item xs={6}>
             <VictoryChart theme={VictoryTheme.material}>
-              <VictoryLine />
+              <VictoryLine/>
             </VictoryChart>
           </Grid>
         </Grid>
@@ -44,12 +38,12 @@ export function Statistics(props: StatisticsProps) {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <VictoryChart theme={VictoryTheme.material}>
-              <VictoryLine />
+              <VictoryLine/>
             </VictoryChart>
           </Grid>
           <Grid item xs={6}>
             <VictoryChart theme={VictoryTheme.material}>
-              <VictoryLine />
+              <VictoryLine/>
             </VictoryChart>
           </Grid>
         </Grid>

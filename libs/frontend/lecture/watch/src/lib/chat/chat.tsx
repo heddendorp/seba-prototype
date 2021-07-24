@@ -1,5 +1,5 @@
-import { ListItem, ListItemText, TextField } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import {ListItem, ListItemText, TextField} from '@material-ui/core';
+import {useEffect, useState} from 'react';
 
 /* eslint-disable-next-line */
 export interface ChatProps {
@@ -34,7 +34,7 @@ export function Chat(props: ChatProps) {
     };
   });
   return (
-    <div style={{ height: '100%', overflow: 'auto' }}>
+    <div style={{height: '100%', overflow: 'auto'}}>
       <h3>Chat</h3>
       {props.groupId && (
         <>
@@ -46,7 +46,7 @@ export function Chat(props: ChatProps) {
               />
             </ListItem>
           ))}
-          <TextField fullWidth onKeyDown={sendMessage} label="Enter message" />
+          <TextField fullWidth onKeyDown={sendMessage} label="Enter message"/>
         </>
       )}
       {!props.groupId && <p>Enter a study group to use the chat!</p>}

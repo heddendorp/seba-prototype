@@ -1,8 +1,8 @@
 import LectureUnitForm from './lecture-unit-form';
-import { useParams } from 'react-router-dom';
-import { LectureUnitService } from '@seba/frontend/api-services';
-import { useStyles } from './styles';
-import { useLectureContext } from '@seba/frontend/context';
+import {useParams} from 'react-router-dom';
+import {LectureUnitService} from '@seba/frontend/api-services';
+import {useStyles} from './styles';
+import {useLectureContext} from '@seba/frontend/context';
 
 type CreateUnitURLParams = {
   lecture_id: string;
@@ -39,7 +39,7 @@ export function CreateLectureUnit() {
 
   return (
     <div className={classes.root}>
-      <LectureUnitForm handleSubmit={handleSubmit} unit_id={undefined} />
+      <LectureUnitForm handleSubmit={handleSubmit} unit_id={undefined}/>
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { BaseService } from './base-service';
-import { ICreateQuizTransport, IQuizTransport } from '@seba/shared';
+import {BaseService} from './base-service';
+import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
 
 export class QuizService extends BaseService {
   public static async create(body: ICreateQuizTransport) {

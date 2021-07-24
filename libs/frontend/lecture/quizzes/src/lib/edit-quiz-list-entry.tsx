@@ -1,19 +1,6 @@
-import {
-  Button,
-  Checkbox,
-  createStyles,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  IconButton,
-  makeStyles,
-  Paper,
-  TextField,
-  Theme,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { useStyles } from './styles';
-import { useState } from 'react';
+import {Button, Checkbox, FormControl, FormGroup, FormLabel, Paper, TextField,} from '@material-ui/core';
+import {useStyles} from './styles';
+import {useState} from 'react';
 
 /* eslint-disable-next-line */
 export interface QuizListEntryProps {
@@ -31,7 +18,7 @@ export function EditQuizListEntry(props: QuizListEntryProps) {
       <FormLabel>Timestamp: 00:00:00</FormLabel>
       <Paper variant="outlined" className={classes.padded}>
         <FormControl>
-          <TextField label="Question" variant="outlined" size="small" />
+          <TextField label="Question" variant="outlined" size="small"/>
           <FormGroup>
             <div>
               <Checkbox
@@ -40,7 +27,7 @@ export function EditQuizListEntry(props: QuizListEntryProps) {
                 }}
                 name="gilad"
               />
-              <TextField label="Question" variant="outlined" size="small" />
+              <TextField label="Question" variant="outlined" size="small"/>
             </div>
           </FormGroup>
         </FormControl>

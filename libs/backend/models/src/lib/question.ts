@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
-import { IUser, UserSchema } from './user';
+import {IUser, UserSchema} from './user';
+
 export interface IAnswer extends mongoose.Document {
   author: IUser;
   text: string;
@@ -11,6 +12,7 @@ export const AnswerSchema = new mongoose.Schema({
   text: String,
   markedAsCorrect: Boolean,
 });
+
 export interface IQuestion extends mongoose.Document {
   timestamp: number;
   author: IUser;
@@ -26,7 +28,7 @@ export const QuestionSchema = new mongoose.Schema({
   author: UserSchema,
   text: String,
   title: String,
-  upVotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  upVotes: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   answers: [AnswerSchema],
   isAnswered: Boolean,
 });

@@ -11,7 +11,7 @@ const PREFIX = '/videos';
 
 router.post(
   '/video',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     if (!req.files)
       return res.status(400).json({
@@ -33,7 +33,7 @@ router.post(
 
 router.post(
   '',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     const unit = new LectureUnit({
       lecture: req.body.lecture_id,
@@ -46,13 +46,13 @@ router.post(
     unit.save(function (err) {
       if (err) {
         console.log(err);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({message: 'Internal server error.'});
       } else {
         Lecture.findById(req.body.lecture_id).then(async (lecture) => {
           lecture.units.push(unit._id);
           await lecture.save();
         });
-        return res.status(200).json({ message: 'Success.' });
+        return res.status(200).json({message: 'Success.'});
       }
     });
   }
@@ -60,14 +60,14 @@ router.post(
 
 router.get(
   '/:lectureUnitId',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     await LectureUnit.findById(req.params.lectureUnitId)
       .populate('quizzes')
       .exec(function (err, result) {
         if (err) {
           console.log(err);
-          return res.status(500).json({ message: 'Internal server error.' });
+          return res.status(500).json({message: 'Internal server error.'});
         } else return res.status(200).json(result);
       });
   }
@@ -75,7 +75,7 @@ router.get(
 
 router.patch(
   '/:lectureUnitId',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -88,26 +88,26 @@ router.patch(
 
         unit.overwrite(req.body);
         unit.save();
-        return res.status(200).json({ message: 'Success.' });
+        return res.status(200).json({message: 'Success.'});
       })
       .catch((err) => {
         console.log(err);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({message: 'Internal server error.'});
       });
   }
 );
 
 router.get(
   '',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
-    res.json(await LectureUnit.find({ _id: req.query.id }));
+    res.json(await LectureUnit.find({_id: req.query.id}));
   }
 );
 
 router.delete(
   '/:lectureUnitId',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -125,7 +125,7 @@ router.delete(
 
     // TODO: Delete recursively (Quiz -> Option & co)
     unit.delete();
-    return res.status(200).json({ message: 'Success.' });
+    return res.status(200).json({message: 'Success.'});
   }
 );
 

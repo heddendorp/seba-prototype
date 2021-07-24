@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import {Lecture, LectureUnit, Quiz, Role} from '@seba/backend/models';
-import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
+import {LectureUnit, Quiz, Role} from '@seba/backend/models';
+import {ICreateQuizTransport} from '@seba/shared';
 
 const router = express.Router();
 

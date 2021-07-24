@@ -7,9 +7,9 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { useStyles } from './style';
-import { LectureService } from '@seba/frontend/api-services';
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {useStyles} from './style';
+import {LectureService} from '@seba/frontend/api-services';
 
 export interface CreateLectureFormProps {
   lecture_id: string | undefined;
@@ -155,7 +155,7 @@ export function LectureForm(props: CreateLectureFormProps) {
       >
         Submit
       </Button>
-      <DeleteButton />
+      <DeleteButton/>
     </form>
   );
 }

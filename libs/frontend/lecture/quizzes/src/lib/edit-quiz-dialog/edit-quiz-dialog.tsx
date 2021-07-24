@@ -9,9 +9,9 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core';
-import React, { useEffect, useReducer, useState } from 'react';
-import { ICreateQuizTransport, IQuizTransport } from '@seba/shared';
-import { useStyles } from '../styles';
+import React, {useReducer} from 'react';
+import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
+import {useStyles} from '../styles';
 
 /* eslint-disable-next-line */
 export interface EditQuizDialogProps {
@@ -20,24 +20,24 @@ export interface EditQuizDialogProps {
   handleClose: (quiz?: IQuizTransport | null) => void;
 }
 
-const emptyAnswer = { answer: '', isCorrect: false };
-const emptyQuestion = { question: '', answers: [{ ...emptyAnswer }] };
+const emptyAnswer = {answer: '', isCorrect: false};
+const emptyQuestion = {question: '', answers: [{...emptyAnswer}]};
 const emptyQuiz = {
   unit_id: '',
   timestamp: 6,
-  questions: [{ ...emptyQuestion }],
+  questions: [{...emptyQuestion}],
 };
 
 //function reducer(state: IQuiz, action: {type: string; payload: IQuiz}): IQuiz {
 function reducer(state: ICreateQuizTransport, action) {
   switch (action.type) {
     case 'reset': {
-      return action.payload ? { ...action.payload } : { ...emptyQuiz };
+      return action.payload ? {...action.payload} : {...emptyQuiz};
     }
     case 'addQuestion': {
       return {
         ...state,
-        questions: [...state.questions, { ...emptyQuestion }],
+        questions: [...state.questions, {...emptyQuestion}],
       };
     }
     case 'updateQuestion': {
@@ -68,7 +68,7 @@ function reducer(state: ICreateQuizTransport, action) {
             ...state.questions[action.payload.questionIndex],
             answers: [
               ...state.questions[action.payload.questionIndex].answers,
-              { ...emptyAnswer },
+              {...emptyAnswer},
             ],
           },
         }),
@@ -87,7 +87,7 @@ function reducer(state: ICreateQuizTransport, action) {
                 [action.payload.answerIndex]: {
                   ...state.questions[action.payload.questionIndex].answers[
                     action.payload.answerIndex
-                  ],
+                    ],
                   ...action.payload.update,
                 },
               }
@@ -119,7 +119,7 @@ function reducer(state: ICreateQuizTransport, action) {
 }
 
 export function EditQuizDialog(props: EditQuizDialogProps) {
-  const [quiz, dispatch] = useReducer(reducer, props.quiz ?? { ...emptyQuiz });
+  const [quiz, dispatch] = useReducer(reducer, props.quiz ?? {...emptyQuiz});
 
   const classes = useStyles();
 
@@ -127,14 +127,14 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
     <Dialog open={props.open}>
       <DialogTitle>Edit the quiz</DialogTitle>
       <DialogContent>
-        <Button onClick={() => dispatch({ type: 'addQuestion' })}>
+        <Button onClick={() => dispatch({type: 'addQuestion'})}>
           AddQuestion
         </Button>
         {quiz.questions.map((question, questionIndex) => (
           <>
             <Button
               onClick={() =>
-                dispatch({ type: 'removeQuestion', payload: { questionIndex } })
+                dispatch({type: 'removeQuestion', payload: {questionIndex}})
               }
               disabled={quiz.questions.length === 1}
             >
@@ -150,7 +150,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
               onChange={(e) =>
                 dispatch({
                   type: 'updateQuestion',
-                  payload: { questionIndex, text: e.target.value },
+                  payload: {questionIndex, text: e.target.value},
                 })
               }
             />
@@ -171,7 +171,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                           payload: {
                             questionIndex,
                             answerIndex,
-                            update: { answer: e.target.value },
+                            update: {answer: e.target.value},
                           },
                         })
                       }
@@ -188,7 +188,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                               payload: {
                                 questionIndex,
                                 answerIndex,
-                                update: { isCorrect: e.target.checked },
+                                update: {isCorrect: e.target.checked},
                               },
                             })
                           }
@@ -202,7 +202,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                   onClick={() =>
                     dispatch({
                       type: 'removeAnswer',
-                      payload: { questionIndex, answerIndex },
+                      payload: {questionIndex, answerIndex},
                     })
                   }
                   disabled={question.answers.length === 1}
@@ -213,7 +213,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
             ))}
             <Button
               onClick={() =>
-                dispatch({ type: 'addAnswer', payload: { questionIndex } })
+                dispatch({type: 'addAnswer', payload: {questionIndex}})
               }
             >
               Add Answer
@@ -225,7 +225,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
         <Button
           onClick={() => {
             props.handleClose(null);
-            dispatch({ type: 'reset', payload: props.quiz });
+            dispatch({type: 'reset', payload: props.quiz});
           }}
         >
           Cancel
@@ -233,7 +233,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
         <Button
           onClick={() => {
             props.handleClose(quiz);
-            dispatch({ type: 'reset', payload: props.quiz });
+            dispatch({type: 'reset', payload: props.quiz});
           }}
           color="primary"
         >

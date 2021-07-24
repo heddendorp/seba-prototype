@@ -1,14 +1,7 @@
-import {
-  createStyles,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  Theme,
-} from '@material-ui/core';
+import {createStyles, Grid, IconButton, makeStyles, Theme,} from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import { QuestionService } from '@seba/frontend/api-services';
+import {QuestionService} from '@seba/frontend/api-services';
 
 /* eslint-disable-next-line */
 export interface QuestionListEntryProps {
@@ -36,12 +29,12 @@ export function QuestionListEntry(props: QuestionListEntryProps) {
       <Grid item xs container justify="space-around" direction="column">
         <Grid item container alignItems="center" spacing={2}>
           <IconButton onClick={upvote}>
-            <ThumbUpIcon />
+            <ThumbUpIcon/>
           </IconButton>{' '}
           <span>{props.question.upVotes.length}</span>
         </Grid>
         <Grid item>
-          <RadioButtonUncheckedIcon />
+          <RadioButtonUncheckedIcon/>
         </Grid>
       </Grid>
       <Grid item xs={11}>

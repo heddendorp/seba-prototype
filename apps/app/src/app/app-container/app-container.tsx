@@ -1,33 +1,18 @@
-import {
-  Redirect,
-  Route,
-  Router,
-  Switch,
-  useRouteMatch,
-} from 'react-router-dom';
-import { LectureProvider, useLectureContext } from '@seba/frontend/context';
-import { Home } from '@seba/frontend/home';
-import { LectureWatch } from '@seba/frontend/lecture/watch';
-import {
-  CreateLectureUnit,
-  EditLectureUnit,
-} from '@seba/frontend/lecture/create-unit';
-import { CreateLecture, EditLecture } from '@seba/frontend/lecture/create';
-import { LectureQuizzes } from '@seba/frontend/lecture/quizzes';
-import { Statistics } from '@seba/frontend/lecture/statistics';
-import { Questions } from '@seba/frontend/lecture/questions';
-import {
-  createStyles,
-  Drawer,
-  makeStyles,
-  Theme,
-  Typography,
-} from '@material-ui/core';
-import { Navigation } from '@seba/frontend/navigation';
-import { SocketContext, socket } from '@seba/frontend/context';
+import {Redirect, Route, Switch, useRouteMatch,} from 'react-router-dom';
+import {LectureProvider, socket, SocketContext} from '@seba/frontend/context';
+import {Home} from '@seba/frontend/home';
+import {LectureWatch} from '@seba/frontend/lecture/watch';
+import {CreateLectureUnit, EditLectureUnit,} from '@seba/frontend/lecture/create-unit';
+import {CreateLecture, EditLecture} from '@seba/frontend/lecture/create';
+import {LectureQuizzes} from '@seba/frontend/lecture/quizzes';
+import {Statistics} from '@seba/frontend/lecture/statistics';
+import {Questions} from '@seba/frontend/lecture/questions';
+import {createStyles, Drawer, makeStyles, Theme,} from '@material-ui/core';
+import {Navigation} from '@seba/frontend/navigation';
 
 /* eslint-disable-next-line */
-export interface AppContainerProps {}
+export interface AppContainerProps {
+}
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function AppContainer(props: AppContainerProps) {
-  const { path, url } = useRouteMatch();
+  const {path, url} = useRouteMatch();
   const classes = useStyles();
   return (
     <LectureProvider>
@@ -77,39 +62,39 @@ export function AppContainer(props: AppContainerProps) {
               paper: classes.drawerPaper,
             }}
           >
-            <Navigation />
+            <Navigation/>
           </Drawer>
           <main className={classes.content}>
             <Switch>
               <Route path={`${path}/`} exact={true}>
-                <Redirect to={`${url}/home`} />
+                <Redirect to={`${url}/home`}/>
               </Route>
               <Route path={`${path}/home`}>
-                <Home />
+                <Home/>
               </Route>
               <Route path={`${path}/lecture/create`}>
-                <CreateLecture />
+                <CreateLecture/>
               </Route>
               <Route path={`${path}/lecture/:lecture_id/edit`}>
-                <EditLecture />
+                <EditLecture/>
               </Route>
               <Route path={`${path}/lecture/:lecture_id/unit/create`}>
-                <CreateLectureUnit />
+                <CreateLectureUnit/>
               </Route>
               <Route path={`${path}/unit/:unit_id/edit`}>
-                <EditLectureUnit />
+                <EditLectureUnit/>
               </Route>
               <Route path={`${path}/lecture/:lecture_id/statistics`}>
-                <Statistics />
+                <Statistics/>
               </Route>
               <Route path={`${path}/unit/:unit_id/watch`}>
-                <LectureWatch />
+                <LectureWatch/>
               </Route>
               <Route path={`${path}/unit/:unit_id/questions`}>
-                <Questions />
+                <Questions/>
               </Route>
               <Route path={`${path}/unit/:unit_id/quizzes`}>
-                <LectureQuizzes />
+                <LectureQuizzes/>
               </Route>
             </Switch>
           </main>

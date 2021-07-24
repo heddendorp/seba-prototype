@@ -1,12 +1,12 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import { LectureUnit, Question } from '@seba/backend/models';
+import {LectureUnit, Question} from '@seba/backend/models';
 
 const router = express.Router();
 
 router.post(
   '/:lectureUnitId',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     const lectureUnit = await LectureUnit.findById(req.params.lectureUnitId);
     const question = new Question({
@@ -39,11 +39,11 @@ router.post(
 
 router.get(
   '/:lectureUnitId',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     const lectureUnit = await LectureUnit.findById(
       req.params.lectureUnitId
-    ).populate({ path: 'questions', options: { sort: { timestamp: 1 } } });
+    ).populate({path: 'questions', options: {sort: {timestamp: 1}}});
     const questions = lectureUnit.questions;
     // console.log(questions);
     res.json(questions);
@@ -52,7 +52,7 @@ router.get(
 
 router.put(
   '/:questionId/upvote',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     const question = await Question.findById(req.params.questionId);
     if (!question.upVotes.includes(req.user._id)) {

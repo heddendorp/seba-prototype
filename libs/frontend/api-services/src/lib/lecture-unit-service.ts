@@ -1,11 +1,7 @@
-import { BaseService } from './base-service';
-import {
-  ICreateLectureUnitTransport,
-  IEditLectureUnitTransport,
-  IUploadVideoTransport,
-} from '@seba/shared';
-import { StorageService } from './storage-service';
-import { ILectureUnit } from '@seba/backend/models';
+import {BaseService} from './base-service';
+import {ICreateLectureUnitTransport, IEditLectureUnitTransport, IUploadVideoTransport,} from '@seba/shared';
+import {StorageService} from './storage-service';
+import {ILectureUnit} from '@seba/backend/models';
 
 export class LectureUnitService extends BaseService {
   public static async create(body: ICreateLectureUnitTransport) {

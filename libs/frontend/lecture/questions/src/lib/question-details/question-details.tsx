@@ -1,5 +1,6 @@
 /* eslint-disable-next-line */
-export interface QuestionDetailsProps {}
+export interface QuestionDetailsProps {
+}
 
 export function QuestionDetails(props: QuestionDetailsProps) {
   return (

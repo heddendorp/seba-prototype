@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Grid, Paper } from '@material-ui/core';
+import {Button, Grid} from '@material-ui/core';
 import NewQuestionDialog from '../new-question-dialog/new-question-dialog';
-import { QuestionService } from '@seba/frontend/api-services';
+import {QuestionService} from '@seba/frontend/api-services';
 
 /* eslint-disable-next-line */
 export interface AddQuesionTriggerProps {

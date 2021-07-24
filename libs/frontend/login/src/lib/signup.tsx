@@ -11,11 +11,11 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { useStyles } from './styles';
-import { UserService } from '@seba/frontend/api-services';
-import { Alert } from '@material-ui/lab';
-import { Role } from '@seba/backend/models';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
+import {useStyles} from './styles';
+import {UserService} from '@seba/frontend/api-services';
+import {Alert} from '@material-ui/lab';
+import {Role} from '@seba/backend/models';
 
 export function SignUp() {
   const classes = useStyles();
@@ -94,7 +94,7 @@ export function SignUp() {
           <Paper elevation={3} className={classes.padding}>
             <Grid container direction="column" spacing={2} alignItems="center">
               <Grid item>
-                <img src={logoPath} alt="Learn with me" />
+                <img src={logoPath} alt="Learn with me"/>
               </Grid>
               <Grid item>
                 <Typography component="h1" variant="h5">

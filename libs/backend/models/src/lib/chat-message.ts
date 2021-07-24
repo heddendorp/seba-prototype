@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { IUser } from './user';
+import {IUser} from './user';
 
 export interface IChatMessage extends Document {
   text: string;

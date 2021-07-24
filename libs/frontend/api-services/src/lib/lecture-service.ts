@@ -1,6 +1,6 @@
-import { BaseService } from './base-service';
-import { ICreateLectureTransport } from '@seba/shared';
-import { ILecture } from '@seba/backend/models';
+import {BaseService} from './base-service';
+import {ICreateLectureTransport} from '@seba/shared';
+import {ILecture} from '@seba/backend/models';
 
 export class LectureService extends BaseService {
   public static async create(body: ICreateLectureTransport) {

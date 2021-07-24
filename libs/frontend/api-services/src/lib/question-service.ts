@@ -1,5 +1,5 @@
-import { BaseService } from './base-service';
-import { IQuestion } from '@seba/backend/models';
+import {BaseService} from './base-service';
+import {IQuestion} from '@seba/backend/models';
 
 export class QuestionService extends BaseService {
   public static async create(body: any, lectureUnitId: string) {

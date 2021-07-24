@@ -4,20 +4,16 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogProps,
   DialogTitle,
   FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
   Grid,
-  Paper,
-  TextField,
 } from '@material-ui/core';
-import {IQuiz, IQuizAnswer, IQuizQuestion, User} from '@seba/backend/models';
-import React, {useEffect, useState} from 'react';
+import {IQuiz, IQuizAnswer, IQuizQuestion} from '@seba/backend/models';
+import React, {useState} from 'react';
 import {useStyles} from './styles';
-import {IQuizTransport} from '@seba/shared';
 
 export interface SubmitQuizDialogProps {
   quiz: IQuiz;

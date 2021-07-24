@@ -1,25 +1,21 @@
 import {
   Button,
   Checkbox,
-  createStyles,
   FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
   Grid,
   IconButton,
-  makeStyles,
   Paper,
-  TextField,
-  Theme,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { useStyles } from './styles';
-import React, { useState } from 'react';
-import { IQuizQuestion } from '../../../../models/src/lib/quiz-question';
-import { IQuizAnswer } from '@seba/backend/models';
+import {useStyles} from './styles';
+import React from 'react';
+import {IQuizQuestion} from '../../../../models/src/lib/quiz-question';
+import {IQuizAnswer} from '@seba/backend/models';
 import EditQuizDialog from './edit-quiz-dialog/edit-quiz-dialog';
-import { IQuizTransport } from '@seba/shared';
+import {IQuizTransport} from '@seba/shared';
 
 /* eslint-disable-next-line */
 export interface QuizListEntryProps {
@@ -52,7 +48,7 @@ export function QuizListEntry(props: QuizListEntryProps) {
         <FormLabel>Timestamp: {props.quiz.timestamp}</FormLabel>
         <Button onClick={() => setOpen(true)}>Edit</Button>
         <IconButton className={classes.dButton} onClick={handleDelete}>
-          <CloseIcon />
+          <CloseIcon/>
         </IconButton>
         <Paper variant="outlined" className={classes.padded}>
           <FormControl>

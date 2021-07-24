@@ -1,9 +1,5 @@
-import { BaseService } from './base-service';
-import {
-  ICreateStudyGroupResponse,
-  ICreateStudyGroupTransport,
-  IJoinStudyGroupTransport,
-} from '@seba/shared';
+import {BaseService} from './base-service';
+import {ICreateStudyGroupResponse, ICreateStudyGroupTransport, IJoinStudyGroupTransport,} from '@seba/shared';
 
 export class StudyGroupService extends BaseService {
   public static async create(body: ICreateStudyGroupTransport) {
