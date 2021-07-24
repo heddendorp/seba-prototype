@@ -1,7 +1,7 @@
 /* eslint-disable-next-line */
 import {Link as RouterLink, LinkProps as RouterLinkProps, useRouteMatch,} from 'react-router-dom';
 import {Collapse, Divider, List, ListItem, ListItemIcon, ListItemText,} from '@material-ui/core';
-import {ILectureUnit, IUser, Role} from '@seba/backend/models';
+import {IUser, Role} from '@seba/backend/models';
 import React, {useEffect, useState} from 'react';
 import {UserService} from '@seba/frontend/api-services';
 
@@ -51,30 +51,6 @@ export function Navigation() {
         </ListItem>
       </li>
     );
-  }
-
-  function WatchLecture(unitId: string) {
-    if (user !== undefined && +user.role == Role.STUDENT)
-      return(
-        <ListItemLink
-          to={`${url}/unit/${unitId}/watch`}
-          icon={<OndemandVideo/>}
-          primary="Watch"
-        />
-      );
-    return null;
-  }
-
-  function Quizzes(unitId: string) {
-    if (user !== undefined && +user.role == Role.LECTURER)
-      return(
-        <ListItemLink
-          to={`${url}/unit/${unitId}/quizzes`}
-          icon={<Assignment/>}
-          primary="Quizzes"
-        />
-      );
-    return null;
   }
 
   useEffect(() => {
@@ -150,13 +126,25 @@ export function Navigation() {
                         primary={`Edit ${unit.title}`}
                       />
                     )}
-                    <WatchLecture unitId={unit._id}/>
+                    {user !== undefined && +user.role == Role.STUDENT &&
+                      <ListItemLink
+                        to={`${url}/unit/${unit._id}/watch`}
+                        icon={<OndemandVideo/>}
+                        primary="Watch"
+                      />
+                    }
                     <ListItemLink
                       to={`${url}/unit/${unit._id}/questions`}
                       icon={<QuestionAnswer/>}
                       primary="Questions"
                     />
-                    <Quizzes unitId={unit._id}/>
+                    {user !== undefined && +user.role == Role.LECTURER &&
+                      <ListItemLink
+                        to={`${url}/unit/${unit._id}/quizzes`}
+                        icon={<Assignment/>}
+                        primary="Quizzes"
+                      />
+                    }
                   </Collapse>
                 </>
               ))}
