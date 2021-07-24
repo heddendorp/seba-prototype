@@ -1,14 +1,19 @@
-import {Grid, Paper, Typography,} from '@material-ui/core';
-import {useParams} from 'react-router-dom';
-import React, {createRef, useContext, useEffect, useState} from 'react';
-import {LectureUnitService, QuizService, UserService} from '@seba/frontend/api-services';
-import {LectureQuestions,} from '@seba/frontend/lecture/questions';
-import {useStyles} from './style';
-import {IQuiz, IUser} from '@seba/backend/models';
+import { Button, DialogActions, DialogContent, DialogTitle, Grid, Paper, Typography } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import React, { createRef, useContext, useEffect, useState } from 'react';
+import {
+  LectureUnitService,
+  QuizService,
+  UserService,
+} from '@seba/frontend/api-services';
+import { LectureQuestions } from '@seba/frontend/lecture/questions';
+import { useStyles } from './style';
+import { IQuiz, IUser } from '@seba/backend/models';
 import Chat from './chat/chat';
 import StudyGroup from './study-group/study-group';
-import {SocketContext} from '@seba/frontend/context';
+import { SocketContext } from '@seba/frontend/context';
 import SubmitQuizDialog from '../../../quizzes/src/lib/submit-quiz-dialog';
+import Dialog from '@material-ui/core/Dialog/Dialog';
 
 const BASE_API_URL = 'http://localhost:3333';
 
@@ -17,8 +22,7 @@ export enum SyncEvent {
   PAUSE,
 }
 
-export interface LectureWatchProps {
-}
+export interface LectureWatchProps {}
 
 type WatchLectureURLParams = { unit_id: string };
 
@@ -29,16 +33,24 @@ export function LectureWatch(props: LectureWatchProps) {
 
   // state to save the current study group
   const [currentStudyGroup, setCurrentStudyGroup] = useState<string>();
+  const [studyGroup, setStudyGroup] = useState<any>();
   const [quizOpen, setQuizOpen] = useState<boolean>(false);
+  const [wrongGroupIdOpen, setWrongGroupIdOpen] = useState<boolean>(false);
 
   // effect to set up and close the socket for a studyGroup
   useEffect(() => {
     if (currentStudyGroup) {
-      console.log(`Setting up socket for ${currentStudyGroup}`);
-      socket.emit('groupConnect', currentStudyGroup);
+      socket.emit('groupConnect', currentStudyGroup, (group: any) => {
+        console.log(group);
+        if (!group) {
+          setWrongGroupIdOpen(true);
+          setCurrentStudyGroup(undefined);
+        }else{
+          setStudyGroup(group);
+        }
+      });
     }
     socket.on('sync', (syncEvent: SyncEvent) => {
-      console.info(syncEvent);
       if (videoRef.current) {
         switch (+syncEvent) {
           case SyncEvent.PLAY:
@@ -84,7 +96,12 @@ export function LectureWatch(props: LectureWatchProps) {
     const comingQuiz = quizzes.find(
       (quiz) => Math.abs(quiz.timestamp - currentTime) < 1
     );
-    if (comingQuiz && comingQuiz.questions.some(question => question.submissions.some(submission => user._id == submission.user))) {
+    if (
+      comingQuiz &&
+      comingQuiz.questions.some((question) =>
+        question.submissions.some((submission) => user._id == submission.user)
+      )
+    ) {
       return;
     }
     if (comingQuiz) {
@@ -119,7 +136,7 @@ export function LectureWatch(props: LectureWatchProps) {
   }
 
   return (
-    <div style={{padding: 32}}>
+    <div style={{ padding: 32 }}>
       <Grid container spacing={4} direction="column">
         <Grid item>
           <Typography variant="h2" component="h1">
@@ -156,9 +173,9 @@ export function LectureWatch(props: LectureWatchProps) {
             <Paper
               variant="outlined"
               className={classes.padded}
-              style={{height: '100%'}}
+              style={{ height: '100%' }}
             >
-              <Chat groupId={currentStudyGroup} socket={socket} user={user}/>
+              <Chat group={studyGroup} groupId={currentStudyGroup} socket={socket} user={user} />
             </Paper>
           </Grid>
         </Grid>
@@ -187,6 +204,18 @@ export function LectureWatch(props: LectureWatchProps) {
                 studyGroupId={currentStudyGroup}
                 onStudyGroupChange={(id) => setCurrentStudyGroup(id)}
               />
+              <Dialog
+                open={wrongGroupIdOpen}
+                onClose={() => setWrongGroupIdOpen(false)}
+              >
+                <DialogTitle>Study group not found</DialogTitle>
+                <DialogContent>The Group ID you entered does not seem to exist, please try again</DialogContent>
+                <DialogActions>
+                  <Button onClick={() => setWrongGroupIdOpen(false)}>
+                    Close
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Paper>
           </Grid>
         </Grid>

@@ -1,9 +1,10 @@
-import {ListItem, ListItemText, TextField} from '@material-ui/core';
-import {useEffect, useState} from 'react';
+import { ListItem, ListItemText, TextField } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface ChatProps {
   socket: any;
+  group: any;
   groupId: string;
   user: any;
 }
@@ -17,7 +18,7 @@ export function Chat(props: ChatProps) {
       const message = event.target.value;
       event.target.value = '';
       props.socket.emit('message', {
-        group_id: props.groupId,
+        group_id: props.group._id,
         message,
         author: props.user.display_name,
       });
@@ -25,31 +26,34 @@ export function Chat(props: ChatProps) {
   };
 
   useEffect(() => {
-    props.socket.on('message', (data: any) => {
-      console.log(data);
-      setMessages(messages.concat(data));
-    });
+    if (props.group) {
+      setMessages(props.group.chat);
+      props.socket.on('message', (data: any) => {
+        console.log(data);
+        setMessages(messages => messages.concat(data));
+      });
+    }
     return () => {
       props.socket.off('message');
     };
-  });
+  }, [props.groupId]);
   return (
-    <div style={{height: '100%', overflow: 'auto'}}>
+    <div style={{ height: '100%', overflow: 'auto' }}>
       <h3>Chat</h3>
-      {props.groupId && (
+      {props.group && (
         <>
           {messages.map((message) => (
-            <ListItem>
+            <ListItem key={message._id}>
               <ListItemText
                 primary={message.author}
                 secondary={message.message}
               />
             </ListItem>
           ))}
-          <TextField fullWidth onKeyDown={sendMessage} label="Enter message"/>
+          <TextField fullWidth onKeyDown={sendMessage} label="Enter message" />
         </>
       )}
-      {!props.groupId && <p>Enter a study group to use the chat!</p>}
+      {!props.group && <p>Enter a study group to use the chat!</p>}
     </div>
   );
 }
