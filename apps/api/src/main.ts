@@ -17,10 +17,12 @@ import * as cors from 'cors';
 import * as fileUpload from 'express-fileupload';
 import * as path from 'path';
 import {statisticRouter} from "../../../libs/backend/controllers/src/lib/statistic-controller";
+import { handleSocket } from './app/socketHandler';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {cors: {}});
+mongoose.set('useFindAndModify', false);
 
 // Server config
 app.use(cors());
@@ -61,21 +63,4 @@ server.listen(port, async () => {
 server.on('error', console.error);
 
 // Setup and configure sockets for study groups
-io.on('connection', (socket) => {
-  socket.on('groupConnect', (group_id) => {
-    console.log(`${socket.id} connected to group ${group_id}`);
-    socket.join(group_id);
-  });
-
-  socket.on('message', (data) => {
-    io.to(data.group_id).emit('message', {
-      author: data.author,
-      message: data.message,
-    });
-  });
-
-  socket.on('sync', (data) => {
-    console.log(data);
-    io.to(data.group_id).emit('sync', data.syncEvent);
-  });
-});
+handleSocket(io);

@@ -2,7 +2,7 @@ import React from 'react';
 import {Login, SignUp} from '@seba/frontend/login';
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import {createMuiTheme, CssBaseline, makeStyles, responsiveFontSizes, ThemeProvider,} from '@material-ui/core';
-import {green, red} from '@material-ui/core/colors';
+import {green, pink, red, teal} from '@material-ui/core/colors';
 import AppContainer from './app-container/app-container';
 
 let theme = createMuiTheme({
@@ -11,10 +11,10 @@ let theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: green[500],
+      main: teal[500],
     },
     secondary: {
-      main: red[500],
+      main: pink[500],
     },
   },
   overrides: {
