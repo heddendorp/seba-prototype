@@ -7,12 +7,12 @@ export interface IQuizSubmission extends mongoose.Document {
 }
 export interface IQuizAnswer extends mongoose.Document {
   answer: string;
-  isCorrrect: boolean;
+  isCorrect: boolean;
 }
 export interface IQuizQuestion extends mongoose.Document {
   question: string;
   answers: IQuizAnswer[];
-  subquestions: IQuizSubmission[];
+  submissions: IQuizSubmission[];
 }
 export interface IQuiz extends mongoose.Document {
   unit_id: string;
@@ -26,8 +26,8 @@ const QuizAnswerSchema = new mongoose.Schema({
 });
 
 const QuizSubmissionSchema = new mongoose.Schema({
-  user: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  answer: QuizAnswerSchema,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  answer: { type: mongoose.Schema.Types.ObjectId, ref: 'QuizAnswer' }
 });
 
 const QuizQuestionSchema = new mongoose.Schema({
