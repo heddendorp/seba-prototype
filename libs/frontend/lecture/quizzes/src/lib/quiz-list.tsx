@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface QuizListProps {
-  //todo timestamp prop
+  timestamp: number
 }
 
 const initialState: IQuizTransport[] = [];
@@ -56,7 +56,7 @@ export function QuizList(props: QuizListProps) {
     //ändere von quizTransport zu normalen --> und add id zum object
     if (quiz != null) {
       quiz.unit_id = params.unit_id;
-      quiz.timestamp = 0;
+      quiz.timestamp = props.timestamp;
       //todo add timestamp
       QuizService.create(quiz).then((payload) => {
         //todo check if errer --> statsu != 200

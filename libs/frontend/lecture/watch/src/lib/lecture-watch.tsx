@@ -13,21 +13,21 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
-import React, { useContext, useEffect, useState } from 'react';
-import { LectureUnitService, UserService } from '@seba/frontend/api-services';
+import {useParams} from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {LectureUnitService, QuizService, UserService} from '@seba/frontend/api-services';
 import AddIcon from '@material-ui/icons/Add';
 import {
   AddQuesionTrigger,
   LectureQuestions,
 } from '@seba/frontend/lecture/questions';
-import { useStyles } from './style';
-import { IQuiz, IQuizAnswer, IUser, Role } from '@seba/backend/models';
+import {useStyles} from './style';
+import {IQuiz, IQuizAnswer, IUser, Role} from '@seba/backend/models';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import Chat from './chat/chat';
 import StudyGroup from './study-group/study-group';
-import { SocketContext } from '@seba/frontend/context';
-import { createRef } from 'react';
+import {SocketContext} from '@seba/frontend/context';
+import {createRef} from 'react';
 import SubmitQuizDialog from '../../../quizzes/src/lib/submit-quiz-dialog';
 
 const BASE_API_URL = 'http://localhost:3333';
@@ -37,7 +37,8 @@ export enum SyncEvent {
   PAUSE,
 }
 
-export interface LectureWatchProps {}
+export interface LectureWatchProps {
+}
 
 type WatchLectureURLParams = { unit_id: string };
 
@@ -100,10 +101,12 @@ export function LectureWatch(props: LectureWatchProps) {
 
   useEffect(() => {
     if (!quizzes || !currentTime || !videoRef.current) return;
-    console.log(quizzes, currentTime);
     const comingQuiz = quizzes.find(
       (quiz) => Math.abs(quiz.timestamp - currentTime) < 1
     );
+    if (comingQuiz && comingQuiz.questions.some(question => question.submissions.some(submission => user._id == submission.user))) {
+      return;
+    }
     if (comingQuiz) {
       videoRef.current.pause();
       setCurrentQuiz(comingQuiz);
@@ -125,19 +128,15 @@ export function LectureWatch(props: LectureWatchProps) {
     });
   }
 
-  function handleSubmitQuiz(answers) {
-    //console.log(answers)
-
+  function handleSubmitQuiz(answers: any) {
+    if(currentQuiz){
+      QuizService.submitAnswers(currentQuiz._id, answers);
+    }
     setQuizOpen(false);
   }
 
-  function onProg(e) {
-    //todo
-    setCurrentTime(e.target.currentTime);
-  }
-
   return (
-    <div style={{ padding: 32 }}>
+    <div style={{padding: 32}}>
       <Grid container spacing={4} direction="column">
         <Grid item>
           <Typography variant="h2" component="h1">
@@ -156,7 +155,7 @@ export function LectureWatch(props: LectureWatchProps) {
                   src={videoPath}
                   onPause={handleClickPause}
                   onPlay={handleClickPlay}
-                  onTimeUpdate={onProg}
+                  onTimeUpdate={(e)=>setCurrentTime(e.target.currentTime)}
                 >
                   Your browser does not support this video type.
                 </video>
@@ -174,9 +173,9 @@ export function LectureWatch(props: LectureWatchProps) {
             <Paper
               variant="outlined"
               className={classes.padded}
-              style={{ height: '100%' }}
+              style={{height: '100%'}}
             >
-              <Chat groupId={currentStudyGroup} socket={socket} user={user} />
+              <Chat groupId={currentStudyGroup} socket={socket} user={user}/>
             </Paper>
           </Grid>
         </Grid>

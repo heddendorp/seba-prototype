@@ -49,7 +49,7 @@ export function QuizListEntry(props: QuizListEntryProps) {
         handleClose={handleEditQuiz}
       />
       <Paper variant="outlined" className={classes.padded}>
-        <FormLabel>Timestamp: 00:00:00</FormLabel>
+        <FormLabel>Timestamp: {props.quiz.timestamp}</FormLabel>
         <Button onClick={() => setOpen(true)}>Edit</Button>
         <IconButton className={classes.dButton} onClick={handleDelete}>
           <CloseIcon />
