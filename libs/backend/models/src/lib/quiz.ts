@@ -1,26 +1,23 @@
 import * as mongoose from 'mongoose';
-import {IUser} from './user';
+import { IUser } from './user';
 
 export interface IQuizSubmission extends mongoose.Document {
-  user?: mongoose.PopulatedDoc<IUser>;
-  answers: mongoose.Types.DocumentArray<IQuizAnswer>;
+  user: IUser;
+  answer: IQuizAnswer;
 }
-
 export interface IQuizAnswer extends mongoose.Document {
   answer: string;
   isCorrect: boolean;
 }
-
-export interface IQuizQuestion extends mongoose.Types.Subdocument {
+export interface IQuizQuestion extends mongoose.Document {
   question: string;
   answers: IQuizAnswer[];
-  submissions: mongoose.Types.DocumentArray<IQuizSubmission>;
+  submissions: IQuizSubmission[];
 }
-
 export interface IQuiz extends mongoose.Document {
   unit_id: string;
   timestamp: number;
-  questions: mongoose.Types.DocumentArray<IQuizQuestion>;
+  questions: Array<IQuizQuestion>;
 }
 
 const QuizAnswerSchema = new mongoose.Schema({
@@ -29,14 +26,14 @@ const QuizAnswerSchema = new mongoose.Schema({
 });
 
 const QuizSubmissionSchema = new mongoose.Schema({
-  user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  answers: [QuizAnswerSchema],
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  answer: { type: mongoose.Schema.Types.ObjectId, ref: 'QuizAnswer' }
 });
 
 const QuizQuestionSchema = new mongoose.Schema({
   question: String,
   answers: [QuizAnswerSchema],
-  submissions: {type: [QuizSubmissionSchema], default: []},
+  submissions: { type: [QuizSubmissionSchema], default: [] },
 });
 
 export const QuizSchema = new mongoose.Schema({

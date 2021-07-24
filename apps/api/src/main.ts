@@ -16,6 +16,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as fileUpload from 'express-fileupload';
 import * as path from 'path';
+import {statisticRouter} from "../../../libs/backend/controllers/src/lib/statistic-controller";
 
 const app = express();
 const server = http.createServer(app);
@@ -39,6 +40,7 @@ app.use('/lecture-unit', lectureUnitRouter);
 app.use('/question', questionRouter);
 app.use('/quiz', quizRouter);
 app.use('/study-group', studyGroupRouter);
+app.use('/statistic', statisticRouter);
 
 // File streaming
 app.use(express.static(path.join(__dirname, '/assets')));
