@@ -23,6 +23,11 @@ export class LectureUnitService extends BaseService {
     request.send(data);
   }
 
+  public static async getAll() {
+    const response = await this.authenticatedRequest('GET', 'lecture-unit');
+    return await response.json() as [ILectureUnit];
+  }
+
   public static async getById(unit_id: string) {
     const response = await this.authenticatedRequest('GET', `lecture-unit/${unit_id}`);
     return await response.json() as ILectureUnit;

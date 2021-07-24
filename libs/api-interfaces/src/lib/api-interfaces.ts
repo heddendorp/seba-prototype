@@ -1,4 +1,5 @@
-import { IAnswer, IQuizSubmission, Role } from '@seba/models';
+import { Role } from '@seba/models';
+//IAnswer, IQuizSubmission,
 
 export interface ICreateLectureTransport extends Record<string, unknown> {
   title: string;
@@ -64,4 +65,12 @@ export interface IQuizAnswerTransport extends Record<string, unknown> {
   question_id: string;
   text: string;
   isCorrect: boolean;
+}
+
+export interface IStatisticTransport extends Record<string, unknown> {
+  lectureStatistics: {
+    unitStatistics: {
+      quizStatistics: { questions: number; users: number }[];
+    }[];
+  }[];
 }

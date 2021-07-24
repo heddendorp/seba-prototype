@@ -9,9 +9,9 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import {useEffect, useState} from "react";
-import {LectureService, LectureUnitService} from "@seba/api-services";
+import { LectureUnitService } from "@seba/api-services";
 import AddIcon from '@material-ui/icons/Add';
-import {ILecture} from "@seba/models";
+
 import { AddQuesionTrigger } from '@seba/questions';
 
 /*import { Card, CardMedia, IconButton } from '@material-ui/core';*/

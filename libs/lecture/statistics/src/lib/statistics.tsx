@@ -6,16 +6,22 @@ import {
   makeStyles,
   Paper,
   Theme,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
 } from '@material-ui/core';
-import { VictoryChart, VictoryLine, VictoryTheme } from 'victory';
-import { LectureUnitService, IStatistic } from "@seba/api-services"
+import { VictoryBar, VictoryChart, VictoryLine, VictoryTheme } from 'victory';
+//import * as _lod from "lodash";
+import { ILecture } from '@seba/models';
+import { StatisticService, LectureService, LectureUnitService } from "@seba/api-services"
 import { useParams } from 'react-router-dom';
 import {useEffect, useState} from "react";
+import { Script } from 'node:vm';
 //LectureService
 
 /* eslint-disable-next-line */
 export interface StatisticsProps {}
-type StatisticsParams = { unit_id: string }
+type StatisticsParams = { lecture_id: string }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,48 +35,61 @@ export function Statistics(props: StatisticsProps) {
   const params = useParams<StatisticsParams>();
   const classes = useStyles();
 
-  const [Title, setTitle] = useState();
+  const [lectTitle, setlectTitle] = useState();
+  //const [unitTitle, setunitTitle] = useState();
+  const [units, setunits] = useState();
+
 
   useEffect(() => {
-    console.log(params.unit_id)
-    const getLectureUnit = async () => await LectureUnitService.getById(params.unit_id);
+    const Stats = async () => await StatisticService.getById(params.lecture_id);
+    console.log(Stats);
     
-    getLectureUnit().then(unit => {
-      setTitle(unit.title)
+    const getLecture = async () => await LectureService.getById(params.lecture_id);
+    getLecture().then(lecture => {
+      setlectTitle(lecture.title)
+      setunits(lecture.units)
     });
-  }, [params.unit_id]);
+    
+  }, [params.lecture_id]);
 
-  useEffect(() => {
-    console 
+//lecture is saved in lecture
+//lecture title in lecture.title
 
-  });
+//Stats.
+
 
   return (
-    <Container className={classes.padded}>
-      <h1>Statistics</h1>
-      
-      <Paper variant="outlined" className={classes.padded}>
-        <h2>{Title}</h2>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <VictoryChart theme={VictoryTheme.material}> 
-              <VictoryLine 
-                data={[[0, 1], [1, 1], [2, 3], [3, 1]]}
-                x={0}
-                y={1}
-              />
-            </VictoryChart>
-          </Grid>
-          <Grid item xs={6}>
-            <VictoryChart theme={VictoryTheme.material}>
-              const array
-              <VictoryLine />
-            </VictoryChart>
-          </Grid>
-        </Grid>
-      </Paper> 
-    </Container>
+//    <div><h2>{lectTitle}</h2>
+  //    <h1>Statistics</h1>
+  //  </div>
+    
+//    units.forEach(unit_id => {
+ //     LectureUnitService.getById(unit_id).then((unit) => {
+  //      unit.quizzes.forEach(quiz_id => {
+          <Container className={classes.padded}>
+            
+            <Paper variant="outlined" className={classes.padded}>
+              <Grid container spacing={3}>
+                <Grid item xs={6}>
+                  <VictoryChart theme={VictoryTheme.material}> 
+                    <VictoryBar 
+                       data = {Stats}
+                       x=''
+                       y=''
+                    />
+                  </VictoryBar>
+                </Grid>
+                <Grid item xs={6}>
+                </Grid>
+              </Grid>
+            </Paper> 
+          </Container>
+
+
+        
+    
   );
+
 }
 
 export default Statistics;

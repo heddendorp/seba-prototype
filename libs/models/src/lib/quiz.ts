@@ -1,18 +1,18 @@
 import * as mongoose from "mongoose";
 import { IUser } from "./user";
 
+export interface IQuizAnswer extends mongoose.Document {
+  answer: string;
+  isCorrect: boolean;
+}
 export interface IQuizSubmission extends mongoose.Document {
   user: IUser;
   answer: IQuizAnswer;
 }
-export interface IQuizAnswer extends mongoose.Document {
-  answer: string;
-  isCorrrect: boolean;
-}
 export interface IQuizQuestion extends mongoose.Document {
     question: string;
     answers: IQuizAnswer[];
-    subquestions: IQuizSubmission[];
+    submissions: IQuizSubmission[];
 }
 export interface IQuiz extends mongoose.Document {
   timestamp: number,

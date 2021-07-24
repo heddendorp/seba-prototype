@@ -1,3 +1,5 @@
+/*
+
 import * as express from 'express';
 import * as passport from 'passport';
 import { IUser, Quiz, Role, User } from '@seba/models';
@@ -42,7 +44,7 @@ router.get(
   }
 );
 
-/*
+
 
 THIS IS THE ALGO FOR FINDING THE NO OF USERS WITH MENTIONED NO OF CORRECT QS
 
@@ -64,5 +66,57 @@ if quizzes.find([quiz._id.questions.submissions.userid == quiz._id.questions])
 i/p no of questions correct
 o/p no of users with those correct answers
 (we can loop this later on no of correct answers, and plot it in a graph)
-hello
+
 */
+
+import * as express from "express";
+import * as passport from "passport";
+import * as _lod from "lodash";
+import {IUser, Lecture, LectureUnit, Quiz, Role} from "@seba/models";
+
+const router = express.Router();
+
+router.get(
+  "/:lectureId",
+  passport.authenticate("jwt", {session: false}),
+  async (req, res) => {
+    if (+req.user.role !== Role.LECTURER)
+      return res.status(401).json({
+        message: "Only lecturers can view lecture statistics."
+      });
+
+    const lectureStatistics = [];
+    Lecture.findById(req.params.lectureId).then(lecture => {
+      if (!(lecture.lecturer as IUser)._id.equals(req.user._id))
+        return res.status(401).json({
+          message: "You can only view your own lecture statistics."
+        });
+
+      lecture.units.forEach(unit_id =>
+        LectureUnit.findById(unit_id).then(unit => {
+          const unitStatistics = [];
+          unit.quizzes.forEach(quiz_id => {
+            Quiz.findById(quiz_id).then(quiz => {
+              const quizStatistics = {}
+              quiz.questions.forEach(question => {
+                question.submissions.forEach(submission => {
+                  if (submission.answer.isCorrect)
+                    if (submission.user._id in quizStatistics)
+                      quizStatistics[submission.user._id]++;
+                    else
+                      quizStatistics[submission.user.id] = 1;
+                });
+              });
+
+              const scoreUserDict = _lod.invert(quizStatistics, true);
+              unitStatistics.push(_lod.mapValues(scoreUserDict, "length"));
+            });
+          });
+          lectureStatistics.push(unitStatistics);
+        }));
+      res.json(lectureStatistics);
+    });
+  }
+);
+
+export const statisticRouter = router;

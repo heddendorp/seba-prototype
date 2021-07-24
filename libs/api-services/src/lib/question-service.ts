@@ -11,7 +11,7 @@ export class QuestionService extends BaseService {
     return await response.json() as [IQuestion];
   }
 
-  public static upvote(id) {
-    return this.authenticatedRequest('POST', `question/${id}/upvote`)
+  public static async upvote(id: string) {
+    return await this.authenticatedRequest('POST', `question/${id}/upvote`);
   }
 }

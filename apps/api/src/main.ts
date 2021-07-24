@@ -10,7 +10,7 @@ import {lectureRouter} from "../../../libs/controllers/src/lib/lecture-controlle
 import {lectureUnitRouter} from "../../../libs/controllers/src/lib/lecture-unit-controller";
 import { questionRouter } from '../../../libs/controllers/src/lib/question-controller';
 import { quizRouter } from '../../../libs/controllers/src/lib/quiz-controller';
-import { statisticRouter} from '../../../libs/controllers/src/lib/statistic-controller';
+import { statisticRouter } from '../../../libs/controllers/src/lib/statistic-controller';
 
 const app = express();
 app.use(cors());
