@@ -13,7 +13,7 @@ router.get(
       return res.status(401).json({
         message: "Only lecturers can view lecture statistics."
       });
-
+    
     const lectureStatistics = [];
     Lecture.findById(req.params.lectureId).then(lecture => {
       if (!(lecture.lecturer as IUser)._id.equals(req.user._id))
@@ -23,18 +23,21 @@ router.get(
 
       lecture.units.forEach(unit_id =>
         LectureUnit.findById(unit_id).then(unit => {
+
           const unitStatistics = [];
           unit.quizzes.forEach(quiz_id => {
             Quiz.findById(quiz_id).then(quiz => {
 
-              const quizStatistics = {}
+              const quizStatistics = [];
               quiz.questions.forEach(question => {
+                const count = question.answers.filter(answer => answer.isCorrect).length;
                 question.submissions.forEach(submission => {
-                  if (submission.answer.isCorrect)
+                  const subcount = submission.answers.filter(answer => answer.isCorrect).length;
+                  if (count == subcount)
                     if (submission.user._id in quizStatistics)
                       quizStatistics[submission.user._id]++;
                     else
-                      quizStatistics[submission.user.id] = 1;
+                      quizStatistics[submission.user.id] = 1;  
                 });
               });
 

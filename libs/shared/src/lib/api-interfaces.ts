@@ -80,3 +80,12 @@ export interface IJoinStudyGroupTransport extends Record<string, unknown> {
   group_id: string;
   student_id: string;
 }
+/*
+export interface IStatisticTransport extends Record<string, unknown> {
+  lectureStatistics: {
+    unitStatistics: {
+      quizStatistics: { questions: number; users: number }[];
+    }[];
+  }[];
+}
+*/

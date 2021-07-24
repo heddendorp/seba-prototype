@@ -2,22 +2,22 @@ import * as mongoose from 'mongoose';
 import { IUser } from './user';
 
 export interface IQuizSubmission extends mongoose.Document {
-  user: IUser;
-  answer: IQuizAnswer;
+  user?: mongoose.PopulatedDoc<IUser>;
+  answers: mongoose.Types.DocumentArray<IQuizAnswer>;
 }
 export interface IQuizAnswer extends mongoose.Document {
   answer: string;
   isCorrect: boolean;
 }
-export interface IQuizQuestion extends mongoose.Document {
+export interface IQuizQuestion extends mongoose.Types.Subdocument {
   question: string;
   answers: IQuizAnswer[];
-  submissions: IQuizSubmission[];
+  submissions:  mongoose.Types.DocumentArray<IQuizSubmission>;
 }
 export interface IQuiz extends mongoose.Document {
   unit_id: string;
   timestamp: number;
-  questions: Array<IQuizQuestion>;
+  questions: mongoose.Types.DocumentArray<IQuizQuestion>;
 }
 
 const QuizAnswerSchema = new mongoose.Schema({
@@ -27,7 +27,7 @@ const QuizAnswerSchema = new mongoose.Schema({
 
 const QuizSubmissionSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  answer: { type: mongoose.Schema.Types.ObjectId, ref: 'QuizAnswer' }
+  answers: [QuizAnswerSchema],
 });
 
 const QuizQuestionSchema = new mongoose.Schema({

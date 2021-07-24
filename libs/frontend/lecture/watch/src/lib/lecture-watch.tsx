@@ -64,7 +64,7 @@ export function LectureWatch(props: LectureWatchProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [videoPath, setVideoPath] = useState('');
-  const [quizzes, setQuizzes] = useState<[IQuiz]>();
+  const [quizzes, setQuizzes] = useState<IQuiz[]>([]);
   const [currentTime, setCurrentTime] = useState<number>();
   const [currentQuiz, setCurrentQuiz] = useState<IQuiz>();
 
@@ -110,7 +110,10 @@ export function LectureWatch(props: LectureWatchProps) {
 
   function handleSubmitQuiz(answers: any) {
     if (currentQuiz) {
-      QuizService.submitAnswers(currentQuiz._id, answers);
+      QuizService.submitAnswers(currentQuiz._id, answers)
+        .then(updatedQuiz => {
+          setQuizzes(oldQuizzes => [updatedQuiz, ...oldQuizzes.filter(q => q._id != updatedQuiz._id)])
+        });
     }
     setQuizOpen(false);
   }

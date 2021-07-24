@@ -117,7 +117,8 @@ router.put(
       }
     })
     await quiz.save();
-    res.json(quiz)
+     //todo error handling
+    return res.status(200).json(quiz);
   }
 );
 
