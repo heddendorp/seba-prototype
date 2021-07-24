@@ -1,5 +1,6 @@
 import {ListItem, ListItemText, TextField} from '@material-ui/core';
 import {useEffect, useState} from 'react';
+import {useStyles} from "../style";
 
 /* eslint-disable-next-line */
 export interface ChatProps {
@@ -11,6 +12,7 @@ export interface ChatProps {
 export function Chat(props: ChatProps) {
   // state for the messages
   const [messages, setMessages] = useState([]);
+  const classes = useStyles();
 
   const sendMessage = (event) => {
     if (event.key === 'Enter') {
@@ -39,12 +41,24 @@ export function Chat(props: ChatProps) {
       {props.groupId && (
         <>
           {messages.map((message) => (
-            <ListItem>
-              <ListItemText
-                primary={message.author}
-                secondary={message.message}
-              />
-            </ListItem>
+            <>
+              {
+                props.user.display_name == message.author ?
+                  <ListItem class={classes.sentMessage}>
+                    <ListItemText
+                      primary={message.author}
+                      secondary={message.message}
+                    />
+                  </ListItem>
+                  :
+                  <ListItem class={classes.receivedMessage}>
+                    <ListItemText
+                      primary={message.author}
+                      secondary={message.message}
+                    />
+                  </ListItem>
+              }
+            </>
           ))}
           <TextField fullWidth onKeyDown={sendMessage} label="Enter message"/>
         </>

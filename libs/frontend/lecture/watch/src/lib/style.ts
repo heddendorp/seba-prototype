@@ -8,6 +8,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     padded: {
       padding: theme.spacing(2),
     },
+    sentMessage: {
+      display: 'flex',
+      textAlign: 'right'
+    },
+    receivedMessage: {
+      display: 'flex',
+      textAlign: 'left'
+    }
     /*     root: {
       font: 'Roboto',
       display: 'flex',
