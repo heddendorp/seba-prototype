@@ -4,6 +4,7 @@ import {ILecture, IUser, Lecture, LectureUnit, Role} from '@seba/backend/models'
 import * as path from 'path';
 import * as uuid from 'uuid';
 import * as fs from 'fs';
+import {DeletionService} from "@seba/backend/services";
 
 const router = express.Router();
 const BASE_FILE_PATH = __dirname + '/assets/';
@@ -123,8 +124,7 @@ router.delete(
         message: 'You can only delete your own lectures.',
       });
 
-    // TODO: Delete recursively (Quiz -> Option & co)
-    unit.delete();
+    await DeletionService.deleteLectureUnit(req.params.lectureUnitId);
     return res.status(200).json({message: 'Success.'});
   }
 );

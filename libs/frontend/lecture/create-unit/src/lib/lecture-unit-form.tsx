@@ -110,7 +110,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
               <Button
                 onClick={handleClickDelete}
                 color="secondary"
-                href="/home"
+                href="/app/home"
               >
                 Delete
               </Button>

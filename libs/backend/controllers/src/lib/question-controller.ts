@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import {LectureUnit, Question} from '@seba/backend/models';
+import {LectureUnit, Question, Role} from '@seba/backend/models';
+import {DeletionService} from "@seba/backend/services";
 
 const router = express.Router();
 
@@ -64,6 +65,15 @@ router.put(
         console.log(err);
       } else res.json(question);
     });
+  }
+);
+
+router.delete(
+  '/:questionId',
+  passport.authenticate('jwt', {session: false}),
+  async (req, res) => {
+    await DeletionService.deleteQuestion(req.params.questionId).catch(err => res.json(err).status(500));
+    res.json({message: "Success."}).status(200);
   }
 );
 
