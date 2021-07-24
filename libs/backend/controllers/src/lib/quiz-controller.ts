@@ -1,13 +1,13 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import { Lecture, LectureUnit, Quiz, Role } from '@seba/backend/models';
-import { ICreateQuizTransport, IQuizTransport } from '@seba/shared';
+import {Lecture, LectureUnit, Quiz, Role} from '@seba/backend/models';
+import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
 
 const router = express.Router();
 
 router.post(
   '',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -23,7 +23,7 @@ router.post(
     quiz.save(function (err) {
       if (err) {
         console.log(err);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({message: 'Internal server error.'});
       } else {
         LectureUnit.findById(quizTransport.unit_id).then(async (unit) => {
           unit.quizzes.push(quiz._id);
@@ -35,22 +35,22 @@ router.post(
   }
 );
 
-// handle the update of a quiz
 router.put(
-  '/:id',
-  passport.authenticate('jwt', { session: false }),
+  '/:quizId',
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
         message: 'Only lecturers can update quizzes.',
       });
 
-    Quiz.findById(req.params.id).then((quiz) => {
+    Quiz.findById(req.params.quizId).then((quiz) => {
+      //Todo mach das richtig, also wie im lecture controller
       quiz.overwrite(req.body);
       quiz.save(function (err) {
         if (err) {
           console.log(err);
-          return res.status(500).json({ message: 'Internal server error.' });
+          return res.status(500).json({message: 'Internal server error.'});
         }
         return res.status(200).json(quiz);
       });
@@ -60,7 +60,7 @@ router.put(
 
 router.delete(
   '/:quizId',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -70,7 +70,7 @@ router.delete(
     Quiz.findByIdAndRemove(req.params.quizId, null, function (err, result) {
       if (err) {
         console.log(err);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({message: 'Internal server error.'});
       } else {
         //todo lösche idobject id in der unit
         //LectureUnit.findOneAndUpdate({_id: result.unit_id}, { $pullAll: { quizzes:  result._id }})
@@ -82,7 +82,7 @@ router.delete(
 
 router.get(
   '/:lectureUnitId',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     await LectureUnit.findById(req.params.lectureUnitId)
       .populate('quizzes')
@@ -92,76 +92,33 @@ router.get(
   }
 );
 
-/* router.post(
-  '/question',
-  //passport.authenticate('jwt', {session: false}),
+router.put(
+  '/:quizId/submission',
+  passport.authenticate('jwt', {session: false}),
   async (req, res) => {
-    /*if (+req.user.role !== Role.LECTURER)
-      return res.status(401).json({
-        message: "Only lecturers can create questions."
-      });
-
-
-    const question = new QuizQuestion({
-      question: req.body.question,
-      options: [],
-      //todo change singlechoice
-      isSingleChoice: false,
-      submissions: []
-    });
-
-    question.save(function (err) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({message: "Internal server error."});
-      } else {
-        //todo muss erster quiz erstellt werden und dann für jede question eingefügt
-
-        Quiz.findById(req.body.quiz_id).then(async quiz => {
-          quiz.quizQuestions.push(question._id);
-          await quiz.save();
-        })
-
-
+    const submissionBody = req.body
+    const quiz = await Quiz.findById(req.params.quizId).exec();
+    quiz.questions.forEach(question => {
+      if (question.submissions.some(submission => req.user._id.equals(submission.user._id))) {
+        return;
       }
-      return res.status(200).json(question);
-    });
-  }
-) */
-
-/* router.post(
-  '/answer',
-  //passport.authenticate('jwt', {session: false}),
-  async (req, res) => {
-    /*if (+req.user.role !== Role.LECTURER)
-      return res.status(401).json({
-        message: "Only lecturers can create questions."
-      });
-
-
-    const answer = new QuizAnswerOption({
-      text: req.body.text,
-      isCorrect: false,
-      //todo change to correct value
-    });
-
-    answer.save(function (err) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({message: "Internal server error."});
+      if (submissionBody[question._id]) {
+        const submission = {
+          user: req.user._id,
+          answers: Object.values(submissionBody[question._id])
+        }
+        question.submissions.push(submission);
       } else {
-        //todo muss erster question erstellt werden und dann für jede question eingefügt
-
-        QuizQuestion.findById(req.body.question_id).then(async question => {
-          question.options.push(answer._id);
-          await question.save();
-        })
-
-
+        const submission = {
+          user: req.user._id,
+          answers: []
+        }
+        question.submissions.push(submission);
       }
-      return res.status(200).json(answer);
-    });
+    })
+    await quiz.save();
+    res.json(quiz)
   }
-) */
+);
 
 export const quizRouter = router;

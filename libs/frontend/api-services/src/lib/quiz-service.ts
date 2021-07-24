@@ -28,4 +28,8 @@ export class QuizService extends BaseService {
     const response = await this.authenticatedRequest('GET', `quiz/${unit_id}`);
     return (await response.json()) as [IQuizTransport];
   }
+
+  public static async submitAnswers(quiz_id: string, body: any) {
+    const response = await this.authenticatedRequest('PUT', `quiz/${quiz_id}/submission`, body)
+  }
 }
