@@ -46,7 +46,6 @@ router.put(
       });
 
     Quiz.findById(req.params.quizId).then((quiz) => {
-      //Todo mach das richtig, also wie im lecture controller
       quiz.overwrite(req.body);
       quiz.save(function (err) {
         if (err) {
@@ -83,7 +82,6 @@ router.get(
       .populate('quizzes')
       .exec()
       .then((result) => res.json(result.quizzes));
-    //todo error handling
   }
 );
 
@@ -116,7 +114,6 @@ router.put(
       }
     });
     await quiz.save();
-    //todo error handling
     return res.status(200).json(quiz);
   }
 );

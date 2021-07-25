@@ -58,7 +58,6 @@ export function QuizList(props: QuizListProps) {
     if (quiz != null) {
       quiz.unit_id = params.unit_id;
       QuizService.create(quiz).then((payload) => {
-        //todo check if errer --> statsu != 200
         dispatch({ type: 'addQuiz', payload: payload });
       });
     }
@@ -68,7 +67,6 @@ export function QuizList(props: QuizListProps) {
   const handleEditQuiz = (quiz?: IQuizTransport) => {
     if (quiz != null) {
       QuizService.update(quiz._id, quiz).then((updatedQuiz) => {
-        //todo check if errer --> statsu != 200
         dispatch({
           type: 'updateQuiz',
           payload: { oldId: quiz._id, quiz: updatedQuiz },
@@ -79,7 +77,6 @@ export function QuizList(props: QuizListProps) {
 
   const handleDeleteQuiz = (quiz: IQuizTransport) => {
     QuizService.delete(quiz._id as string).then((payload) => {
-      //todo check if errer --> statsu != 200
       dispatch({ type: 'deleteQuiz', payload: payload });
     });
   };
