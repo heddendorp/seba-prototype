@@ -9,7 +9,7 @@ export class DeletionService {
       unit.quizzes.pull(id);
       unit.save()
     });
-    await Quiz.findByIdAndDelete(id);
+    return Quiz.findByIdAndDelete(id);
   }
 
   public static async deleteQuestion(id: string) {

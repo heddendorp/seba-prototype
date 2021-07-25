@@ -104,8 +104,9 @@ export function LectureWatch(props: LectureWatchProps) {
   useEffect(() => {
     if (!quizzes || !currentTime || !videoRef.current) return;
     const comingQuiz = quizzes.find(
-      (quiz) => Math.abs(quiz.timestamp - currentTime) < 1
+      (quiz) => Math.abs(quiz.timestamp - currentTime) < 0.3
     );
+    //check if the user has already done the quiz
     if (
       comingQuiz &&
       comingQuiz.questions.some((question) =>
@@ -139,16 +140,14 @@ export function LectureWatch(props: LectureWatchProps) {
     });
   }
 
-  function handleSubmitQuiz(answers: any) {
-    if (currentQuiz) {
-      QuizService.submitAnswers(currentQuiz._id, answers).then(
-        (updatedQuiz) => {
-          setQuizzes((oldQuizzes) => [
-            updatedQuiz,
-            ...oldQuizzes.filter((q) => q._id != updatedQuiz._id),
-          ]);
-        }
-      );
+  function handleSubmitQuiz(answers?: any) {
+    if(!answers) {
+      if (currentQuiz) {
+        QuizService.submitAnswers(currentQuiz._id, answers)
+          .then(updatedQuiz => {
+            setQuizzes(oldQuizzes => [updatedQuiz, ...oldQuizzes.filter(q => q._id != updatedQuiz._id)])
+          });
+      }
     }
     setQuizOpen(false);
   }
