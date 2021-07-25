@@ -13,7 +13,7 @@ router.get(
         message: "Only lecturers can view lecture statistics."
       });
 
-    const lectureStatistics = [];
+    const lectureStatistics = {};
     const lecture = await Lecture.findById(req.params.lectureId)
       .populate({path: "units", populate: {path: "quizzes"}})
       .exec();
@@ -24,36 +24,50 @@ router.get(
       });
 
     lecture.units.forEach(unit => {
-      const unitStatistics = [];
+      const unitStatistics = {};
       unit.quizzes.forEach(quiz => {
         const questionStats = {};
         quiz.questions.forEach(question => {
+          const stats = {};
+
           const count = question.answers.filter(answer => answer.isCorrect).length;
           question.submissions.forEach(submission => {
             const subcount = submission.answers.filter(answer => answer.isCorrect).length;
             if (count == subcount) {
-              if (submission.user._id in questionStats)
-                questionStats[submission.user._id as string]++;
+              if (submission.user._id in stats)
+                stats[submission.user._id as string]++;
               else
-                questionStats[submission.user._id as string] = 1;
+                stats[submission.user._id as string] = 1;
             }
             else {
-              questionStats[submission.user._id as string] = 0;
+              stats[submission.user._id as string] = 0;
             }
           });
+
+          // Count correct per question
+          const temp = {};
+          for (const key in stats) {
+            if (stats[key] in temp)
+              temp[stats[key]]++;
+            else
+              temp[stats[key]] = 1;
+          }
+
+          // Parse to chart data structure
+          const result = [];
+          for (const key in temp) {
+            result.push({points: key, count: temp[key]});
+          }
+
+          questionStats[question.question] = result;
         });
 
-        const stats = {};
-        for (const key in questionStats) {
-          if (questionStats[key] in stats)
-            stats[questionStats[key]]++;
-          else
-            stats[questionStats[key]] = 1;
-        }
-
-        unitStatistics.push({quizId: quiz._id, statistics: stats});
+        if (quiz._id as string in unitStatistics)
+          unitStatistics[quiz._id as string].push(questionStats);
+        else
+          unitStatistics[quiz._id as string] = [questionStats];
       });
-      lectureStatistics.push({unitId: unit._id, statistics: unitStatistics});
+      lectureStatistics[unit.title] = unitStatistics;
     });
 
     res.status(200).json(lectureStatistics);
