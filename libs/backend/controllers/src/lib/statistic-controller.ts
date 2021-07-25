@@ -1,7 +1,6 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import * as _ from 'lodash';
-import { IUser, Lecture, LectureUnit, Quiz, Role } from '@seba/backend/models';
+import { IUser, Lecture, Role } from '@seba/backend/models';
 
 const router = express.Router();
 
@@ -14,40 +13,62 @@ router.get(
         message: 'Only lecturers can view lecture statistics.',
       });
 
-    const lectureStatistics = [];
-    Lecture.findById(req.params.lectureId)
-      .then((lecture) => {
-        if (!(lecture.lecturer as IUser)._id.equals(req.user._id))
-          return res.status(401).json({
-            message: 'You can only view your own lecture statistics.',
+    const lectureStatistics = {};
+    const lecture = await Lecture.findById(req.params.lectureId)
+      .populate({ path: 'units', populate: { path: 'quizzes' } })
+      .exec();
+
+    if (!(lecture.lecturer as IUser)._id.equals(req.user._id))
+      return res.status(401).json({
+        message: 'You can only view your own lecture statistics.',
+      });
+
+    lecture.units.forEach((unit) => {
+      const unitStatistics = {};
+      unit.quizzes.forEach((quiz) => {
+        const questionStats = {};
+        quiz.questions.forEach((question) => {
+          const stats = {};
+
+          const count = question.answers.filter((answer) => answer.isCorrect)
+            .length;
+          question.submissions.forEach((submission) => {
+            const subcount = submission.answers.filter(
+              (answer) => answer.isCorrect
+            ).length;
+            if (count == subcount) {
+              if (submission.user._id in stats)
+                stats[submission.user._id as string]++;
+              else stats[submission.user._id as string] = 1;
+            } else {
+              stats[submission.user._id as string] = 0;
+            }
           });
 
-        lecture.units.forEach((unit_id) =>
-          LectureUnit.findById(unit_id).then((unit) => {
-            const unitStatistics = [];
-            unit.quizzes.forEach((quiz_id) => {
-              Quiz.findById(quiz_id).then((quiz) => {
-                const quizStatistics = {};
-                quiz.questions.forEach((question) => {
-                  question.submissions.forEach((submission) => {
-                    if (submission.answer.isCorrect)
-                      if (submission.user._id in quizStatistics)
-                        quizStatistics[submission.user._id]++;
-                      else quizStatistics[submission.user.id] = 1;
-                  });
-                });
+          // Count correct per question
+          const temp = {};
+          for (const key in stats) {
+            if (stats[key] in temp) temp[stats[key]]++;
+            else temp[stats[key]] = 1;
+          }
 
-                unitStatistics.push(
-                  _.mapValues(_.invert(quizStatistics, true), 'length')
-                );
-              });
-            });
-            lectureStatistics.push(unitStatistics);
-          })
-        );
-        res.status(200).json(lectureStatistics);
-      })
-      .catch((err) => res.status(500).json(err));
+          // Parse to chart data structure
+          const result = [];
+          for (const key in temp) {
+            result.push({ points: key, count: temp[key] });
+          }
+
+          questionStats[question.question] = result;
+        });
+
+        if ((quiz._id as string) in unitStatistics)
+          unitStatistics[quiz._id as string].push(questionStats);
+        else unitStatistics[quiz._id as string] = [questionStats];
+      });
+      lectureStatistics[unit.title] = unitStatistics;
+    });
+
+    res.status(200).json(lectureStatistics);
   }
 );
 
