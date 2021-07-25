@@ -4,6 +4,8 @@ import { StatisticService, LectureService, LectureUnitService, UserService } fro
 import { useParams } from 'react-router-dom';
 import {useEffect, useState} from "react";
 import { ILectureUnit, IUser } from '@seba/backend/models';
+import _ from 'lodash';
+import { stat } from 'node:fs/promises';
 
 /* eslint-disable-next-line */
 export interface StatisticsProps {}
@@ -25,6 +27,8 @@ export function Statistics(props: StatisticsProps) {
   const [lectTitle, setlectTitle] = useState('');
   //const [units, setunits] = useState<[ILectureUnit]>();
   const [stats, setstats] = useState();
+  const [currentquiz, setcurrentquiz] = useState();
+  const [currentunit, setcurrentunit] = useState();
 
   useEffect(() => {
     UserService.getCurrent().then((user) => setUser(user));
@@ -34,30 +38,28 @@ export function Statistics(props: StatisticsProps) {
       //setunits(lecture.units as [ILectureUnit]);
     });
 
-  }, [params.lecture_id]);
-/*
-  useEffect(() => {
-    LectureUnitService.
-  });
-
-    const Stats = async () => await StatisticService.getByLectureId(params.lecture_id);
-    console.log('hello');
-    console.log(Stats);
-    console.log('hi');
-*/
-
-  useEffect(() => {
-    StatisticService.getByLectureId(params.lecture_id).then((stat) => {
-      console.log(stat);
-      
-      //setstats(stat.unitStatistics.quizStatistics);
+    StatisticService.getByLectureId(params.lecture_id).then(stat => {
+      setstats(stat);
     });
 
-    console.log('hello');
-    console.log(stats);
-    console.log('hi');
   }, [params.lecture_id]);
 
+  console.log('stats');
+  console.log(stats);
+  
+  useEffect(() => {
+    const unitcounter = 0;
+    const quizcounter = 0;
+    
+  }, [stats]);
+/*
+  let anObject = {left: 1, right: 2};
+  console.log(anObject.left);
+  _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
+    console.log(key);
+  });
+
+*/
   return (
     <Container className={classes.padded}>
       <h1>Statistics for {lectTitle}</h1>
@@ -66,13 +68,15 @@ export function Statistics(props: StatisticsProps) {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <VictoryChart theme={VictoryTheme.material}>
-              <VictoryBar/>
+              <VictoryBar
+                /*data = "stats.statistics.statistics"
+                x = {0}
+                y = {1}*/
+              />
             </VictoryChart>
           </Grid>
           <Grid item xs={6}>
-            <VictoryChart theme={VictoryTheme.material}>
-              <VictoryLine/>
-            </VictoryChart>
+            
           </Grid>
         </Grid>
       </Paper>
