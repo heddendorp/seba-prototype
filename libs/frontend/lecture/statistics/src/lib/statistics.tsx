@@ -1,13 +1,11 @@
 import {
   Container,
   createStyles,
-  List,
-  ListItem,
   makeStyles,
   Paper,
   Theme,
 } from '@material-ui/core';
-import { VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory';
 import { StatisticService } from '@seba/frontend/api-services';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -21,6 +19,18 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     padded: {
       padding: theme.spacing(2),
+    },
+    row: {
+      display: 'flex',
+      flexDirection: 'row',
+      overflow: 'auto',
+      maxWidth: '100%',
+    },
+    chart: {
+      flexShrink: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
   })
 );
@@ -41,41 +51,29 @@ export function Statistics(props: StatisticsProps) {
 
   return (
     <Container className={classes.padded}>
-      <Paper variant="outlined" className={classes.padded}>
-        {Object.keys(statistics).map((unitId) => (
-          <>
-            {Object.keys(statistics[unitId]).length > 0 && (
-              <div>
-                <h2>{unitId}</h2>
-                <Paper style={{ overflow: 'auto' }}>
-                  <List style={{ display: 'flex', flexDirection: 'row' }}>
-                    <ListItem>
-                      {Object.keys(statistics[unitId]).map((quizId) => (
-                        <List>
-                          {statistics[unitId][quizId].map((quiz) => (
-                            <ListItem>
-                              {Object.keys(quiz).map((title) => (
-                                <VictoryChart theme={VictoryTheme.material}>
-                                  <VictoryLabel text={title} />
-                                  <VictoryBar
-                                    data={quiz[title]}
-                                    x="points"
-                                    y="count"
-                                  />
-                                </VictoryChart>
-                              ))}
-                            </ListItem>
-                          ))}
-                        </List>
-                      ))}
-                    </ListItem>
-                  </List>
-                </Paper>
+      <>
+        {Object.entries(statistics).map(([unit, quizzes]) => (
+          <Paper variant="outlined" className={classes.padded}>
+            <h2>{unit}</h2>
+            {Object.entries(quizzes).map(([quizId, questions]) => (
+              <div className={classes.row}>
+                {Object.entries(questions).map(([text, data]) => (
+                  <div className={classes.chart}>
+                    <h3 style={{ marginBottom: -16 }}>{text}</h3>
+                    <VictoryChart
+                      theme={VictoryTheme.material}
+                    >
+                      <VictoryAxis tickValues={data.map(date => date.points)} tickFormat={data.map(date => date.points+' points')}/>
+                      <VictoryAxis dependentAxis tickValues={data.map(date => date.count)}/>
+                      <VictoryBar data={data} x="points" y="count" />
+                    </VictoryChart>
+                  </div>
+                ))}
               </div>
-            )}
-          </>
+            ))}
+          </Paper>
         ))}
-      </Paper>
+      </>
     </Container>
   );
 }
