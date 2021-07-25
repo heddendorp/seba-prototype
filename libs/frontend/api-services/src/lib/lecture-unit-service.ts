@@ -42,7 +42,7 @@ export class LectureUnitService extends BaseService {
   }
 
   public static async update(unit_id: string, body: IEditLectureUnitTransport) {
-    return this.authenticatedRequest('PATCH', `lecture-unit/${unit_id}`, body);
+    return this.authenticatedRequest('PUT', `lecture-unit/${unit_id}`, body);
   }
 
   static delete(unit_id: string) {

@@ -70,7 +70,7 @@ router.get(
   }
 );
 
-router.patch(
+router.put(
   '/:lectureId',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
