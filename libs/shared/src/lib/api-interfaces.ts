@@ -55,16 +55,6 @@ export interface IQuizTransport extends ICreateQuizTransport {
 export interface IQuestionTransport extends Record<string, unknown> {
   quiz_id: string;
   question: string;
-  //options: Array<IAnswer>,
-  //todo change singlechoice
-  //isSingleChoice: boolean,
-  //submissions: Array<IQuizSubmission>
-}
-
-export interface IQuizAnswerTransport extends Record<string, unknown> {
-  question_id: string;
-  text: string;
-  isCorrect: boolean;
 }
 
 export interface ICreateStudyGroupTransport extends Record<string, unknown> {

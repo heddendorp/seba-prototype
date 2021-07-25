@@ -206,7 +206,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         <Grid item xs={12}>
           <div className={classes.finishButton}>
             <DeleteButton />
-            <Button color="primary" type="submit" variant="contained">
+            <Button color="primary" type="submit" variant="contained" disabled={!file && props.unit_id === undefined}>
               Submit
             </Button>
           </div>

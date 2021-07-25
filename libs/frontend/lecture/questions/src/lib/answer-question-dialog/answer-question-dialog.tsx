@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { QuestionService } from '@seba/frontend/api-services';
+import { QuestionService, UserService } from '@seba/frontend/api-services';
 import { useEffect, useState } from 'react';
 
 /* eslint-disable-next-line */
@@ -26,6 +26,12 @@ export function AnswerQuestionDialog(props: AnswerQuestionDialogProps) {
 
   // state for the current answer
   const [answer, setAnswer] = useState('');
+
+  // state for the current user
+  const [user, setUser] = useState();
+  useEffect(() => {
+    UserService.getCurrent().then((user) => setUser(user));
+  }, []);
 
   // handle a submited answer
   const handleAnswer = async () => {
@@ -82,7 +88,7 @@ export function AnswerQuestionDialog(props: AnswerQuestionDialogProps) {
               {answer.author.display_name} answered
             </Typography>
             <p>{answer.text}</p>
-            { !props.question.isAnswered && (
+            { !props.question.isAnswered && props.question.author._id == user?._id && (
               <Button color="primary" onClick={()=>{handleAcceptedAnswer(answer._id)}}>Accept this answer</Button>
             )}
             <Divider />
