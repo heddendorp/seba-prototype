@@ -21,4 +21,16 @@ export class QuestionService extends BaseService {
       await this.authenticatedRequest('PUT', `question/${id}/upvote`)
     ).json();
   }
+
+  public static async addAnswer(id: string, answer: any) {
+    return (
+      await this.authenticatedRequest('POST', `question/${id}/answer`, {answer})
+    ).json();
+  }
+
+  public static async acceptAnswer(questionId: string, answerId: string) {
+    return (
+      await this.authenticatedRequest('PUT', `question/${questionId}/answer/${answerId}/accept`)
+    ).json();
+  }
 }

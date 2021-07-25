@@ -9,8 +9,10 @@ import {
 } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { QuestionService } from '@seba/frontend/api-services';
-import { Question } from '@seba/backend/models';
+import AnswerQuestionDialog from '../answer-question-dialog/answer-question-dialog';
+import { useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface QuestionListEntryProps {
@@ -38,6 +40,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function QuestionListEntry(props: QuestionListEntryProps) {
   const classes = useStyles();
+  const [answerQuestionDialogOpen, setAnswerQuestionDialogOpen] = useState(
+    false
+  );
+  const [answerDialogMode, setAnswerDialogMode] = useState(false);
   const upvote = () => {
     QuestionService.upvote(props.question._id).then((question) =>
       props.onQuestionUpdate(question)
@@ -46,7 +52,7 @@ export function QuestionListEntry(props: QuestionListEntryProps) {
   return (
     <div className={classes.container}>
       <div className={classes.row}>
-        <div style={{ marginTop: 16 }}>
+        <div style={{ marginTop: 16, flexShrink: 0 }}>
           <div>
             <IconButton onClick={upvote}>
               <ThumbUpIcon />
@@ -69,10 +75,38 @@ export function QuestionListEntry(props: QuestionListEntryProps) {
         className={classes.row}
         style={{ justifyContent: 'space-between', marginTop: 16 }}
       >
-        <Button>Give Answer</Button>
-        <Button>Show Answers</Button>
-        <Chip label="Not answered" icon={<RadioButtonUncheckedIcon />} />
+        {!props.question.isAnswered && (
+          <Button
+            onClick={() => {
+              setAnswerQuestionDialogOpen(true);
+              setAnswerDialogMode(true);
+            }}
+          >
+            Give Answer
+          </Button>
+        )}
+        <Button
+          onClick={() => {
+            setAnswerQuestionDialogOpen(true);
+            setAnswerDialogMode(false);
+          }}
+        >
+          Show Answers
+        </Button>
+        {props.question.isAnswered && (
+          <Chip label="Answered" icon={<CheckCircleIcon />} color="primary" />
+        )}
+        {!props.question.isAnswered && (
+          <Chip label="Not answered" icon={<RadioButtonUncheckedIcon />} />
+        )}
       </div>
+      <AnswerQuestionDialog
+        open={answerQuestionDialogOpen}
+        question={props.question}
+        onQuestionUpdate={props.onQuestionUpdate}
+        newAnswerMode={answerDialogMode}
+        onClose={() => setAnswerQuestionDialogOpen(false)}
+      />
     </div>
   );
 }
