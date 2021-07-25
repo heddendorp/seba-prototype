@@ -9,6 +9,8 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const studyGroup = new StudyGroup({
+      unit: req.body.unit_id,
+      private: false,
       students: [req.body.student_id],
     });
 
@@ -21,16 +23,32 @@ router.post(
   }
 );
 
-router.post(
-  '/join',
+router.put(
+  '/:groupId/:private',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    StudyGroup.findById(req.body.group_id).then((studyGroup) => {
-      studyGroup.students.push(req.body.student_id);
-      studyGroup.save();
+    StudyGroup.findById(req.params.groupId)
+      .then((group) => {
+        group.private = req.params.private == 'true';
+        group.save();
 
-      return res.status(200).json({ message: 'Success.' });
-    });
+        res.status(200).json({ message: 'Success.' });
+      })
+      .catch((err) => res.status(500).json(err));
+  }
+);
+
+router.get(
+  '/:unitId',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    StudyGroup.findOne({ unit: req.params.unitId, private: false })
+      .then((group) => {
+        if (!group) res.status(404).json({ message: 'No active group found.' });
+
+        res.status(200).json({ message: 'Success.', groupId: group._id });
+      })
+      .catch((err) => res.status(500).json(err));
   }
 );
 

@@ -12,6 +12,7 @@ import React, { createRef, useContext, useEffect, useState } from 'react';
 import {
   LectureUnitService,
   QuizService,
+  StudyGroupService,
   UserService,
 } from '@seba/frontend/api-services';
 import { LectureQuestions } from '@seba/frontend/lecture/questions';
@@ -44,12 +45,15 @@ export function LectureWatch(props: LectureWatchProps) {
   const [studyGroup, setStudyGroup] = useState<any>();
   const [quizOpen, setQuizOpen] = useState<boolean>(false);
   const [wrongGroupIdOpen, setWrongGroupIdOpen] = useState<boolean>(false);
+  const [privateStatus, setPrivateStatus] = useState(false);
 
   // reference of the video element
   const videoRef = createRef<HTMLVideoElement>();
 
   // effect to set up and close the socket for a studyGroup
   useEffect(() => {
+    socket.on('update', (data: any) => setPrivateStatus(data.privateStatus));
+
     socket.on('sync', (data: any) => {
       const video = document.getElementById('video_stream') as HTMLVideoElement;
       video.currentTime = data.currentTime;
@@ -65,6 +69,7 @@ export function LectureWatch(props: LectureWatchProps) {
       }
     });
     return () => {
+      socket.off('update');
       socket.off('sync');
     };
   }, [currentStudyGroup]);
@@ -230,7 +235,16 @@ export function LectureWatch(props: LectureWatchProps) {
         <StudyGroup
           user={user}
           studyGroupId={currentStudyGroup}
+          unitId={params.unit_id}
           onStudyGroupChange={(id) => joinStudyGroup(id)}
+          privateStatus={privateStatus}
+          setPrivateStatus={(privateStatus: boolean) => {
+            socket.emit('update', {
+              group_id: currentStudyGroup,
+              privateStatus: privateStatus,
+            });
+            setPrivateStatus(privateStatus);
+          }}
         />
         <Dialog
           open={wrongGroupIdOpen}

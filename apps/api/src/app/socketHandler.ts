@@ -6,6 +6,7 @@ export const handleSocket = (io: Server) => {
     socket.on('groupConnect', async (group_id, callback) => {
       try {
         const group = await StudyGroup.findById(group_id);
+
         if (group) {
           socket.join(group_id);
           callback(group);
@@ -35,6 +36,13 @@ export const handleSocket = (io: Server) => {
       io.to(data.group_id).emit('sync', {
         syncEvent: data.syncEvent,
         currentTime: data.currentTime,
+      });
+    });
+
+    socket.on('update', (data) => {
+      console.log(data);
+      io.to(data.group_id).emit('update', {
+        privateStatus: data.privateStatus,
       });
     });
   });

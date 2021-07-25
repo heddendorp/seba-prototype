@@ -69,14 +69,10 @@ export interface IQuizAnswerTransport extends Record<string, unknown> {
 
 export interface ICreateStudyGroupTransport extends Record<string, unknown> {
   student_id: string;
+  unit_id: string;
 }
 
 export interface ICreateStudyGroupResponse extends Record<string, unknown> {
   group_id: string;
   message: string;
-}
-
-export interface IJoinStudyGroupTransport extends Record<string, unknown> {
-  group_id: string;
-  student_id: string;
 }
