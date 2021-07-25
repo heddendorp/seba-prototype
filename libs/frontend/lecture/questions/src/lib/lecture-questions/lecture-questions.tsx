@@ -1,6 +1,6 @@
-import {Grid} from '@material-ui/core';
-import {QuestionService} from '@seba/frontend/api-services';
-import {useEffect, useReducer} from 'react';
+import { Grid, Typography } from '@material-ui/core';
+import { QuestionService } from '@seba/frontend/api-services';
+import { useEffect, useReducer, useState } from 'react';
 import AddQuesionTrigger from '../add-quesion-trigger/add-quesion-trigger';
 import QuestionListEntry from '../question-list-entry/question-list-entry';
 
@@ -36,6 +36,27 @@ export function LectureQuestions(props: LectureQuestionsProps) {
   // state with reducer to save questions
   const [questions, dispatch] = useReducer(LectureQuestionsReducer, []);
 
+  // state with the questions that are currently displayed
+  const [displayedQuestions, setDisplayedQuestions] = useState([]);
+
+  // effect to update questions on time change
+  useEffect(() => {
+    const questionCopy = questions.slice();
+    questionCopy.sort((a, b) => {
+      const aDist = Math.abs(a.timestamp - props.currentTime);
+      const bDist = Math.abs(b.timestamp - props.currentTime);
+      if (aDist < bDist) {
+        return -1;
+      }
+      if (aDist > bDist) {
+        return 1;
+      }
+      return 0;
+    });
+    // display the first three questions
+    setDisplayedQuestions(questionCopy.slice(0, 3));
+  }, [props.currentTime, questions]);
+
   // handle a question added
   const handleQuestionAdded = (question: any) => {
     console.log(question);
@@ -66,22 +87,21 @@ export function LectureQuestions(props: LectureQuestionsProps) {
 
   return (
     <div>
-      <h3>Questions</h3>
+      <Typography variant="h4" component="h3" gutterBottom>
+        Questions
+      </Typography>
       <AddQuesionTrigger
         lecureUnitId={props.lecureUnitId}
         currentTime={props.currentTime}
         onNewQuestion={handleQuestionAdded}
       />
-      <Grid container spacing={1} direction="column">
-        {questions.map((question) => (
-          <Grid item key={question._id}>
-            <QuestionListEntry
-              question={question}
-              onQuestionUpdate={handleQuestionUpdated}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {displayedQuestions.map((question, index) => (
+        <QuestionListEntry
+          key={question._id}
+          question={question}
+          onQuestionUpdate={handleQuestionUpdated}
+        />
+      ))}
     </div>
   );
 }
