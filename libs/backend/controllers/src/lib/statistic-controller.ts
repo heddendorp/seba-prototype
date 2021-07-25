@@ -61,9 +61,7 @@ router.get(
           questionStats[question.question] = result;
         });
 
-        if ((quiz._id as string) in unitStatistics)
-          unitStatistics[quiz._id as string].push(questionStats);
-        else unitStatistics[quiz._id as string] = [questionStats];
+        unitStatistics[quiz._id as string] = questionStats;
       });
       lectureStatistics[unit.title] = unitStatistics;
     });

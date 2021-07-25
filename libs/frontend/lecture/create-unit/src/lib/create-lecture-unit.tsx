@@ -34,8 +34,7 @@ export function CreateLectureUnit() {
           title: title,
           description: description,
           publish_date: new Date(dateTime),
-          video_path: body.video_path,
-          duration: body.duration
+          video_path: body.video_path
         }).then((response) => {
           context.updateLectures();
           response
