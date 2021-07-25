@@ -17,8 +17,7 @@ export function UploadLectureDropzone(props: UploadLectureDropzoneProps) {
   return (
     <DropzoneArea
       filesLimit={1}
-      //at the moment it is set to nothing - todo: set to video
-      //acceptedFiles={['video/*']}
+      acceptedFiles={['video/*']}
       showPreviews={true}
       showPreviewsInDropzone={false}
       useChipsForPreview
