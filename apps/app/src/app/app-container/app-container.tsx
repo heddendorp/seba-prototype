@@ -9,7 +9,7 @@ import {
 import { CreateLecture, EditLecture } from '@seba/frontend/lecture/create';
 import { LectureQuizzes } from '@seba/frontend/lecture/quizzes';
 import { Statistics } from '@seba/frontend/lecture/statistics';
-import { Questions } from '@seba/frontend/lecture/questions';
+import { QuestionList, Questions } from '@seba/frontend/lecture/questions';
 import {
   createMuiTheme,
   createStyles,
@@ -127,7 +127,7 @@ export function AppContainer(props: AppContainerProps) {
                 <LectureWatch />
               </Route>
               <Route path={`${path}/unit/:unit_id/questions`}>
-                <Questions />
+                <QuestionList />
               </Route>
               <Route path={`${path}/unit/:unit_id/quizzes`}>
                 <LectureQuizzes />

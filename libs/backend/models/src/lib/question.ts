@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 import { IUser, UserSchema } from './user';
 
-export interface IAnswer extends mongoose.Document {
-  author: IUser;
+export interface IAnswer extends mongoose.Types.Subdocument {
+  author: IUser & mongoose.Types.EmbeddedDocument;
   text: string;
   markedAsCorrect: boolean;
 }
@@ -10,7 +10,7 @@ export interface IAnswer extends mongoose.Document {
 export const AnswerSchema = new mongoose.Schema({
   author: UserSchema,
   text: String,
-  markedAsCorrect: Boolean,
+  markedAsCorrect: { type: Boolean, default: false },
 });
 
 export interface IQuestion extends mongoose.Document {
@@ -18,8 +18,8 @@ export interface IQuestion extends mongoose.Document {
   author: IUser;
   text: string;
   title: string;
-  upVotes: [IUser];
-  answers: [IAnswer];
+  upVotes: mongoose.PopulatedDoc<IUser[]>;
+  answers: mongoose.Types.DocumentArray<IAnswer>;
   isAnswered: boolean;
 }
 
@@ -29,7 +29,7 @@ export const QuestionSchema = new mongoose.Schema({
   text: String,
   title: String,
   upVotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  answers: [AnswerSchema],
+  answers: [{type:AnswerSchema, default:[]}],
   isAnswered: Boolean,
 });
 

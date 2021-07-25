@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as passport from 'passport';
 import { LectureUnit, Question, Role } from '@seba/backend/models';
 import { DeletionService } from '@seba/backend/services';
+import * as mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -76,6 +77,36 @@ router.delete(
       res.json(err).status(500)
     );
     res.json({ message: 'Success.' }).status(200);
+  }
+);
+
+router.post(
+  '/:questionId/answer',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const answer = {text: req.body.answer, author: req.user};
+    const question = await Question.findByIdAndUpdate(
+      req.params.questionId,
+      {
+        $push: { answers: answer },
+      },
+      { new: true }
+    );
+    res.json(question);
+  }
+);
+
+router.put(
+  '/:questionId/answer/:answerId/accept',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const question = await Question.findById(req.params.questionId);
+    const answer = question.answers.id(req.params.answerId);
+    answer.markedAsCorrect = true;
+    question.isAnswered = true;
+    await answer.save();
+    await question.save();
+    res.json(question);
   }
 );
 
