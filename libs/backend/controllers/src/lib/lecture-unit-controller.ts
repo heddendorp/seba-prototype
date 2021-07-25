@@ -11,7 +11,7 @@ import * as path from 'path';
 import * as uuid from 'uuid';
 import * as fs from 'fs';
 import { DeletionService } from '@seba/backend/services';
-import * as _ from "get-video-duration";
+import { getVideoDurationInSeconds } from "get-video-duration";
 
 const router = express.Router();
 const BASE_FILE_PATH = __dirname + '/assets/';
@@ -32,7 +32,7 @@ router.post(
     );
     req.files['video'].mv(path.join(BASE_FILE_PATH, relative_path));
 
-    _.getVideoDurationInSeconds(relative_path).then(duration => {
+    getVideoDurationInSeconds(relative_path).then(duration => {
       return res.status(200).json({
         video_path: relative_path,
         duration: duration,
