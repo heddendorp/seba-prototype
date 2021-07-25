@@ -21,7 +21,7 @@ export function EditLecture() {
   ) => {
     LectureService.update(params.lecture_id, {
       title: title,
-      short_title: title,
+      short_title: short_title,
       semester: semester,
     }).then(() => context.updateLectures());
   };

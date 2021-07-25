@@ -80,7 +80,7 @@ router.get(
   }
 );
 
-router.patch(
+router.put(
   '/:lectureUnitId',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
@@ -91,7 +91,7 @@ router.patch(
 
     LectureUnit.findById(req.params.lectureUnitId)
       .then((unit) => {
-        if (req.body.video_path !== undefined) fs.unlinkSync(unit.video_path);
+        if (req.body.video_path !== undefined) fs.unlinkSync(BASE_FILE_PATH + unit.video_path);
 
         unit.overwrite(req.body);
         unit.save();

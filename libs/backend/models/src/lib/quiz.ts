@@ -37,7 +37,6 @@ const QuizQuestionSchema = new mongoose.Schema({
 });
 
 export const QuizSchema = new mongoose.Schema({
-  //todo add lecture unit?
   unit_id: String,
   timestamp: Number,
   questions: [QuizQuestionSchema],
