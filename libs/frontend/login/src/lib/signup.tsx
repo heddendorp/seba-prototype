@@ -1,6 +1,7 @@
 import {
   Button,
   Container,
+  Divider,
   FormControl,
   Grid,
   InputLabel,
@@ -19,7 +20,7 @@ import { Role } from '@seba/backend/models';
 
 export function SignUp() {
   const classes = useStyles();
-  const logoPath = '/assets/logo.png';
+  const logoPath = '/assets/brainstorm.svg';
 
   const [display_name, setDisplayName] = useState('');
   const [username, setUsername] = useState('');
@@ -94,7 +95,29 @@ export function SignUp() {
           <Paper elevation={3} className={classes.padding}>
             <Grid container direction="column" spacing={2} alignItems="center">
               <Grid item>
-                <img src={logoPath} alt="Learn with me" />
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <img
+                    src={logoPath}
+                    alt="Learn with me"
+                    style={{ marginRight: 16 }}
+                  />
+                  <Divider orientation="vertical" flexItem />
+                  <Typography
+                    variant="h4"
+                    style={{ fontWeight: 'bold', marginLeft: 16 }}
+                  >
+                    Learn <br />
+                    With <br />
+                    Me
+                  </Typography>
+                </div>
               </Grid>
               <Grid item>
                 <Typography component="h1" variant="h5">
