@@ -10,6 +10,7 @@ import { useStyles } from './styles';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface QuizListProps {
   timestamp: number;
+  maxVideoLength: number;
 }
 
 const initialState: IQuizTransport[] = [];
@@ -54,10 +55,8 @@ export function QuizList(props: QuizListProps) {
   }, [params.unit_id]);
 
   const handleClose = (quiz?: ICreateQuizTransport | null) => {
-    //ändere von quizTransport zu normalen --> und add id zum object
     if (quiz != null) {
       quiz.unit_id = params.unit_id;
-      quiz.timestamp = props.timestamp;
       QuizService.create(quiz).then((payload) => {
         //todo check if errer --> statsu != 200
         dispatch({ type: 'addQuiz', payload: payload });
@@ -101,6 +100,7 @@ export function QuizList(props: QuizListProps) {
         open={open}
         handleClose={handleClose}
         timestamp={props.timestamp}
+        maxVideoDuration={props.maxVideoLength}
       />
       <Grid
         container
@@ -114,6 +114,7 @@ export function QuizList(props: QuizListProps) {
               quiz={quiz}
               handleEditQuiz={handleEditQuiz}
               handleDeleteQuiz={handleDeleteQuiz}
+              maxVideoLength={props.maxVideoLength}
             />
           </Grid>
         ))}

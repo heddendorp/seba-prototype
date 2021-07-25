@@ -146,7 +146,8 @@ export function LectureWatch(props: LectureWatchProps) {
   }
 
   function handleSubmitQuiz(answers?: any) {
-    if (!answers) {
+    //if the user submitted answer
+    if(answers) {
       if (currentQuiz) {
         QuizService.submitAnswers(currentQuiz._id, answers).then(
           (updatedQuiz) => {
@@ -157,6 +158,9 @@ export function LectureWatch(props: LectureWatchProps) {
           }
         );
       }
+    } else {
+      //skip the duration of the quiz
+      (document.getElementById('video_stream') as HTMLVideoElement).currentTime = currentTime + 0.8;
     }
     setQuizOpen(false);
   }

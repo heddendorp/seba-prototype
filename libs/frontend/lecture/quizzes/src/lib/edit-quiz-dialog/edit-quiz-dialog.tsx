@@ -12,12 +12,12 @@ import {
   Paper,
   TextField,
   OutlinedInput,
-  Tooltip,
+  Tooltip, Typography,
 } from '@material-ui/core';
-import React, { useReducer } from 'react';
-import { ICreateQuizTransport, IQuizTransport } from '@seba/shared';
-import { useStyles } from '../styles';
-import { IQuizQuestion } from '@seba/backend/models';
+import React, {ChangeEvent, useReducer, useState} from 'react';
+import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
+import {useStyles} from '../styles';
+import {IQuizQuestion} from '@seba/backend/models';
 import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
 import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -27,7 +27,8 @@ export interface EditQuizDialogProps {
   quiz?: any;
   open: boolean;
   handleClose: (quiz?: IQuizTransport | null) => void;
-  timestamp?: number; //todo
+  timestamp?: number;
+  maxVideoDuration: number;
 }
 
 const emptyAnswer = { answer: '', isCorrect: false };
@@ -48,6 +49,9 @@ function reducer(
   switch (action.type) {
     case 'reset': {
       return action.payload ? { ...action.payload } : { ...emptyQuiz };
+    }
+    case 'updateTimestamp' : {
+      return { ...state, timestamp: action.payload.timestamp}
     }
     case 'addQuestion': {
       return {
@@ -134,18 +138,52 @@ function reducer(
 }
 
 export function EditQuizDialog(props: EditQuizDialogProps) {
-  const [quiz, dispatch] = useReducer(reducer, props.quiz ?? { ...emptyQuiz });
+  const [quiz, dispatch] = useReducer(reducer, props.quiz ?? {...emptyQuiz, timestamp: props.timestamp});
+  const [disabledSubmit, setDisabledSubmit] = useState(false);
 
   const classes = useStyles();
 
   return (
-    <Dialog open={props.open} classes={{ paper: classes.questionDialog }}>
+    <Dialog open={props.open} classes={{paper: classes.questionDialog}}
+            TransitionProps={{
+              onEntered: () => {
+                if (!props.quiz) {
+                  dispatch({
+                    type: 'updateTimestamp',
+                    payload: {timestamp: props.timestamp}
+                  })
+                }
+              }
+            }}>
       <DialogTitle>{!props.quiz ? 'Create new quiz' : 'Edit quiz'}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {!props.quiz
-            ? `Quiz will be created at: ${props.timestamp}`
-            : `Quiz at: ${props.timestamp}`}
+          <Grid container direction="row" >
+            <Grid item className={classes.dialogText} >
+              <Typography variant="h6" gutterBottom>
+              {!props.quiz
+                ? 'Quiz will be created at:  '
+                : 'Quiz is at: '}
+              </Typography>
+            </Grid>
+            <Grid item >
+              <TextField
+                variant="outlined"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  dispatch({
+                    type: 'updateTimestamp',
+                    payload: {timestamp: e.target.value}
+                  })
+                  setDisabledSubmit((e.target.value as number) > props.maxVideoDuration)
+                }}
+                value={quiz.timestamp}
+                type='number'
+                size='small'
+                className={classes.timestampInput}
+                error={disabledSubmit}
+              />
+            </Grid>
+          </Grid>
         </DialogContentText>
         {quiz.questions.map(
           (question: IQuizQuestion, questionIndex: number) => (
@@ -287,6 +325,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
           onClick={() => {
             props.handleClose(null);
             dispatch({ type: 'reset', payload: props.quiz });
+            setDisabledSubmit(false);
           }}
         >
           Cancel
@@ -294,9 +333,11 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
         <Button
           onClick={() => {
             props.handleClose(quiz);
-            dispatch({ type: 'reset', payload: props.quiz });
+            dispatch({ type: 'reset', payload: quiz });
+            setDisabledSubmit(false);
           }}
           color="primary"
+          disabled={disabledSubmit}
         >
           Submit
         </Button>
