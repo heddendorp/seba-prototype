@@ -25,4 +25,8 @@ export const useStyles = makeStyles((theme) => ({
   previewChip: {
     maxWidth: 800,
   },
+  deleteButtonContainer: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
+  }
 }));

@@ -10,6 +10,8 @@ import {
 import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import {useStyles} from './style';
 import {LectureService} from '@seba/frontend/api-services';
+import {useHistory} from 'react-router-dom';
+import {useLectureContext} from "@seba/frontend/context";
 
 export interface CreateLectureFormProps {
   lecture_id: string | undefined;
@@ -18,6 +20,8 @@ export interface CreateLectureFormProps {
 
 export function LectureForm(props: CreateLectureFormProps) {
   const classes = useStyles();
+  const history = useHistory();
+  const context = useLectureContext();
 
   const [title, setTitle] = useState('');
   const [shortTitle, setShortTitle] = useState('');
@@ -70,7 +74,6 @@ export function LectureForm(props: CreateLectureFormProps) {
               <Button
                 onClick={handleClickDelete}
                 color="secondary"
-                href="/home"
               >
                 Delete
               </Button>
@@ -103,8 +106,11 @@ export function LectureForm(props: CreateLectureFormProps) {
   const handleCloseDialog = () => setDeleteAlert(false);
 
   const handleClickDelete = async () => {
-    if (props.lecture_id !== undefined)
+    if (props.lecture_id !== undefined) {
       await LectureService.delete(props.lecture_id);
+      context.updateLectures();
+      history.push("/app/home");
+    }
 
     setDeleteAlert(false);
   };

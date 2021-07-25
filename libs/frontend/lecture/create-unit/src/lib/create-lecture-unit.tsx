@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom';
 import {LectureUnitService} from '@seba/frontend/api-services';
 import {useStyles} from './styles';
 import {useLectureContext} from '@seba/frontend/context';
+import {useHistory} from 'react-router-dom';
 
 type CreateUnitURLParams = {
   lecture_id: string;
@@ -11,6 +12,7 @@ type CreateUnitURLParams = {
 export function CreateLectureUnit() {
   const classes = useStyles();
   const context = useLectureContext();
+  const history = useHistory();
   const params = useParams<CreateUnitURLParams>();
 
   const handleSubmit = async (
@@ -33,7 +35,10 @@ export function CreateLectureUnit() {
           description: description,
           publish_date: new Date(dateTime),
           video_path: body.video_path,
-        }).then(() => context.updateLectures());
+        }).then(response => {
+          context.updateLectures();
+          response.json().then(body => history.push(`/app/unit/${body.unit_id}/quizzes`));
+        });
       },
     });
 

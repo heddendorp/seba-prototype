@@ -3,10 +3,12 @@ import {LectureService} from '@seba/frontend/api-services';
 import {useStyles} from './style';
 import {LectureForm} from './lecture-form';
 import {useLectureContext} from '@seba/frontend/context';
+import {useHistory} from 'react-router-dom';
 
 export function CreateLecture() {
   const classes = useStyles();
   const context = useLectureContext();
+  const history = useHistory();
 
   const handleSubmit = async (
     title: string,
@@ -17,7 +19,11 @@ export function CreateLecture() {
       title: title,
       short_title: short_title,
       semester: semester,
-    }).then(() => context.updateLectures());
+    }).then(response => {
+      context.updateLectures();
+      response.json().then(body =>
+        history.push(`/app/lecture/${body.lecture_id}/unit/create`));
+    });
 
   return (
     <Container component="main" maxWidth="xs">

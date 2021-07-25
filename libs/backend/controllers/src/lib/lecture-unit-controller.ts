@@ -53,7 +53,7 @@ router.post(
           lecture.units.push(unit._id);
           await lecture.save();
         });
-        return res.status(200).json({message: 'Success.'});
+        return res.status(200).json({message: 'Success.', unit_id: unit._id});
       }
     });
   }
@@ -115,17 +115,18 @@ router.delete(
         message: 'Only lecturers can delete lectures.',
       });
 
-    const unit = await LectureUnit.findById(req.params.lectureUnitId)
+    LectureUnit.findById(req.params.lectureUnitId)
       .populate('lecture')
-      .exec();
-    const lecture = unit.lecture as ILecture;
-    if (!(lecture.lecturer as IUser)._id.equals(req.user._id))
-      return res.status(401).json({
-        message: 'You can only delete your own lectures.',
-      });
+      .exec().then(unit => {
+      if (!((unit.lecture as ILecture).lecturer as IUser)._id.equals(req.user._id))
+        return res.status(401).json({
+          message: 'You can only delete your own lectures.',
+        });
 
-    await DeletionService.deleteLectureUnit(req.params.lectureUnitId);
-    return res.status(200).json({message: 'Success.'});
+      DeletionService.deleteLectureUnit(req.params.lectureUnitId).then(() => res.status(200).json({
+        message: "Success."
+      }));
+    });
   }
 );
 
