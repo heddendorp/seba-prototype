@@ -24,12 +24,15 @@ import { IQuizAnswer } from '@seba/backend/models';
 import EditQuizDialog from './edit-quiz-dialog/edit-quiz-dialog';
 import { IQuizTransport } from '@seba/shared';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
+import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
+import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
 
 /* eslint-disable-next-line */
 export interface QuizListEntryProps {
   quiz: any;
   handleDeleteQuiz: (quiz: any) => void;
   handleEditQuiz: (quiz?: IQuizTransport) => void;
+  maxVideoLength: number;
 }
 
 export function QuizListEntry(props: QuizListEntryProps) {
@@ -91,6 +94,7 @@ export function QuizListEntry(props: QuizListEntryProps) {
         quiz={props.quiz}
         open={open}
         handleClose={handleEditQuiz}
+        maxVideoDuration={props.maxVideoLength}
       />
       <Paper variant="outlined" className={classes.padded}>
         <Grid container justify="space-between">
@@ -115,17 +119,19 @@ export function QuizListEntry(props: QuizListEntryProps) {
             <Grid container spacing={1} direction="column">
               {props.quiz.questions.map((question: IQuizQuestion) => (
                 <Grid item key={question._id}>
-                  <FormLabel>{question.question}</FormLabel>
+                  <label className={classes.questionText}>{question.question}</label>
                   <FormGroup>
                     {question.answers.map((answer: IQuizAnswer) => {
                       return (
-                        //icons?
                         <FormControlLabel
                           key={answer._id}
                           control={
                             <Checkbox
                               checked={answer.isCorrect}
                               disabled={true}
+                              className={classes.displayedQuizCheckbox}
+                              icon={ <CircleUnchecked /> }
+                              checkedIcon={ <CircleCheckedFilled /> }
                             />
                           }
                           label={answer.answer}
@@ -135,7 +141,6 @@ export function QuizListEntry(props: QuizListEntryProps) {
                   </FormGroup>
                 </Grid>
               ))}
-              <FormLabel>*Correct answers are marked</FormLabel>
             </Grid>
           </FormControl>
         </Paper>

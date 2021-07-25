@@ -14,6 +14,8 @@ import {
 import { IQuiz, IQuizAnswer, IQuizQuestion } from '@seba/backend/models';
 import React, { useState } from 'react';
 import { useStyles } from './styles';
+import CircleUnchecked from "@material-ui/icons/RadioButtonUnchecked";
+import CircleCheckedFilled from "@material-ui/icons/CheckCircle";
 
 export interface SubmitQuizDialogProps {
   quiz: IQuiz;
@@ -52,7 +54,7 @@ export function SubmitQuizDialog(props: SubmitQuizDialogProps) {
           <Grid container spacing={1} direction="column">
             {props.quiz.questions.map((question: IQuizQuestion) => (
               <Grid item key={question._id}>
-                <FormLabel>{question.question}</FormLabel>
+                <label className={classes.questionText}>{question.question}</label>
                 <FormGroup>
                   {question.answers.map((answer: IQuizAnswer) => {
                     return (
@@ -67,6 +69,9 @@ export function SubmitQuizDialog(props: SubmitQuizDialogProps) {
                                 e.target.checked
                               )
                             }
+                            className={classes.displayedQuizCheckbox}
+                            icon={ <CircleUnchecked style={{ color: '#00796b' }}/> }
+                            checkedIcon={ <CircleCheckedFilled style={{ color: '#00796b'}}/> }
                           />
                         }
                         label={answer.answer}

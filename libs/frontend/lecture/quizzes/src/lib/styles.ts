@@ -43,5 +43,20 @@ export const useStyles = makeStyles((theme: Theme) =>
     createQuizButton: {
       margin: theme.spacing(1, 0, 1, 0),
     },
+    dialogText: {
+      display: 'flex',
+      flexDirection: "column",
+      justifyContent: "center",
+    },
+    timestampInput: {
+      maxWidth: 110,
+    },
+    displayedQuizCheckbox: {
+      marginLeft: theme.spacing(2),
+    },
+    questionText : {
+      fontSize: 18,
+    }
+
   })
 );
