@@ -1,7 +1,13 @@
 import {
   Avatar,
   Button,
-  Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Checkbox,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -11,12 +17,12 @@ import {
   Paper,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {useStyles} from './styles';
-import React, {useState} from 'react';
-import {IQuizQuestion} from '@seba/backend/models';
-import {IQuizAnswer} from '@seba/backend/models';
+import { useStyles } from './styles';
+import React, { useState } from 'react';
+import { IQuizQuestion } from '@seba/backend/models';
+import { IQuizAnswer } from '@seba/backend/models';
 import EditQuizDialog from './edit-quiz-dialog/edit-quiz-dialog';
-import {IQuizTransport} from '@seba/shared';
+import { IQuizTransport } from '@seba/shared';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
 
 /* eslint-disable-next-line */
@@ -27,7 +33,6 @@ export interface QuizListEntryProps {
 }
 
 export function QuizListEntry(props: QuizListEntryProps) {
-
   const [open, setOpen] = React.useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
 
@@ -51,7 +56,7 @@ export function QuizListEntry(props: QuizListEntryProps) {
     return (
       <div>
         <IconButton onClick={handleOpenDialog} className={classes.deleteButton}>
-          <DeleteIcon/>
+          <DeleteIcon />
         </IconButton>
         <Dialog
           open={deleteAlert}
@@ -71,15 +76,13 @@ export function QuizListEntry(props: QuizListEntryProps) {
             <Button onClick={handleCloseDialog} color="primary">
               Cancel
             </Button>
-            <Button
-              onClick={handleDelete}
-              color="secondary"
-            >
+            <Button onClick={handleDelete} color="secondary">
               Delete
             </Button>
           </DialogActions>
         </Dialog>
-      </div>);
+      </div>
+    );
   }
 
   return (
@@ -90,12 +93,21 @@ export function QuizListEntry(props: QuizListEntryProps) {
         handleClose={handleEditQuiz}
       />
       <Paper variant="outlined" className={classes.padded}>
-        <Grid container justify='space-between'>
+        <Grid container justify="space-between">
           <Grid item>
-            <Chip color="primary" size="medium" label={`Quiz is at: ${props.quiz.timestamp}s`} avatar={<Avatar><WatchLaterIcon/></Avatar>}/>
+            <Chip
+              color="primary"
+              size="medium"
+              label={`Quiz is at: ${props.quiz.timestamp}s`}
+              avatar={
+                <Avatar>
+                  <WatchLaterIcon />
+                </Avatar>
+              }
+            />
           </Grid>
           <Grid item>
-            <DeleteButton/>
+            <DeleteButton />
           </Grid>
         </Grid>
         <Paper variant="outlined" className={classes.padded}>
@@ -127,7 +139,14 @@ export function QuizListEntry(props: QuizListEntryProps) {
             </Grid>
           </FormControl>
         </Paper>
-        <Button color="primary" variant="outlined" className={classes.editButton} onClick={() => setOpen(true)}>Edit Quiz</Button>
+        <Button
+          color="primary"
+          variant="outlined"
+          className={classes.editButton}
+          onClick={() => setOpen(true)}
+        >
+          Edit Quiz
+        </Button>
       </Paper>
     </>
   );

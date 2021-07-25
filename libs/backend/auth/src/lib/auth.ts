@@ -1,7 +1,7 @@
-import {User} from '@seba/backend/models';
+import { User } from '@seba/backend/models';
 import * as passwordHash from 'password-hash';
-import {Strategy as LocalStrategy} from 'passport-local';
-import {ExtractJwt, Strategy as JwtStrategy} from 'passport-jwt';
+import { Strategy as LocalStrategy } from 'passport-local';
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import * as jwt from 'jsonwebtoken';
 
 const jwtSecret = 'server-secret';
@@ -37,7 +37,7 @@ export function initializePassport(passport) {
         passReqToCallback: true,
       },
       async function (req, username, password, done) {
-        if (await User.exists({username: username}))
+        if (await User.exists({ username: username }))
           return done(null, {
             statusCode: 409,
           });
@@ -60,7 +60,7 @@ export function initializePassport(passport) {
   passport.use(
     'login',
     new LocalStrategy(function (username, password, done) {
-      User.findOne({username: username}, function (err, user) {
+      User.findOne({ username: username }, function (err, user) {
         if (err) return done(err);
 
         if (!user || !passwordHash.verify(password, user.password))
@@ -88,7 +88,7 @@ export function initializePassport(passport) {
             new Error('Token is expired');
           }
 
-          const user = await User.findOne({_id: token.id});
+          const user = await User.findOne({ _id: token.id });
           return done(null, user);
         } catch (error) {
           done(error);

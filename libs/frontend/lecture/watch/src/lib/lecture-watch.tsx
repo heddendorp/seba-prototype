@@ -141,12 +141,16 @@ export function LectureWatch(props: LectureWatchProps) {
   }
 
   function handleSubmitQuiz(answers?: any) {
-    if(!answers) {
+    if (!answers) {
       if (currentQuiz) {
-        QuizService.submitAnswers(currentQuiz._id, answers)
-          .then(updatedQuiz => {
-            setQuizzes(oldQuizzes => [updatedQuiz, ...oldQuizzes.filter(q => q._id != updatedQuiz._id)])
-          });
+        QuizService.submitAnswers(currentQuiz._id, answers).then(
+          (updatedQuiz) => {
+            setQuizzes((oldQuizzes) => [
+              updatedQuiz,
+              ...oldQuizzes.filter((q) => q._id != updatedQuiz._id),
+            ]);
+          }
+        );
       }
     }
     setQuizOpen(false);
@@ -163,9 +167,9 @@ export function LectureWatch(props: LectureWatchProps) {
         className={classes.hideOverflow}
       >
         <video
-        style={{
-          display: 'block',
-        }}
+          style={{
+            display: 'block',
+          }}
           id="video_stream"
           controls
           width="100%"

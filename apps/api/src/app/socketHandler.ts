@@ -24,7 +24,7 @@ export const handleSocket = (io: Server) => {
       };
       const group = await StudyGroup.findByIdAndUpdate(
         data.group_id,
-        { $push: { chat: {$each: [newMessage], $sort:{timestamp: -1} }} },
+        { $push: { chat: { $each: [newMessage], $sort: { timestamp: -1 } } } },
         { new: true }
       );
       io.to(data.group_id).emit('message', group.chat[0]);
@@ -34,7 +34,7 @@ export const handleSocket = (io: Server) => {
       console.log(data);
       io.to(data.group_id).emit('sync', {
         syncEvent: data.syncEvent,
-        currentTime: data.currentTime
+        currentTime: data.currentTime,
       });
     });
   });

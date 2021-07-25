@@ -1,11 +1,16 @@
 import QuestionListEntry from '../question-list-entry/question-list-entry';
-import {FormControl, Grid, InputLabel, MenuItem, Select,} from '@material-ui/core';
-import {useEffect, useState} from 'react';
-import {QuestionService} from '@seba/frontend/api-services';
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { QuestionService } from '@seba/frontend/api-services';
 
 /* eslint-disable-next-line */
-export interface QuestionListProps {
-}
+export interface QuestionListProps {}
 
 export function QuestionList(props: QuestionListProps) {
   const [error, setError] = useState(null);
@@ -48,7 +53,7 @@ export function QuestionList(props: QuestionListProps) {
         <Grid container spacing={3} direction="column">
           {questions.map((question) => (
             <Grid item key={question._id}>
-              <QuestionListEntry question={question}/>
+              <QuestionListEntry question={question} />
             </Grid>
           ))}
         </Grid>

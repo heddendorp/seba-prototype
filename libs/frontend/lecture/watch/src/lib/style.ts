@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -10,19 +10,20 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     sentMessage: {
       display: 'flex',
-      textAlign: 'right'
+      textAlign: 'right',
     },
     receivedMessage: {
       display: 'flex',
-      textAlign: 'left'
+      textAlign: 'left',
     },
     grid: {
       display: 'grid',
       gridTemplateColumns: '2fr 1fr',
       gridTemplateRows: 'auto auto auto min-content ',
-      gridTemplateAreas: '"title title" "video group" "description group" "questions chat"',
+      gridTemplateAreas:
+        '"title title" "video group" "description group" "questions chat"',
       gridGap: '1rem',
       padding: theme.spacing(6),
-    }
+    },
   })
 );

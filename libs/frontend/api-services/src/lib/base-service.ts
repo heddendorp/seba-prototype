@@ -1,4 +1,4 @@
-import {StorageService} from './storage-service';
+import { StorageService } from './storage-service';
 
 export type MethodType =
   | 'GET'

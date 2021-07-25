@@ -1,13 +1,13 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import {IUser, Lecture, Role} from '@seba/backend/models';
-import {DeletionService} from '@seba/backend/services';
+import { IUser, Lecture, Role } from '@seba/backend/models';
+import { DeletionService } from '@seba/backend/services';
 
 const router = express.Router();
 
 router.post(
   '',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -24,28 +24,28 @@ router.post(
     lecture.save(function (err) {
       if (err) {
         console.log(err);
-        return res.status(500).json({message: 'Internal server error.'});
-      } else return res.status(200).json({message: 'Success.', lecture_id: lecture._id});
+        return res.status(500).json({ message: 'Internal server error.' });
+      } else return res.status(200).json({ message: 'Success.', lecture_id: lecture._id });
     });
   }
 );
 
 router.get(
   '',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     let result;
     switch (+req.user.role) {
       case Role.LECTURER:
-        result = await Lecture.find({lecturer: req.user._id})
+        result = await Lecture.find({ lecturer: req.user._id })
           .populate('units')
           .exec();
         break;
       case Role.STUDENT:
-        result = await Lecture.find({students: req.user._id})
+        result = await Lecture.find({ students: req.user._id })
           .populate({
-            path: "units",
-            match: { publish_date: { $lte: Date.now() }}
+            path: 'units',
+            match: { publish_date: { $lte: Date.now() } },
           })
           .exec();
         break;
@@ -59,12 +59,12 @@ router.get(
 
 router.get(
   '/:lectureId',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Lecture.findById(req.params.lectureId, function (err, result) {
       if (err) {
         console.log(err);
-        return res.status(500).json({message: 'Internal server error.'});
+        return res.status(500).json({ message: 'Internal server error.' });
       } else return res.status(200).json(result);
     }).exec();
   }
@@ -72,7 +72,7 @@ router.get(
 
 router.patch(
   '/:lectureId',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -81,12 +81,12 @@ router.patch(
 
     await Lecture.findByIdAndUpdate(
       req.params.lectureId,
-      {$set: req.body},
+      { $set: req.body },
       function (err) {
         if (err) {
           console.log(err);
-          return res.status(500).json({message: 'Internal server error.'});
-        } else return res.status(200).json({message: 'Success.'});
+          return res.status(500).json({ message: 'Internal server error.' });
+        } else return res.status(200).json({ message: 'Success.' });
       }
     ).exec();
   }
@@ -94,7 +94,7 @@ router.patch(
 
 router.delete(
   '/:lectureId',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -107,9 +107,11 @@ router.delete(
           message: 'You can only delete your own lectures.',
         });
 
-      DeletionService.deleteLecture(req.params.lectureId).then(() => res.status(200).json({
-        message: "Success."
-      }));
+      DeletionService.deleteLecture(req.params.lectureId).then(() =>
+        res.status(200).json({
+          message: 'Success.',
+        })
+      );
     });
   }
 );

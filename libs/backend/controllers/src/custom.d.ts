@@ -1,4 +1,4 @@
-import {IUser} from '@seba/backend/models';
+import { IUser } from '@seba/backend/models';
 
 interface IPassportUser extends IUser {
   statusCode: number;

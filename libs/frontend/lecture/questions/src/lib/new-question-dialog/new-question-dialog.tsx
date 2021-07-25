@@ -8,7 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface NewQuestionDialogProps {
@@ -20,7 +20,7 @@ export interface NewQuestionDialogProps {
 export function NewQuestionDialog(props: NewQuestionDialogProps) {
   const [question, setQuestion] = useState<any>([]);
   useEffect(() => {
-    setQuestion({timestamp: props.timestamp});
+    setQuestion({ timestamp: props.timestamp });
   }, [props.timestamp]);
   return (
     <Dialog open={props.open} onClose={props.onClose(null)}>
@@ -36,7 +36,7 @@ export function NewQuestionDialog(props: NewQuestionDialogProps) {
           required
           type="text"
           fullWidth
-          onChange={(e) => setQuestion({...question, title: e.target.value})}
+          onChange={(e) => setQuestion({ ...question, title: e.target.value })}
         />
         <TextField
           label="Question Content"
@@ -45,7 +45,7 @@ export function NewQuestionDialog(props: NewQuestionDialogProps) {
           rows={4}
           fullWidth
           required
-          onChange={(e) => setQuestion({...question, text: e.target.value})}
+          onChange={(e) => setQuestion({ ...question, text: e.target.value })}
         />
       </DialogContent>
       <DialogActions>

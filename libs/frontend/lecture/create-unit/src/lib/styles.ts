@@ -1,4 +1,4 @@
-import {makeStyles} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +27,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   deleteButtonContainer: {
     marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1)
-  }
+    marginRight: theme.spacing(1),
+  },
 }));

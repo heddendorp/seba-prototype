@@ -1,6 +1,12 @@
-import {createContext, ReactNode, useContext, useEffect, useState,} from 'react';
-import {ILecture} from '@seba/backend/models';
-import {LectureService} from '@seba/frontend/api-services';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { ILecture } from '@seba/backend/models';
+import { LectureService } from '@seba/frontend/api-services';
 
 type LectureProviderProps = { children: ReactNode };
 type State = {
@@ -10,7 +16,7 @@ type State = {
 
 const LectureContext = createContext<State | undefined>(undefined);
 
-export function LectureProvider({children}: LectureProviderProps) {
+export function LectureProvider({ children }: LectureProviderProps) {
   const [lectures, setLectures] = useState<[ILecture]>();
 
   function updateLectures() {
@@ -25,7 +31,7 @@ export function LectureProvider({children}: LectureProviderProps) {
 
   return (
     <LectureContext.Provider
-      value={{lectures: lectures, updateLectures: updateLectures}}
+      value={{ lectures: lectures, updateLectures: updateLectures }}
     >
       {children}
     </LectureContext.Provider>

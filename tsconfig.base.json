@@ -10,41 +10,22 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@seba/shared": [
-        "libs/shared/src/index.ts"
-      ],
+      "@seba/shared": ["libs/shared/src/index.ts"],
       "@seba/frontend/api-services": [
         "libs/frontend/api-services/src/index.ts"
       ],
-      "@seba/backend/auth": [
-        "libs/backend/auth/src/index.ts"
-      ],
-      "@seba/frontend/context": [
-        "libs/frontend/context/src/index.ts"
-      ],
-      "@seba/backend/controllers": [
-        "libs/backend/controllers/src/index.ts"
-      ],
-      "@seba/frontend/home": [
-        "libs/frontend/home/src/index.ts"
-      ],
-      "@seba/frontend/login": [
-        "libs/frontend/login/src/index.ts"
-      ],
-      "@seba/frontend/navigation": [
-        "libs/frontend/navigation/src/index.ts"
-      ],
-      "@seba/backend/models": [
-        "libs/backend/models/src/index.ts"
-      ],
+      "@seba/backend/auth": ["libs/backend/auth/src/index.ts"],
+      "@seba/frontend/context": ["libs/frontend/context/src/index.ts"],
+      "@seba/backend/controllers": ["libs/backend/controllers/src/index.ts"],
+      "@seba/frontend/home": ["libs/frontend/home/src/index.ts"],
+      "@seba/frontend/login": ["libs/frontend/login/src/index.ts"],
+      "@seba/frontend/navigation": ["libs/frontend/navigation/src/index.ts"],
+      "@seba/backend/models": ["libs/backend/models/src/index.ts"],
       "@seba/frontend/lecture/create": [
         "libs/frontend/lecture/create/src/index.ts"
       ],
@@ -63,13 +44,8 @@
       "@seba/frontend/lecture/watch": [
         "libs/frontend/lecture/watch/src/index.ts"
       ],
-      "@seba/backend/services": [
-        "libs/backend/services/src/index.ts"
-      ]
+      "@seba/backend/services": ["libs/backend/services/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

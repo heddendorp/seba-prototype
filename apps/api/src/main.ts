@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
-import {Server} from 'socket.io';
+import { Server } from 'socket.io';
 import {
   lectureRouter,
   lectureUnitRouter,
@@ -11,24 +11,24 @@ import {
   userRouter,
 } from '@seba/backend/controllers';
 import * as passport from 'passport';
-import {initializePassport} from '@seba/backend/auth';
+import { initializePassport } from '@seba/backend/auth';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as fileUpload from 'express-fileupload';
 import * as path from 'path';
-import {statisticRouter} from "../../../libs/backend/controllers/src/lib/statistic-controller";
+import { statisticRouter } from '../../../libs/backend/controllers/src/lib/statistic-controller';
 import { handleSocket } from './app/socketHandler';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {cors: {}});
+const io = new Server(server, { cors: {} });
 mongoose.set('useFindAndModify', false);
 
 // Server config
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json({type: ['application/json', 'text/plain']}));
-app.use(fileUpload({createParentPath: true}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ type: ['application/json', 'text/plain'] }));
+app.use(fileUpload({ createParentPath: true }));
 
 // Authentication via Passport.js
 app.use(passport.initialize());
@@ -55,7 +55,7 @@ server.listen(port, async () => {
   // Connect to database
   const url = 'mongodb://localhost:27017/learn-with-me';
   mongoose
-    .connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+    .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to database'))
     .catch(console.error.bind(console, 'Connection error:'));
 });

@@ -1,6 +1,14 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography,} from '@material-ui/core';
-import {StudyGroupService} from '@seba/frontend/api-services';
-import {useState} from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Typography,
+} from '@material-ui/core';
+import { StudyGroupService } from '@seba/frontend/api-services';
+import { useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface StudyGroupProps {
@@ -29,7 +37,7 @@ export function StudyGroup(props: StudyGroupProps) {
 
   // handle new group creation
   const handleCreate = () => {
-    StudyGroupService.create({student_id: props.user._id}).then((res) => {
+    StudyGroupService.create({ student_id: props.user._id }).then((res) => {
       props.onStudyGroupChange(res.group_id);
     });
   };

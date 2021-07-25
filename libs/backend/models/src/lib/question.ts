@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {IUser, UserSchema} from './user';
+import { IUser, UserSchema } from './user';
 
 export interface IAnswer extends mongoose.Document {
   author: IUser;
@@ -28,7 +28,7 @@ export const QuestionSchema = new mongoose.Schema({
   author: UserSchema,
   text: String,
   title: String,
-  upVotes: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+  upVotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   answers: [AnswerSchema],
   isAnswered: Boolean,
 });

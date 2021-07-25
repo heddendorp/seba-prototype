@@ -3,20 +3,24 @@ import {
   Checkbox,
   Dialog,
   DialogActions,
-  DialogContent, DialogContentText,
+  DialogContent,
+  DialogContentText,
   DialogTitle,
-  Grid, IconButton, InputAdornment, Paper,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Paper,
   TextField,
   OutlinedInput,
   Tooltip,
 } from '@material-ui/core';
-import React, {useReducer} from 'react';
-import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
-import {useStyles} from '../styles';
-import {IQuizQuestion} from "@seba/backend/models";
+import React, { useReducer } from 'react';
+import { ICreateQuizTransport, IQuizTransport } from '@seba/shared';
+import { useStyles } from '../styles';
+import { IQuizQuestion } from '@seba/backend/models';
 import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
 import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
-import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 /* eslint-disable-next-line */
 export interface EditQuizDialogProps {
@@ -26,23 +30,29 @@ export interface EditQuizDialogProps {
   timestamp?: number; //todo
 }
 
-const emptyAnswer = {answer: '', isCorrect: false};
-const emptyQuestion = {question: '', answers: [{...emptyAnswer}, {...emptyAnswer}]};
+const emptyAnswer = { answer: '', isCorrect: false };
+const emptyQuestion = {
+  question: '',
+  answers: [{ ...emptyAnswer }, { ...emptyAnswer }],
+};
 const emptyQuiz = {
   unit_id: '',
   timestamp: 0,
-  questions: [{...emptyQuestion}],
+  questions: [{ ...emptyQuestion }],
 };
 
-function reducer(state: ICreateQuizTransport, action: { type: string; payload: any }) {
+function reducer(
+  state: ICreateQuizTransport,
+  action: { type: string; payload: any }
+) {
   switch (action.type) {
     case 'reset': {
-      return action.payload ? {...action.payload} : {...emptyQuiz};
+      return action.payload ? { ...action.payload } : { ...emptyQuiz };
     }
     case 'addQuestion': {
       return {
         ...state,
-        questions: [...state.questions, {...emptyQuestion}],
+        questions: [...state.questions, { ...emptyQuestion }],
       };
     }
     case 'updateQuestion': {
@@ -73,7 +83,7 @@ function reducer(state: ICreateQuizTransport, action: { type: string; payload: a
             ...state.questions[action.payload.questionIndex],
             answers: [
               ...state.questions[action.payload.questionIndex].answers,
-              {...emptyAnswer},
+              { ...emptyAnswer },
             ],
           },
         }),
@@ -92,7 +102,7 @@ function reducer(state: ICreateQuizTransport, action: { type: string; payload: a
                 [action.payload.answerIndex]: {
                   ...state.questions[action.payload.questionIndex].answers[
                     action.payload.answerIndex
-                    ],
+                  ],
                   ...action.payload.update,
                 },
               }
@@ -124,23 +134,25 @@ function reducer(state: ICreateQuizTransport, action: { type: string; payload: a
 }
 
 export function EditQuizDialog(props: EditQuizDialogProps) {
-  const [quiz, dispatch] = useReducer(reducer, props.quiz ?? {...emptyQuiz});
+  const [quiz, dispatch] = useReducer(reducer, props.quiz ?? { ...emptyQuiz });
 
   const classes = useStyles();
 
   return (
-    <Dialog open={props.open} classes={{paper: classes.questionDialog}}>
+    <Dialog open={props.open} classes={{ paper: classes.questionDialog }}>
       <DialogTitle>{!props.quiz ? 'Create new quiz' : 'Edit quiz'}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {!props.quiz ? `Quiz will be created at: ${props.timestamp}` : `Quiz at: ${props.timestamp}`}
+          {!props.quiz
+            ? `Quiz will be created at: ${props.timestamp}`
+            : `Quiz at: ${props.timestamp}`}
         </DialogContentText>
-        {
-          quiz.questions.map((question: IQuizQuestion, questionIndex: number) => (
+        {quiz.questions.map(
+          (question: IQuizQuestion, questionIndex: number) => (
             <Paper variant="outlined" className={classes.paper}>
-              <Grid container style={{gridGap: 10}}>
+              <Grid container style={{ gridGap: 10 }}>
                 <TextField
-                  InputProps={{className: classes.questionInput}}
+                  InputProps={{ className: classes.questionInput }}
                   variant="outlined"
                   key={questionIndex}
                   placeholder="Enter a question..."
@@ -150,7 +162,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                   onChange={(e) =>
                     dispatch({
                       type: 'updateQuestion',
-                      payload: {questionIndex, text: e.target.value},
+                      payload: { questionIndex, text: e.target.value },
                     })
                   }
                 />
@@ -159,8 +171,16 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                     <Grid item className={classes.answerContent} xs={1}>
                       <Tooltip title="Mark correct option">
                         <Checkbox
-                          icon={<CircleUnchecked style={{color: 'white', fontSize: 35,}}/>}
-                          checkedIcon={<CircleCheckedFilled style={{color: 'white', fontSize: 35,}}/>}
+                          icon={
+                            <CircleUnchecked
+                              style={{ color: 'white', fontSize: 35 }}
+                            />
+                          }
+                          checkedIcon={
+                            <CircleCheckedFilled
+                              style={{ color: 'white', fontSize: 35 }}
+                            />
+                          }
                           checked={answer.isCorrect}
                           onChange={(e) =>
                             dispatch({
@@ -168,7 +188,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                               payload: {
                                 questionIndex,
                                 answerIndex,
-                                update: {isCorrect: e.target.checked},
+                                update: { isCorrect: e.target.checked },
                               },
                             })
                           }
@@ -189,36 +209,44 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                             payload: {
                               questionIndex,
                               answerIndex,
-                              update: {answer: e.target.value},
+                              update: { answer: e.target.value },
                             },
                           })
                         }
                         endAdornment={
-                          question.answers.length > 2 &&
-                          <InputAdornment position="end">
-                            <Tooltip title="Delete option">
-                              <IconButton
-                                onClick={() =>
-                                  dispatch({
-                                    type: 'removeAnswer',
-                                    payload: {questionIndex, answerIndex},
-                                  })
-                                }
-                              >
-                                <DeleteIcon/>
-                              </IconButton>
-                            </Tooltip>
-                          </InputAdornment>
+                          question.answers.length > 2 && (
+                            <InputAdornment position="end">
+                              <Tooltip title="Delete option">
+                                <IconButton
+                                  onClick={() =>
+                                    dispatch({
+                                      type: 'removeAnswer',
+                                      payload: { questionIndex, answerIndex },
+                                    })
+                                  }
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </Tooltip>
+                            </InputAdornment>
+                          )
                         }
                       />
                     </Grid>
                   </Grid>
                 ))}
-                <Grid container justify='space-between' className={classes.modifyButtons}>
+                <Grid
+                  container
+                  justify="space-between"
+                  className={classes.modifyButtons}
+                >
                   <Grid item>
                     <Button
                       onClick={() =>
-                        dispatch({type: 'addAnswer', payload: {questionIndex}})
+                        dispatch({
+                          type: 'addAnswer',
+                          payload: { questionIndex },
+                        })
                       }
                       className={classes.modifyButton}
                       variant="outlined"
@@ -227,25 +255,30 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                     </Button>
                   </Grid>
                   <Grid item>
-                    {
-                      quiz.questions.length > 1 &&
+                    {quiz.questions.length > 1 && (
                       <Button
                         onClick={() =>
-                          dispatch({type: 'removeQuestion', payload: {questionIndex}})
+                          dispatch({
+                            type: 'removeQuestion',
+                            payload: { questionIndex },
+                          })
                         }
                         className={classes.modifyButton}
                         variant="outlined"
                       >
                         Delete Question
                       </Button>
-                    }
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
             </Paper>
-          ))
-        }
-        <Button variant="outlined" onClick={() => dispatch({type: 'addQuestion', payload: null})}>
+          )
+        )}
+        <Button
+          variant="outlined"
+          onClick={() => dispatch({ type: 'addQuestion', payload: null })}
+        >
           Add Question
         </Button>
       </DialogContent>
@@ -253,7 +286,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
         <Button
           onClick={() => {
             props.handleClose(null);
-            dispatch({type: 'reset', payload: props.quiz});
+            dispatch({ type: 'reset', payload: props.quiz });
           }}
         >
           Cancel
@@ -261,7 +294,7 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
         <Button
           onClick={() => {
             props.handleClose(quiz);
-            dispatch({type: 'reset', payload: props.quiz});
+            dispatch({ type: 'reset', payload: props.quiz });
           }}
           color="primary"
         >

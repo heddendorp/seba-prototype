@@ -10,12 +10,12 @@ import {
   TextField,
 } from '@material-ui/core';
 import UploadLectureDropzone from './upload-lecture-dropzone/upload-lecture-dropzone';
-import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
-import {LectureUnitService} from '@seba/frontend/api-services';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { LectureUnitService } from '@seba/frontend/api-services';
 import moment from 'moment';
-import {useStyles} from './styles';
-import {useHistory} from 'react-router-dom';
-import {useLectureContext} from "@seba/frontend/context";
+import { useStyles } from './styles';
+import { useHistory } from 'react-router-dom';
+import { useLectureContext } from '@seba/frontend/context';
 
 export interface LectureUnitFormProps {
   unit_id: string | undefined;
@@ -83,19 +83,24 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
     if (props.unit_id !== undefined) {
       await LectureUnitService.delete(props.unit_id);
       context.updateLectures();
-      history.push("/app/home");
+      history.push('/app/home');
     }
 
     setDeleteAlert(false);
   };
 
-  const handleCancel = () => history.push("/app/home");
+  const handleCancel = () => history.push('/app/home');
 
   function DeleteButton() {
     if (props.unit_id !== undefined)
       return (
         <div className={classes.deleteButtonContainer}>
-          <Button fullWidth color="secondary" onClick={handleOpenDialog} variant="contained">
+          <Button
+            fullWidth
+            color="secondary"
+            onClick={handleOpenDialog}
+            variant="contained"
+          >
             Delete
           </Button>
           <Dialog
@@ -116,10 +121,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
               <Button onClick={handleCloseDialog} color="primary">
                 Cancel
               </Button>
-              <Button
-                onClick={handleClickDelete}
-                color="secondary"
-              >
+              <Button onClick={handleClickDelete} color="secondary">
                 Delete
               </Button>
             </DialogActions>
@@ -190,9 +192,9 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
             required
           />
         </Grid>
-        <Preview/>
+        <Preview />
         <Grid item xs={12}>
-          <UploadLectureDropzone setFile={setFile}/>
+          <UploadLectureDropzone setFile={setFile} />
         </Grid>
         <Grid item xs={12}>
           <LinearProgress
@@ -203,7 +205,7 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         </Grid>
         <Grid item xs={12}>
           <div className={classes.finishButton}>
-            <DeleteButton/>
+            <DeleteButton />
             <Button color="primary" type="submit" variant="contained">
               Submit
             </Button>

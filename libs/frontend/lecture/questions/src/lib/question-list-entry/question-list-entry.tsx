@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       borderTop: '1px solid grey',
       borderBottom: '1px solid grey',
-      paddingTop:theme.spacing(2),
-      paddingBottom:theme.spacing(2),
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
       display: 'flex',
       flexDirection: 'column',
     },
@@ -46,26 +46,32 @@ export function QuestionListEntry(props: QuestionListEntryProps) {
   return (
     <div className={classes.container}>
       <div className={classes.row}>
-        <div style={{marginTop:16}}>
-         <div>
-         <IconButton onClick={upvote}>
-            <ThumbUpIcon />
-          </IconButton>{' '}
-          <span>{props.question.upVotes.length}</span>
-         </div>
-         <div>
-           <span>{props.question.answers.length} answer{props.question.answers.length != 1 && 's'}</span>
-         </div>
+        <div style={{ marginTop: 16 }}>
+          <div>
+            <IconButton onClick={upvote}>
+              <ThumbUpIcon />
+            </IconButton>{' '}
+            <span>{props.question.upVotes.length}</span>
+          </div>
+          <div>
+            <span>
+              {props.question.answers.length} answer
+              {props.question.answers.length != 1 && 's'}
+            </span>
+          </div>
         </div>
-        <div style={{marginLeft:24}}>
+        <div style={{ marginLeft: 24 }}>
           <h4>{props.question.title}</h4>
           <p>{props.question.text}</p>
         </div>
       </div>
-      <div className={classes.row} style={{justifyContent:'space-between', marginTop:16}}>
+      <div
+        className={classes.row}
+        style={{ justifyContent: 'space-between', marginTop: 16 }}
+      >
         <Button>Give Answer</Button>
         <Button>Show Answers</Button>
-      <Chip label="Not answered" icon={<RadioButtonUncheckedIcon />} />
+        <Chip label="Not answered" icon={<RadioButtonUncheckedIcon />} />
       </div>
     </div>
   );

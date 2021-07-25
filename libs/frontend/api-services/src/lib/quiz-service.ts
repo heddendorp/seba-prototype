@@ -1,6 +1,6 @@
-import {BaseService} from './base-service';
-import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
-import {IQuiz} from "@seba/backend/models";
+import { BaseService } from './base-service';
+import { ICreateQuizTransport, IQuizTransport } from '@seba/shared';
+import { IQuiz } from '@seba/backend/models';
 
 export class QuizService extends BaseService {
   public static async create(body: ICreateQuizTransport) {
@@ -31,7 +31,11 @@ export class QuizService extends BaseService {
   }
 
   public static async submitAnswers(quiz_id: string, body: any) {
-    const response = await this.authenticatedRequest('PUT', `quiz/${quiz_id}/submission`, body)
+    const response = await this.authenticatedRequest(
+      'PUT',
+      `quiz/${quiz_id}/submission`,
+      body
+    );
     return (await response.json()) as IQuiz;
   }
 }

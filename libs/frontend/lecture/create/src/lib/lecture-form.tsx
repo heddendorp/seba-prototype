@@ -7,11 +7,11 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
-import {useStyles} from './style';
-import {LectureService} from '@seba/frontend/api-services';
-import {useHistory} from 'react-router-dom';
-import {useLectureContext} from "@seba/frontend/context";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useStyles } from './style';
+import { LectureService } from '@seba/frontend/api-services';
+import { useHistory } from 'react-router-dom';
+import { useLectureContext } from '@seba/frontend/context';
 
 export interface CreateLectureFormProps {
   lecture_id: string | undefined;
@@ -71,10 +71,7 @@ export function LectureForm(props: CreateLectureFormProps) {
               <Button onClick={handleCloseDialog} color="primary">
                 Cancel
               </Button>
-              <Button
-                onClick={handleClickDelete}
-                color="secondary"
-              >
+              <Button onClick={handleClickDelete} color="secondary">
                 Delete
               </Button>
             </DialogActions>
@@ -109,7 +106,7 @@ export function LectureForm(props: CreateLectureFormProps) {
     if (props.lecture_id !== undefined) {
       await LectureService.delete(props.lecture_id);
       context.updateLectures();
-      history.push("/app/home");
+      history.push('/app/home');
     }
 
     setDeleteAlert(false);
@@ -161,7 +158,7 @@ export function LectureForm(props: CreateLectureFormProps) {
       >
         Submit
       </Button>
-      <DeleteButton/>
+      <DeleteButton />
     </form>
   );
 }

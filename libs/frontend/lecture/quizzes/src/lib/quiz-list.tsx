@@ -1,15 +1,15 @@
-import React, {useEffect, useReducer} from 'react';
-import {Button, Grid} from '@material-ui/core';
+import React, { useEffect, useReducer } from 'react';
+import { Button, Grid } from '@material-ui/core';
 import EditQuizDialog from './edit-quiz-dialog/edit-quiz-dialog';
-import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
-import {QuizService} from '@seba/frontend/api-services';
+import { ICreateQuizTransport, IQuizTransport } from '@seba/shared';
+import { QuizService } from '@seba/frontend/api-services';
 import QuizListEntry from './quiz-list-entry';
-import {useParams} from 'react-router-dom';
-import {useStyles} from "./styles";
+import { useParams } from 'react-router-dom';
+import { useStyles } from './styles';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface QuizListProps {
-  timestamp: number
+  timestamp: number;
 }
 
 const initialState: IQuizTransport[] = [];
@@ -49,7 +49,7 @@ export function QuizList(props: QuizListProps) {
 
   useEffect(() => {
     QuizService.getByUnitId(params.unit_id).then((quizzes) => {
-      dispatch({type: 'setState', payload: quizzes});
+      dispatch({ type: 'setState', payload: quizzes });
     });
   }, [params.unit_id]);
 
@@ -60,7 +60,7 @@ export function QuizList(props: QuizListProps) {
       quiz.timestamp = props.timestamp;
       QuizService.create(quiz).then((payload) => {
         //todo check if errer --> statsu != 200
-        dispatch({type: 'addQuiz', payload: payload});
+        dispatch({ type: 'addQuiz', payload: payload });
       });
     }
     setOpen(false);
@@ -72,7 +72,7 @@ export function QuizList(props: QuizListProps) {
         //todo check if errer --> statsu != 200
         dispatch({
           type: 'updateQuiz',
-          payload: {oldId: quiz._id, quiz: updatedQuiz},
+          payload: { oldId: quiz._id, quiz: updatedQuiz },
         });
       });
     }
@@ -81,7 +81,7 @@ export function QuizList(props: QuizListProps) {
   const handleDeleteQuiz = (quiz: IQuizTransport) => {
     QuizService.delete(quiz._id as string).then((payload) => {
       //todo check if errer --> statsu != 200
-      dispatch({type: 'deleteQuiz', payload: payload});
+      dispatch({ type: 'deleteQuiz', payload: payload });
     });
   };
 
@@ -89,11 +89,25 @@ export function QuizList(props: QuizListProps) {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={() => setOpen(true)} className={classes.createQuizButton}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setOpen(true)}
+        className={classes.createQuizButton}
+      >
         Create quiz
       </Button>
-      <EditQuizDialog open={open} handleClose={handleClose} timestamp={props.timestamp}/>
-      <Grid container spacing={1} direction="column" className={classes.sizingView}>
+      <EditQuizDialog
+        open={open}
+        handleClose={handleClose}
+        timestamp={props.timestamp}
+      />
+      <Grid
+        container
+        spacing={1}
+        direction="column"
+        className={classes.sizingView}
+      >
         {quizzes.map((quiz) => (
           <Grid item key={quiz._id}>
             <QuizListEntry

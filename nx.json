@@ -14,113 +14,68 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
   "projects": {
     "api": {
-      "tags": [
-        "scope:api"
-      ]
+      "tags": ["scope:api"]
     },
     "app": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "app-e2e": {
-      "tags": [
-        "scope:app"
-      ],
-      "implicitDependencies": [
-        "app"
-      ]
+      "tags": ["scope:app"],
+      "implicitDependencies": ["app"]
     },
     "shared": {
-      "tags": [
-        "scope:shared"
-      ]
+      "tags": ["scope:shared"]
     },
     "frontend-api-services": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "backend-auth": {
-      "tags": [
-        "scope:api"
-      ]
+      "tags": ["scope:api"]
     },
     "frontend-context": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "backend-controllers": {
-      "tags": [
-        "scope:api"
-      ]
+      "tags": ["scope:api"]
     },
     "frontend-home": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "frontend-login": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "frontend-navigation": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "backend-models": {
-      "tags": [
-        "scope:api"
-      ]
+      "tags": ["scope:api"]
     },
     "frontend-lecture-create": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "frontend-lecture-create-unit": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "frontend-lecture-quizzes": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "frontend-lecture-questions": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "frontend-lecture-statistics": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "frontend-lecture-watch": {
-      "tags": [
-        "scope:app"
-      ]
+      "tags": ["scope:app"]
     },
     "backend-services": {
-      "tags": [
-        "scope:api"
-      ]
+      "tags": ["scope:api"]
     }
   }
 }

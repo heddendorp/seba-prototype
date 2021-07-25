@@ -1,9 +1,9 @@
-import {Container, CssBaseline, Typography} from '@material-ui/core';
-import {LectureService} from '@seba/frontend/api-services';
-import {useStyles} from './style';
-import {LectureForm} from './lecture-form';
-import {useLectureContext} from '@seba/frontend/context';
-import {useHistory} from 'react-router-dom';
+import { Container, CssBaseline, Typography } from '@material-ui/core';
+import { LectureService } from '@seba/frontend/api-services';
+import { useStyles } from './style';
+import { LectureForm } from './lecture-form';
+import { useLectureContext } from '@seba/frontend/context';
+import { useHistory } from 'react-router-dom';
 
 export function CreateLecture() {
   const classes = useStyles();
@@ -19,20 +19,23 @@ export function CreateLecture() {
       title: title,
       short_title: short_title,
       semester: semester,
-    }).then(response => {
+    }).then((response) => {
       context.updateLectures();
-      response.json().then(body =>
-        history.push(`/app/lecture/${body.lecture_id}/unit/create`));
+      response
+        .json()
+        .then((body) =>
+          history.push(`/app/lecture/${body.lecture_id}/unit/create`)
+        );
     });
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline/>
+      <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Create Lecture
         </Typography>
-        <LectureForm handleSubmit={handleSubmit} lecture_id={undefined}/>
+        <LectureForm handleSubmit={handleSubmit} lecture_id={undefined} />
       </div>
     </Container>
   );

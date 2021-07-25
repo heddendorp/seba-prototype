@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,27 +14,27 @@ export const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 900,
     },
     deleteButton: {
-      bottom: theme.spacing(1)
+      bottom: theme.spacing(1),
     },
     editButton: {
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(1),
     },
     paper: {
       padding: theme.spacing(1),
-      margin: theme.spacing(1,0,1,0),
+      margin: theme.spacing(1, 0, 1, 0),
       backgroundColor: '#00796b',
     },
     questionInput: {
-      backgroundColor: '#FFFFFF'
+      backgroundColor: '#FFFFFF',
     },
     modifyButton: {
       borderColor: '#FFFFFF',
       color: '#FFFFFF',
     },
-    modifyButtons : {
+    modifyButtons: {
       marginTop: theme.spacing(1),
     },
-    answerContent : {
+    answerContent: {
       display: 'flex',
     },
     questionDialog: {
@@ -42,8 +42,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     createQuizButton: {
       margin: theme.spacing(1, 0, 1, 0),
-
-    }
-
+    },
   })
 );

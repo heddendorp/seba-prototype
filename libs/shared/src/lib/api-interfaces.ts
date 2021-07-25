@@ -1,4 +1,4 @@
-import {Role} from '@seba/backend/models';
+import { Role } from '@seba/backend/models';
 
 export interface ICreateLectureTransport extends Record<string, unknown> {
   title: string;

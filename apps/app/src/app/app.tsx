@@ -1,8 +1,14 @@
 import React from 'react';
-import {Login, SignUp} from '@seba/frontend/login';
-import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
-import {createMuiTheme, CssBaseline, makeStyles, responsiveFontSizes, ThemeProvider,} from '@material-ui/core';
-import {green, pink, red, teal} from '@material-ui/core/colors';
+import { Login, SignUp } from '@seba/frontend/login';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import {
+  createMuiTheme,
+  CssBaseline,
+  makeStyles,
+  responsiveFontSizes,
+  ThemeProvider,
+} from '@material-ui/core';
+import { green, pink, red, teal } from '@material-ui/core/colors';
 import AppContainer from './app-container/app-container';
 
 let theme = createMuiTheme({
@@ -34,20 +40,20 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline/>
+      <CssBaseline />
       <BrowserRouter>
         <Switch>
           <Route path="/" exact={true}>
             <Redirect to="/login"></Redirect>
           </Route>
           <Route path="/login">
-            <Login/>
+            <Login />
           </Route>
           <Route path="/signup">
-            <SignUp/>
+            <SignUp />
           </Route>
           <Route path="/app">
-            <AppContainer/>
+            <AppContainer />
           </Route>
         </Switch>
       </BrowserRouter>

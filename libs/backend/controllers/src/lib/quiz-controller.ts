@@ -1,14 +1,14 @@
 import * as express from 'express';
 import * as passport from 'passport';
-import {LectureUnit, Quiz, Role} from '@seba/backend/models';
-import {ICreateQuizTransport} from '@seba/shared';
-import {DeletionService} from "@seba/backend/services";
+import { LectureUnit, Quiz, Role } from '@seba/backend/models';
+import { ICreateQuizTransport } from '@seba/shared';
+import { DeletionService } from '@seba/backend/services';
 
 const router = express.Router();
 
 router.post(
   '',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -24,7 +24,7 @@ router.post(
     quiz.save(function (err) {
       if (err) {
         console.log(err);
-        return res.status(500).json({message: 'Internal server error.'});
+        return res.status(500).json({ message: 'Internal server error.' });
       } else {
         LectureUnit.findById(quizTransport.unit_id).then(async (unit) => {
           unit.quizzes.push(quiz._id);
@@ -38,7 +38,7 @@ router.post(
 
 router.put(
   '/:quizId',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
@@ -51,7 +51,7 @@ router.put(
       quiz.save(function (err) {
         if (err) {
           console.log(err);
-          return res.status(500).json({message: 'Internal server error.'});
+          return res.status(500).json({ message: 'Internal server error.' });
         }
         return res.status(200).json(quiz);
       });
@@ -61,21 +61,23 @@ router.put(
 
 router.delete(
   '/:quizId',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     if (+req.user.role !== Role.LECTURER)
       return res.status(401).json({
         message: 'Only lecturers can delete quizzes.',
       });
 
-    const deletedQuiz = await DeletionService.deleteQuiz(req.params.quizId).catch(err => res.json(err).status(500));
+    const deletedQuiz = await DeletionService.deleteQuiz(
+      req.params.quizId
+    ).catch((err) => res.json(err).status(500));
     res.status(200).json(deletedQuiz);
   }
 );
 
 router.get(
   '/:lectureUnitId',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await LectureUnit.findById(req.params.lectureUnitId)
       .populate('quizzes')
@@ -87,31 +89,35 @@ router.get(
 
 router.put(
   '/:quizId/submission',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const submissionBody = req.body
+    const submissionBody = req.body;
     const quiz = await Quiz.findById(req.params.quizId).exec();
-    quiz.questions.forEach(question => {
-      if (question.submissions.some(submission => req.user._id.equals(submission.user._id))) {
+    quiz.questions.forEach((question) => {
+      if (
+        question.submissions.some((submission) =>
+          req.user._id.equals(submission.user._id)
+        )
+      ) {
         return;
       }
       if (submissionBody[question._id]) {
         const submission = {
           user: req.user._id,
-          answers: Object.values(submissionBody[question._id])
-        }
+          answers: Object.values(submissionBody[question._id]),
+        };
         question.submissions.push(submission);
       } else {
         const submission = {
           user: req.user._id,
-          answers: []
-        }
+          answers: [],
+        };
         question.submissions.push(submission);
       }
-    })
+    });
     await quiz.save();
     //todo error handling
-    return res.status(200).json(quiz)
+    return res.status(200).json(quiz);
   }
 );
 

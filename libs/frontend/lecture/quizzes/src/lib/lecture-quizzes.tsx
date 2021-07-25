@@ -1,22 +1,20 @@
 import QuizList from './quiz-list';
-import React, {createRef, useEffect, useState} from 'react';
-import {LectureUnitService} from "@seba/frontend/api-services";
-import {useParams} from "react-router-dom";
-import {useStyles} from "./styles";
+import React, { createRef, useEffect, useState } from 'react';
+import { LectureUnitService } from '@seba/frontend/api-services';
+import { useParams } from 'react-router-dom';
+import { useStyles } from './styles';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface LectureQuizzesProps {
-}
+export interface LectureQuizzesProps {}
 
 type QuizURLParams = { unit_id: string };
 const BASE_API_URL = 'http://localhost:3333';
 
 export function LectureQuizzes(props: LectureQuizzesProps) {
-
   const videoRef = createRef<HTMLVideoElement>();
   const params = useParams<QuizURLParams>();
   const [videoPath, setVideoPath] = useState<string>('');
-  const [timestamp, setTimestamp] = useState(0)
+  const [timestamp, setTimestamp] = useState(0);
 
   useEffect(() => {
     LectureUnitService.getById(params.unit_id).then((unit) => {
@@ -40,7 +38,7 @@ export function LectureQuizzes(props: LectureQuizzesProps) {
       >
         Your browser does not support this video type.
       </video>
-      <QuizList timestamp={timestamp}/>
+      <QuizList timestamp={timestamp} />
     </div>
   );
 }

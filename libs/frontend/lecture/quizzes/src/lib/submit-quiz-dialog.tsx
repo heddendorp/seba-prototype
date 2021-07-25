@@ -11,9 +11,9 @@ import {
   FormLabel,
   Grid,
 } from '@material-ui/core';
-import {IQuiz, IQuizAnswer, IQuizQuestion} from '@seba/backend/models';
-import React, {useState} from 'react';
-import {useStyles} from './styles';
+import { IQuiz, IQuizAnswer, IQuizQuestion } from '@seba/backend/models';
+import React, { useState } from 'react';
+import { useStyles } from './styles';
 
 export interface SubmitQuizDialogProps {
   quiz: IQuiz;
@@ -26,14 +26,21 @@ export function SubmitQuizDialog(props: SubmitQuizDialogProps) {
 
   const classes = useStyles();
 
-  const updateAnswer = (questionId: string, answer: IQuizAnswer, checked: boolean) => {
+  const updateAnswer = (
+    questionId: string,
+    answer: IQuizAnswer,
+    checked: boolean
+  ) => {
     setAnswers((state: any) => {
       if (!checked) {
-        const newState = {...state}
-        delete newState[questionId][answer._id]
+        const newState = { ...state };
+        delete newState[questionId][answer._id];
         return newState;
       }
-      return {...state, [questionId]: {...state[questionId], [answer._id]: answer,},};
+      return {
+        ...state,
+        [questionId]: { ...state[questionId], [answer._id]: answer },
+      };
     });
   };
 

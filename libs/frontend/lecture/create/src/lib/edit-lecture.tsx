@@ -1,9 +1,9 @@
-import {Container, CssBaseline, Typography} from '@material-ui/core';
-import {useParams} from 'react-router-dom';
-import {useStyles} from './style';
-import {LectureForm} from './lecture-form';
-import {LectureService} from '@seba/frontend/api-services';
-import {useLectureContext} from '@seba/frontend/context';
+import { Container, CssBaseline, Typography } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { useStyles } from './style';
+import { LectureForm } from './lecture-form';
+import { LectureService } from '@seba/frontend/api-services';
+import { useLectureContext } from '@seba/frontend/context';
 
 type EditLectureURLParams = {
   lecture_id: string;
@@ -28,7 +28,7 @@ export function EditLecture() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline/>
+      <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Edit Lecture
