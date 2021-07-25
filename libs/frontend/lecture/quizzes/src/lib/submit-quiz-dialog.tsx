@@ -22,12 +22,12 @@ export interface SubmitQuizDialogProps {
 }
 
 export function SubmitQuizDialog(props: SubmitQuizDialogProps) {
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState<any>({});
 
   const classes = useStyles();
 
   const updateAnswer = (questionId: string, answer: IQuizAnswer, checked: boolean) => {
-    setAnswers((state) => {
+    setAnswers((state: any) => {
       if (!checked) {
         const newState = {...state}
         delete newState[questionId][answer._id]
@@ -75,7 +75,7 @@ export function SubmitQuizDialog(props: SubmitQuizDialogProps) {
       <DialogActions>
         <Button
           onClick={() => {
-            props.handleClose(answers);
+            props.handleClose(null);
           }}
         >
           Cancel

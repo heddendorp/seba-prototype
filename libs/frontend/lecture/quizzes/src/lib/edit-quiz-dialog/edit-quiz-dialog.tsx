@@ -3,33 +3,38 @@ import {
   Checkbox,
   Dialog,
   DialogActions,
-  DialogContent,
+  DialogContent, DialogContentText,
   DialogTitle,
-  FormControlLabel,
-  Grid,
+  Grid, IconButton, InputAdornment, Paper,
   TextField,
+  OutlinedInput,
+  Tooltip,
 } from '@material-ui/core';
 import React, {useReducer} from 'react';
 import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
 import {useStyles} from '../styles';
+import {IQuizQuestion} from "@seba/backend/models";
+import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
+import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
+import DeleteIcon from "@material-ui/icons/Delete";
 
 /* eslint-disable-next-line */
 export interface EditQuizDialogProps {
   quiz?: any;
   open: boolean;
   handleClose: (quiz?: IQuizTransport | null) => void;
+  timestamp?: number; //todo
 }
 
 const emptyAnswer = {answer: '', isCorrect: false};
-const emptyQuestion = {question: '', answers: [{...emptyAnswer}]};
+const emptyQuestion = {question: '', answers: [{...emptyAnswer}, {...emptyAnswer}]};
 const emptyQuiz = {
   unit_id: '',
-  timestamp: 6,
+  timestamp: 0,
   questions: [{...emptyQuestion}],
 };
 
-//function reducer(state: IQuiz, action: {type: string; payload: IQuiz}): IQuiz {
-function reducer(state: ICreateQuizTransport, action) {
+function reducer(state: ICreateQuizTransport, action: { type: string; payload: any }) {
   switch (action.type) {
     case 'reset': {
       return action.payload ? {...action.payload} : {...emptyQuiz};
@@ -124,63 +129,38 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
   const classes = useStyles();
 
   return (
-    <Dialog open={props.open}>
-      <DialogTitle>Edit the quiz</DialogTitle>
+    <Dialog open={props.open} classes={{paper: classes.questionDialog}}>
+      <DialogTitle>{!props.quiz ? 'Create new quiz' : 'Edit quiz'}</DialogTitle>
       <DialogContent>
-        <Button onClick={() => dispatch({type: 'addQuestion'})}>
-          AddQuestion
-        </Button>
-        {quiz.questions.map((question, questionIndex) => (
-          <>
-            <Button
-              onClick={() =>
-                dispatch({type: 'removeQuestion', payload: {questionIndex}})
-              }
-              disabled={quiz.questions.length === 1}
-            >
-              delete
-            </Button>
-            <TextField
-              key={questionIndex}
-              label={`Question ${questionIndex + 1}`}
-              placeholder="Question content"
-              fullWidth
-              required
-              value={question.question}
-              onChange={(e) =>
-                dispatch({
-                  type: 'updateQuestion',
-                  payload: {questionIndex, text: e.target.value},
-                })
-              }
-            />
-            {question.answers.map((answer, answerIndex) => (
-              <>
-                <Grid container>
-                  <Grid item>
-                    <TextField
-                      key={answerIndex}
-                      label={`Answer ${answerIndex + 1}`}
-                      placeholder="Answer content"
-                      fullWidth
-                      required
-                      value={answer.answer}
-                      onChange={(e) =>
-                        dispatch({
-                          type: 'updateAnswer',
-                          payload: {
-                            questionIndex,
-                            answerIndex,
-                            update: {answer: e.target.value},
-                          },
-                        })
-                      }
-                    />
-                  </Grid>
-                  <Grid item>
-                    <FormControlLabel
-                      control={
+        <DialogContentText>
+          {!props.quiz ? `Quiz will be created at: ${props.timestamp}` : `Quiz at: ${props.timestamp}`}
+        </DialogContentText>
+        {
+          quiz.questions.map((question: IQuizQuestion, questionIndex: number) => (
+            <Paper variant="outlined" className={classes.paper}>
+              <Grid container style={{gridGap: 10}}>
+                <TextField
+                  InputProps={{className: classes.questionInput}}
+                  variant="outlined"
+                  key={questionIndex}
+                  placeholder="Enter a question..."
+                  fullWidth
+                  multiline
+                  value={question.question}
+                  onChange={(e) =>
+                    dispatch({
+                      type: 'updateQuestion',
+                      payload: {questionIndex, text: e.target.value},
+                    })
+                  }
+                />
+                {question.answers.map((answer, answerIndex) => (
+                  <Grid item container direction="row">
+                    <Grid item className={classes.answerContent} xs={1}>
+                      <Tooltip title="Mark correct option">
                         <Checkbox
+                          icon={<CircleUnchecked style={{color: 'white', fontSize: 35,}}/>}
+                          checkedIcon={<CircleCheckedFilled style={{color: 'white', fontSize: 35,}}/>}
                           checked={answer.isCorrect}
                           onChange={(e) =>
                             dispatch({
@@ -193,33 +173,81 @@ export function EditQuizDialog(props: EditQuizDialogProps) {
                             })
                           }
                         />
+                      </Tooltip>
+                    </Grid>
+                    <Grid item xs={11}>
+                      <OutlinedInput
+                        key={answerIndex}
+                        placeholder={`Answer option ${answerIndex + 1}`}
+                        fullWidth
+                        multiline
+                        className={classes.questionInput}
+                        value={answer.answer}
+                        onChange={(e) =>
+                          dispatch({
+                            type: 'updateAnswer',
+                            payload: {
+                              questionIndex,
+                              answerIndex,
+                              update: {answer: e.target.value},
+                            },
+                          })
+                        }
+                        endAdornment={
+                          question.answers.length > 2 &&
+                          <InputAdornment position="end">
+                            <Tooltip title="Delete option">
+                              <IconButton
+                                onClick={() =>
+                                  dispatch({
+                                    type: 'removeAnswer',
+                                    payload: {questionIndex, answerIndex},
+                                  })
+                                }
+                              >
+                                <DeleteIcon/>
+                              </IconButton>
+                            </Tooltip>
+                          </InputAdornment>
+                        }
+                      />
+                    </Grid>
+                  </Grid>
+                ))}
+                <Grid container justify='space-between' className={classes.modifyButtons}>
+                  <Grid item>
+                    <Button
+                      onClick={() =>
+                        dispatch({type: 'addAnswer', payload: {questionIndex}})
                       }
-                      label="Is correct"
-                    />
+                      className={classes.modifyButton}
+                      variant="outlined"
+                    >
+                      Add Answer
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    {
+                      quiz.questions.length > 1 &&
+                      <Button
+                        onClick={() =>
+                          dispatch({type: 'removeQuestion', payload: {questionIndex}})
+                        }
+                        className={classes.modifyButton}
+                        variant="outlined"
+                      >
+                        Delete Question
+                      </Button>
+                    }
                   </Grid>
                 </Grid>
-                <Button
-                  onClick={() =>
-                    dispatch({
-                      type: 'removeAnswer',
-                      payload: {questionIndex, answerIndex},
-                    })
-                  }
-                  disabled={question.answers.length === 1}
-                >
-                  Delete Answer
-                </Button>
-              </>
-            ))}
-            <Button
-              onClick={() =>
-                dispatch({type: 'addAnswer', payload: {questionIndex}})
-              }
-            >
-              Add Answer
-            </Button>
-          </>
-        ))}
+              </Grid>
+            </Paper>
+          ))
+        }
+        <Button variant="outlined" onClick={() => dispatch({type: 'addQuestion', payload: null})}>
+          Add Question
+        </Button>
       </DialogContent>
       <DialogActions>
         <Button

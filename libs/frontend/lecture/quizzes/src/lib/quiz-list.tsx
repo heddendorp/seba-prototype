@@ -1,10 +1,11 @@
 import React, {useEffect, useReducer} from 'react';
 import {Button, Grid} from '@material-ui/core';
 import EditQuizDialog from './edit-quiz-dialog/edit-quiz-dialog';
-import {ICreateQuizTransport, IQuizTransport} from '@seba/api-interfaces';
+import {ICreateQuizTransport, IQuizTransport} from '@seba/shared';
 import {QuizService} from '@seba/frontend/api-services';
 import QuizListEntry from './quiz-list-entry';
 import {useParams} from 'react-router-dom';
+import {useStyles} from "./styles";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface QuizListProps {
@@ -57,7 +58,6 @@ export function QuizList(props: QuizListProps) {
     if (quiz != null) {
       quiz.unit_id = params.unit_id;
       quiz.timestamp = props.timestamp;
-      //todo add timestamp
       QuizService.create(quiz).then((payload) => {
         //todo check if errer --> statsu != 200
         dispatch({type: 'addQuiz', payload: payload});
@@ -66,7 +66,7 @@ export function QuizList(props: QuizListProps) {
     setOpen(false);
   };
 
-  const handleEditQuiz = (quiz: IQuizTransport) => {
+  const handleEditQuiz = (quiz?: IQuizTransport) => {
     if (quiz != null) {
       QuizService.update(quiz._id, quiz).then((updatedQuiz) => {
         //todo check if errer --> statsu != 200
@@ -85,13 +85,15 @@ export function QuizList(props: QuizListProps) {
     });
   };
 
+  const classes = useStyles();
+
   return (
     <>
-      <Button variant={'outlined'} onClick={() => setOpen(true)}>
-        Add Quiz
+      <Button variant="contained" color="primary" onClick={() => setOpen(true)} className={classes.createQuizButton}>
+        Create quiz
       </Button>
-      <EditQuizDialog open={open} handleClose={handleClose}/>
-      <Grid container spacing={1} direction="column">
+      <EditQuizDialog open={open} handleClose={handleClose} timestamp={props.timestamp}/>
+      <Grid container spacing={1} direction="column" className={classes.sizingView}>
         {quizzes.map((quiz) => (
           <Grid item key={quiz._id}>
             <QuizListEntry

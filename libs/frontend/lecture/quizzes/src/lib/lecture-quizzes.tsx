@@ -2,6 +2,7 @@ import QuizList from './quiz-list';
 import React, {createRef, useEffect, useState} from 'react';
 import {LectureUnitService} from "@seba/frontend/api-services";
 import {useParams} from "react-router-dom";
+import {useStyles} from "./styles";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LectureQuizzesProps {
@@ -23,8 +24,10 @@ export function LectureQuizzes(props: LectureQuizzesProps) {
     });
   }, [params.unit_id]);
 
+  const classes = useStyles();
+
   return (
-    <div>
+    <div className={classes.root}>
       <h1>Quizzes</h1>
       <video
         id="video_stream"
@@ -33,6 +36,7 @@ export function LectureQuizzes(props: LectureQuizzesProps) {
         ref={videoRef}
         src={videoPath}
         onTimeUpdate={(e) => setTimestamp(Math.round(e.target.currentTime))}
+        className={classes.sizingView}
       >
         Your browser does not support this video type.
       </video>

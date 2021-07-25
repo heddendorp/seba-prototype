@@ -68,8 +68,8 @@ router.delete(
         message: 'Only lecturers can delete quizzes.',
       });
 
-    await DeletionService.deleteQuiz(req.params.quizId).catch(err => res.json(err).status(500));
-    res.json({message: "Success."}).status(200);
+    const deletedQuiz = await DeletionService.deleteQuiz(req.params.quizId).catch(err => res.json(err).status(500));
+    res.status(200).json(deletedQuiz);
   }
 );
 
