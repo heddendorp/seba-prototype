@@ -9,6 +9,7 @@ export interface ILectureUnit extends mongoose.Document {
   description: string;
   publish_date: Date;
   video_path: string;
+  duration: number;
   quizzes: [IQuiz] | [string];
   questions: [IQuestion] | [string];
 }
@@ -19,6 +20,7 @@ export const LectureUnitSchema = new mongoose.Schema({
   description: String,
   publish_date: Date,
   video_path: String,
+  duration: Number,
   quizzes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' }],
   questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
 });

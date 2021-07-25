@@ -12,6 +12,7 @@ export interface ICreateLectureUnitTransport extends Record<string, unknown> {
   description: string;
   publish_date: Date;
   video_path: string;
+  duration: number;
 }
 
 export interface IEditLectureUnitTransport extends Record<string, unknown> {
