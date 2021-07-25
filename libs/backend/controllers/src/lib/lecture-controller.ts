@@ -25,7 +25,7 @@ router.post(
       if (err) {
         console.log(err);
         return res.status(500).json({message: 'Internal server error.'});
-      } else return res.status(200).json({message: 'Success.'});
+      } else return res.status(200).json({message: 'Success.', lecture_id: lecture._id});
     });
   }
 );
@@ -43,7 +43,10 @@ router.get(
         break;
       case Role.STUDENT:
         result = await Lecture.find({students: req.user._id})
-          .populate('units')
+          .populate({
+            path: "units",
+            match: { publish_date: { $lte: Date.now() }}
+          })
           .exec();
         break;
       default:
@@ -104,7 +107,9 @@ router.delete(
           message: 'You can only delete your own lectures.',
         });
 
-      DeletionService.deleteLecture(req.params.lectureId);
+      DeletionService.deleteLecture(req.params.lectureId).then(() => res.status(200).json({
+        message: "Success."
+      }));
     });
   }
 );

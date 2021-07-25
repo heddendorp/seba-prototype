@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: 'white',
       marginLeft: theme.spacing(4),
       marginTop: theme.spacing(6),
+      padding: theme.spacing(4),
       minHeight: `calc(100vh - ${theme.spacing(6)}px)`,
       boxShadow: theme.shadows[6],
       borderTopLeftRadius: 16,

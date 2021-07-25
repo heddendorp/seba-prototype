@@ -14,6 +14,8 @@ import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import {LectureUnitService} from '@seba/frontend/api-services';
 import moment from 'moment';
 import {useStyles} from './styles';
+import {useHistory} from 'react-router-dom';
+import {useLectureContext} from "@seba/frontend/context";
 
 export interface LectureUnitFormProps {
   unit_id: string | undefined;
@@ -28,6 +30,8 @@ export interface LectureUnitFormProps {
 
 export function LectureUnitForm(props: LectureUnitFormProps) {
   const classes = useStyles();
+  const history = useHistory();
+  const context = useLectureContext();
 
   const [title, setTitle] = useState('');
   const [dateTime, setDateTime] = useState(
@@ -76,17 +80,22 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
   const handleCloseDialog = () => setDeleteAlert(false);
 
   const handleClickDelete = async () => {
-    if (props.unit_id !== undefined)
+    if (props.unit_id !== undefined) {
       await LectureUnitService.delete(props.unit_id);
+      context.updateLectures();
+      history.push("/app/home");
+    }
 
     setDeleteAlert(false);
   };
 
+  const handleCancel = () => history.push("/app/home");
+
   function DeleteButton() {
     if (props.unit_id !== undefined)
       return (
-        <div>
-          <Button fullWidth color="secondary" onClick={handleOpenDialog}>
+        <div className={classes.deleteButtonContainer}>
+          <Button fullWidth color="secondary" onClick={handleOpenDialog} variant="contained">
             Delete
           </Button>
           <Dialog
@@ -110,7 +119,6 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
               <Button
                 onClick={handleClickDelete}
                 color="secondary"
-                href="/app/home"
               >
                 Delete
               </Button>
@@ -141,8 +149,8 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         <Grid item xs={9}>
           <TextField
             id="outlined-textarea"
-            label="Lecture title"
-            placeholder="Enter a lecture title..."
+            label="Unit title"
+            placeholder="Enter a unit title..."
             multiline
             variant="outlined"
             rowsMax={2}
@@ -171,8 +179,8 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         <Grid item xs={12}>
           <TextField
             id="outlined-textarea"
-            label="Lecture description"
-            placeholder="Enter a lecture description..."
+            label="Unit description"
+            placeholder="Enter a unit description..."
             multiline
             variant="outlined"
             rowsMax={5}
@@ -195,9 +203,8 @@ export function LectureUnitForm(props: LectureUnitFormProps) {
         </Grid>
         <Grid item xs={12}>
           <div className={classes.finishButton}>
-            <Button autoFocus>Cancel</Button>
             <DeleteButton/>
-            <Button color="primary" type="submit">
+            <Button color="primary" type="submit" variant="contained">
               Submit
             </Button>
           </div>
