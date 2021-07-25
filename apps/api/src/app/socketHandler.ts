@@ -24,10 +24,10 @@ export const handleSocket = (io: Server) => {
       };
       const group = await StudyGroup.findByIdAndUpdate(
         data.group_id,
-        { $push: { chat: newMessage } },
+        { $push: { chat: {$each: [newMessage], $sort:{timestamp: -1} }} },
         { new: true }
       );
-      io.to(data.group_id).emit('message', group.chat.slice(-1)[0]);
+      io.to(data.group_id).emit('message', group.chat[0]);
     });
 
     socket.on('sync', (data) => {

@@ -1,7 +1,16 @@
-import {createStyles, Grid, IconButton, makeStyles, Theme,} from '@material-ui/core';
+import {
+  Button,
+  Chip,
+  createStyles,
+  Grid,
+  IconButton,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import {QuestionService} from '@seba/frontend/api-services';
+import { QuestionService } from '@seba/frontend/api-services';
+import { Question } from '@seba/backend/models';
 
 /* eslint-disable-next-line */
 export interface QuestionListEntryProps {
@@ -11,8 +20,18 @@ export interface QuestionListEntryProps {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    padded: {
-      padding: theme.spacing(3),
+    container: {
+      borderTop: '1px solid grey',
+      borderBottom: '1px solid grey',
+      paddingTop:theme.spacing(2),
+      paddingBottom:theme.spacing(2),
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    row: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'start',
     },
   })
 );
@@ -25,23 +44,30 @@ export function QuestionListEntry(props: QuestionListEntryProps) {
     );
   };
   return (
-    <Grid container alignItems="stretch">
-      <Grid item xs container justify="space-around" direction="column">
-        <Grid item container alignItems="center" spacing={2}>
-          <IconButton onClick={upvote}>
-            <ThumbUpIcon/>
+    <div className={classes.container}>
+      <div className={classes.row}>
+        <div style={{marginTop:16}}>
+         <div>
+         <IconButton onClick={upvote}>
+            <ThumbUpIcon />
           </IconButton>{' '}
           <span>{props.question.upVotes.length}</span>
-        </Grid>
-        <Grid item>
-          <RadioButtonUncheckedIcon/>
-        </Grid>
-      </Grid>
-      <Grid item xs={11}>
-        <h1>{props.question.title}</h1>
-        <p>{props.question.text}</p>
-      </Grid>
-    </Grid>
+         </div>
+         <div>
+           <span>{props.question.answers.length} answer{props.question.answers.length != 1 && 's'}</span>
+         </div>
+        </div>
+        <div style={{marginLeft:24}}>
+          <h4>{props.question.title}</h4>
+          <p>{props.question.text}</p>
+        </div>
+      </div>
+      <div className={classes.row} style={{justifyContent:'space-between', marginTop:16}}>
+        <Button>Give Answer</Button>
+        <Button>Show Answers</Button>
+      <Chip label="Not answered" icon={<RadioButtonUncheckedIcon />} />
+      </div>
+    </div>
   );
 }
 

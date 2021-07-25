@@ -1,4 +1,4 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography,} from '@material-ui/core';
 import {StudyGroupService} from '@seba/frontend/api-services';
 import {useState} from 'react';
 
@@ -36,7 +36,9 @@ export function StudyGroup(props: StudyGroupProps) {
 
   return (
     <>
-      <h3>Study Group</h3>
+      <Typography variant="h4" component="h3" gutterBottom>
+        Study Group
+      </Typography>
       {props.studyGroupId && (
         <p>
           You are in group <pre>{props.studyGroupId}</pre>

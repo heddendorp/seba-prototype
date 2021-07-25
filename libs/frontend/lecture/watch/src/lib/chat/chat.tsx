@@ -1,4 +1,4 @@
-import {ListItem, ListItemText, TextField} from '@material-ui/core';
+import {Grid, List, ListItem, ListItemText, TextField, Typography} from '@material-ui/core';
 import {useEffect, useState} from 'react';
 import {useStyles} from "../style";
 
@@ -12,7 +12,7 @@ export interface ChatProps {
 
 export function Chat(props: ChatProps) {
   // state for the messages
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const classes = useStyles();
 
   const sendMessage = (event) => {
@@ -31,7 +31,7 @@ export function Chat(props: ChatProps) {
     if (props.group) {
       setMessages(props.group.chat);
       props.socket.on('message', (data: any) => {
-        setMessages(messages => messages.concat(data));
+        setMessages(messages => [data].concat(messages));
       });
     }
     return () => {
@@ -39,12 +39,16 @@ export function Chat(props: ChatProps) {
     };
   }, [props.groupId]);
   return (
-    <div style={{ height: '100%', overflow: 'auto' }}>
-      <h3>Chat</h3>
+    <div>
+      <Typography variant="h4" component="h3" gutterBottom>
+        Chat
+      </Typography>
       {props.groupId && (
         <>
+        <TextField fullWidth onKeyDown={sendMessage} label="Enter message" />
+        <List style={{overflowY:'auto', maxHeight:'50vh'}}>
           {messages.map((message) => (
-            <>
+          <>
               {
                 props.user.display_name == message.author ?
                   <ListItem className={classes.sentMessage} key={message._id}>
@@ -61,10 +65,10 @@ export function Chat(props: ChatProps) {
                     />
                   </ListItem>
               }
-            </>
+          </>
           ))}
-          <TextField fullWidth onKeyDown={sendMessage} label="Enter message" />
-        </>
+          </List>
+          </>
       )}
       {!props.group && <p>Enter a study group to use the chat!</p>}
     </div>

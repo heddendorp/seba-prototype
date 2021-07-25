@@ -1,4 +1,12 @@
-import { Button, DialogActions, DialogContent, DialogTitle, Grid, Paper, Typography } from '@material-ui/core';
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import React, { createRef, useContext, useEffect, useState } from 'react';
 import {
@@ -43,7 +51,7 @@ export function LectureWatch(props: LectureWatchProps) {
   // effect to set up and close the socket for a studyGroup
   useEffect(() => {
     socket.on('sync', (data: any) => {
-      const video = document.getElementById("video_stream") as HTMLVideoElement;
+      const video = document.getElementById('video_stream') as HTMLVideoElement;
       video.currentTime = data.currentTime;
       switch (+data.syncEvent) {
         case SyncEvent.PLAY:
@@ -67,7 +75,7 @@ export function LectureWatch(props: LectureWatchProps) {
         setWrongGroupIdOpen(true);
         setStudyGroup(undefined);
         setCurrentStudyGroup(undefined);
-      }else{
+      } else {
         setStudyGroup(group);
         setCurrentStudyGroup(groupId);
       }
@@ -117,7 +125,8 @@ export function LectureWatch(props: LectureWatchProps) {
     socket.emit('sync', {
       group_id: currentStudyGroup,
       syncEvent: SyncEvent.PLAY,
-      currentTime: (document.getElementById("video_stream") as HTMLVideoElement).currentTime
+      currentTime: (document.getElementById('video_stream') as HTMLVideoElement)
+        .currentTime,
     });
   }
 
@@ -125,105 +134,114 @@ export function LectureWatch(props: LectureWatchProps) {
     socket.emit('sync', {
       group_id: currentStudyGroup,
       syncEvent: SyncEvent.PAUSE,
-      currentTime: (document.getElementById("video_stream") as HTMLVideoElement).currentTime
+      currentTime: (document.getElementById('video_stream') as HTMLVideoElement)
+        .currentTime,
     });
   }
 
   function handleSubmitQuiz(answers: any) {
     if (currentQuiz) {
-      QuizService.submitAnswers(currentQuiz._id, answers)
-        .then(updatedQuiz => {
-          setQuizzes(oldQuizzes => [updatedQuiz, ...oldQuizzes.filter(q => q._id != updatedQuiz._id)])
-      });
+      QuizService.submitAnswers(currentQuiz._id, answers).then(
+        (updatedQuiz) => {
+          setQuizzes((oldQuizzes) => [
+            updatedQuiz,
+            ...oldQuizzes.filter((q) => q._id != updatedQuiz._id),
+          ]);
+        }
+      );
     }
     setQuizOpen(false);
   }
 
   return (
-    <div style={{ padding: 32 }}>
-      <Grid container spacing={4} direction="column">
-        <Grid item>
-          <Typography variant="h2" component="h1">
-            Watch: {title}
-          </Typography>
-        </Grid>
-        <Grid item container spacing={4} alignItems="stretch">
-          <Grid item xs={8} container direction="column" spacing={2}>
-            <Grid item>
-              <Paper variant="outlined" className={classes.hideOverflow}>
-                <video
-                  id="video_stream"
-                  controls
-                  width="100%"
-                  ref={videoRef}
-                  src={videoPath}
-                  onPause={handleClickPause}
-                  onPlay={handleClickPlay}
-                  onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
-                >
-                  Your browser does not support this video type.
-                </video>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.padded}>
-                <Typography variant="h4" component="h2">
-                  {description}
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid item xs>
-            <Paper
-              variant="outlined"
-              className={classes.padded}
-              style={{ height: '100%' }}
-            >
-              <Chat group={studyGroup} groupId={currentStudyGroup} socket={socket} user={user} />
-            </Paper>
-          </Grid>
-        </Grid>
-        {currentQuiz && (
-          <SubmitQuizDialog
-            quiz={currentQuiz}
-            open={quizOpen}
-            handleClose={handleSubmitQuiz}
-          />
-        )}
-        <Grid item container spacing={4} alignItems="stretch">
-          <Grid item xs={8} container direction="column" spacing={2}>
-            <Grid item>
-              <Paper variant="outlined" className={classes.padded}>
-                <LectureQuestions
-                  lecureUnitId={params.unit_id}
-                  currentTime={currentTime}
-                />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid item xs>
-            <Paper variant="outlined" className={classes.padded}>
-              <StudyGroup
-                user={user}
-                studyGroupId={currentStudyGroup}
-                onStudyGroupChange={(id) => joinStudyGroup(id)}
-              />
-              <Dialog
-                open={wrongGroupIdOpen}
-                onClose={() => setWrongGroupIdOpen(false)}
-              >
-                <DialogTitle>Study group not found</DialogTitle>
-                <DialogContent>The Group ID you entered does not seem to exist, please try again</DialogContent>
-                <DialogActions>
-                  <Button onClick={() => setWrongGroupIdOpen(false)}>
-                    Close
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Grid>
+    <div className={classes.grid}>
+      <Typography style={{ gridArea: 'title' }} variant="h3" component="h1">
+        Watch: {title}
+      </Typography>
+      <Paper
+        style={{ gridArea: 'video' }}
+        variant="outlined"
+        className={classes.hideOverflow}
+      >
+        <video
+        style={{
+          display: 'block',
+        }}
+          id="video_stream"
+          controls
+          width="100%"
+          ref={videoRef}
+          src={videoPath}
+          onPause={handleClickPause}
+          onPlay={handleClickPlay}
+          onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
+        >
+          Your browser does not support this video type.
+        </video>
+      </Paper>
+      <Paper
+        style={{ gridArea: 'description' }}
+        variant="outlined"
+        className={classes.padded}
+      >
+        <Typography variant="h5" component="h2">
+          {description}
+        </Typography>
+      </Paper>
+      <Paper
+        style={{ gridArea: 'chat' }}
+        variant="outlined"
+        className={classes.padded}
+      >
+        <Chat
+          group={studyGroup}
+          groupId={currentStudyGroup}
+          socket={socket}
+          user={user}
+        />
+      </Paper>
+      {currentQuiz && (
+        <SubmitQuizDialog
+          quiz={currentQuiz}
+          open={quizOpen}
+          handleClose={handleSubmitQuiz}
+        />
+      )}
+
+      <Paper
+        style={{ gridArea: 'questions' }}
+        variant="outlined"
+        className={classes.padded}
+      >
+        <LectureQuestions
+          lecureUnitId={params.unit_id}
+          currentTime={currentTime}
+        />
+      </Paper>
+
+      <Paper
+        style={{ gridArea: 'group' }}
+        variant="outlined"
+        className={classes.padded}
+      >
+        <StudyGroup
+          user={user}
+          studyGroupId={currentStudyGroup}
+          onStudyGroupChange={(id) => joinStudyGroup(id)}
+        />
+        <Dialog
+          open={wrongGroupIdOpen}
+          onClose={() => setWrongGroupIdOpen(false)}
+        >
+          <DialogTitle>Study group not found</DialogTitle>
+          <DialogContent>
+            The Group ID you entered does not seem to exist, please try again
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setWrongGroupIdOpen(false)}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      </Paper>
     </div>
   );
 }
