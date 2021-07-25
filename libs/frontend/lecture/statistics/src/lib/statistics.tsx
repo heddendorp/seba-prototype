@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      width: theme.spacing(50),
     },
   })
 );
@@ -61,11 +62,12 @@ export function Statistics(props: StatisticsProps) {
                   <div className={classes.chart}>
                     <h3 style={{ marginBottom: -16 }}>{text}</h3>
                     <VictoryChart
+                      domain={{x: [0, 2], y: [0, 4]}}
                       theme={VictoryTheme.material}
                     >
                       <VictoryAxis tickValues={data.map(date => date.points)} tickFormat={data.map(date => date.points+' points')}/>
                       <VictoryAxis dependentAxis tickValues={data.map(date => date.count)}/>
-                      <VictoryBar data={data} x="points" y="count" />
+                      <VictoryBar alignment='start' barWidth={30} data={data} x="points" y="count" />
                     </VictoryChart>
                   </div>
                 ))}
