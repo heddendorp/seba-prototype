@@ -55,7 +55,7 @@ router.get(
           // Parse to chart data structure
           const result = [];
           for (const key in temp) {
-            result.push({ points: key, count: temp[key] });
+            result.push({ points: parseInt(key), count: temp[key] });
           }
 
           questionStats[question.question] = result;
