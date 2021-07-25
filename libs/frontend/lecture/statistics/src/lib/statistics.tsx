@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      
     },
   })
 );
@@ -65,7 +66,7 @@ export function Statistics(props: StatisticsProps) {
                     >
                       <VictoryAxis tickValues={data.map(date => date.points)} tickFormat={data.map(date => date.points+' points')}/>
                       <VictoryAxis dependentAxis tickValues={data.map(date => date.count)}/>
-                      <VictoryBar data={data} x="points" y="count" />
+                      <VictoryBar alignment='start' barWidth='25' data={data} x="points" y="count" />
                     </VictoryChart>
                   </div>
                 ))}
